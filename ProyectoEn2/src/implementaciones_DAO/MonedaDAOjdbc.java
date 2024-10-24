@@ -41,6 +41,7 @@ public class MonedaDAOjdbc implements MonedaDAO {
 	@Override
 		public Moneda find(String nomenclatura) {
 			String sql = "SELECT * FROM MONEDA WHERE nomenclatura=?";
+			Moneda moneda= null;
 			try {
 				Connection con= MyConnection.getConnection();
 				PreparedStatement ps= con.prepareStatement(sql);
@@ -60,9 +61,9 @@ public class MonedaDAOjdbc implements MonedaDAO {
 		            if(tipo.equals("Cripto")) {
 		            	
 		            
-		            Criptomoneda moneda = new Criptomoneda(nombre, nomenclatura1, valor_dolar,volatilidad,cant);
+		             moneda = new Criptomoneda(nombre, nomenclatura1, valor_dolar,volatilidad,cant);
 		            }else {
-		            	MonedaFiduciaria moneda = new MonedaFiduciaria(nombre, nomenclatura1, valor_dolar,volatilidad,cant);
+		             moneda = new MonedaFiduciaria(nombre, nomenclatura1, valor_dolar,volatilidad,cant);
 		            }
 		            }
 				
@@ -72,7 +73,7 @@ public class MonedaDAOjdbc implements MonedaDAO {
 			} catch (SQLException e) {
 				
 			}
-			return null;
+			return moneda;
 		}
 
 	@Override
