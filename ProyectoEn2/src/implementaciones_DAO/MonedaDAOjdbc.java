@@ -57,6 +57,8 @@ public class MonedaDAOjdbc implements MonedaDAO {
 		            String tipo = res.getString("tipo"); 
 		            float cant= res.getFloat("stock");
 		            
+		            
+		            // en SQL lite tenemos que tirar un check en la base de datos para los valores Cripto y Fiat
 		            if(tipo.equals("Cripto")) {	
 		            
 		             moneda = new Criptomoneda(nombre, nomenclatura1, valor_dolar,volatilidad,cant);
