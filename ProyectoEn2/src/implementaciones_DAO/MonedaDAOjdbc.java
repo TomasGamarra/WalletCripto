@@ -57,9 +57,7 @@ public class MonedaDAOjdbc implements MonedaDAO {
 		            String tipo = res.getString("tipo"); 
 		            float cant= res.getFloat("stock");
 		            
-		            // Crear un objeto Moneda con los valores obtenidos
-		            if(tipo.equals("Cripto")) {
-		            	
+		            if(tipo.equals("Cripto")) {	
 		            
 		             moneda = new Criptomoneda(nombre, nomenclatura1, valor_dolar,volatilidad,cant);
 		            }else {
@@ -104,7 +102,24 @@ public class MonedaDAOjdbc implements MonedaDAO {
 
 	@Override
 	public void delete(String nomenclatura) {
-		// TODO Auto-generated method stub
+		String sql= "DELETE FROM MONEDA WHERE nomenclatura ?";
+		try {
+			Connection con = MyConnection.getConnection();
+			PreparedStatement ps = con.prepareStatement(sql);
+			
+			ps.setString(1, nomenclatura);
+			
+			int res= ps.executeUpdate();
+			
+			if(res != 0) {
+				System.out.print("Se elimino la moneda");
+			}else {
+				System.out.print("No se pudo eliminar la moneda porque no se encontro");
+			}
+			
+		}catch (SQLException e) {
+			
+		}
 		
 	}
 
