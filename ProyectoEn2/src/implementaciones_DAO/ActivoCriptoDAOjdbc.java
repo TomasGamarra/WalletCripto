@@ -41,7 +41,7 @@ public class ActivoCriptoDAOjdbc implements ActivoCriptoDAO {
 			ps.setString(1,nomenclatura);
 			ResultSet res = ps.executeQuery();
 			res.next();
-			ActivoCripto act = new ActivoCripto(res.getFloat("cantidad"),,res.getString("direccion"));;
+			ActivoCripto act = new ActivoCripto(res.getFloat("cantidad"),res.getString(0),res.getString("direccion"));;
 			
 			
 		}catch (SQLException e) {

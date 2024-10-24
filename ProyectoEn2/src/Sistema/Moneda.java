@@ -10,7 +10,10 @@ import java.awt.Image;
 public abstract class Moneda {
 	private String nombre;
 	private String sigla;
-	private Image icono;
+	private float precio;
+	private float volatilidad;
+	private String tipo;
+	private float cant;
 	
 	
 	public Moneda() {
@@ -18,10 +21,12 @@ public abstract class Moneda {
 		
 	}
 	
-	public Moneda(String nombre, String sigla, Image icono) {
+	public Moneda(String nombre, String sigla, float precio, float volatilidad, float cant) {
 		this.nombre = nombre;
 		this.sigla = sigla;
-		this.icono = icono;
+		this.precio =precio;
+		this.volatilidad=volatilidad;
+		this.cant=cant;
 	}
 
 
@@ -52,29 +57,37 @@ public abstract class Moneda {
 		this.sigla = sigla;
 	}
 
-
-
-
-	public Image getIcono() {
-		return icono;
+	public float getPrecio() {
+		return precio;
 	}
 
-
-
-
-	public void setIcono(Image icono) {
-		this.icono = icono;
+	public void setPrecio(float precio) {
+		this.precio = precio;
 	}
 
-	
-	
-	
-	
-	
+	public float getVolatilidad() {
+		return volatilidad;
+	}
 
-	
-	
-	
+	public void setVolatilidad(float volatilidad) {
+		this.volatilidad = volatilidad;
+	}
+
+	public String getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
+
+	public float getCant() {
+		return cant;
+	}
+
+	public void setCant(float cant) {
+		this.cant = cant;
+	}
 	
 	
 	

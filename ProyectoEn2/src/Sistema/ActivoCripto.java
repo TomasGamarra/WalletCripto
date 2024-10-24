@@ -6,7 +6,6 @@ public class ActivoCripto extends Activo {
 
 	
     public ActivoCripto() {
-    	
     }
 	
 	public ActivoCripto(float amount, Moneda moneda, String direccion) {
