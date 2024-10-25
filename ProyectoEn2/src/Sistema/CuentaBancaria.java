@@ -14,7 +14,7 @@ public class CuentaBancaria {
 	private String alias;
 	private String cbu;
 	private String empresa;
-	private MonedaFiduciaria monedaAsociada;
+	private MonedaFiat monedaAsociada;
 
 	public CuentaBancaria() {
 
@@ -25,7 +25,7 @@ public class CuentaBancaria {
 	 * @param cbu     digitos de una direccion a una cuenta bancaria
 	 * @param empresa empresa de banco
 	 */
-	public CuentaBancaria(String alias, String cbu, String empresa,MonedaFiduciaria monedaAsociada) {
+	public CuentaBancaria(String alias, String cbu, String empresa,MonedaFiat monedaAsociada) {
 		this.alias = alias;
 		this.cbu = cbu;
 		this.empresa = empresa;
@@ -60,12 +60,12 @@ public class CuentaBancaria {
 		this.empresa = empresa;
 	}
 	
-	public MonedaFiduciaria getMonedaAsociada() {
+	public MonedaFiat getMonedaAsociada() {
 		return monedaAsociada;
 		
 	}
 	
-	public void setMonedaAsociada(MonedaFiduciaria monedaAsociada) {
+	public void setMonedaAsociada(MonedaFiat monedaAsociada) {
 		this.monedaAsociada=monedaAsociada;
 	}
 

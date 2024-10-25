@@ -2,20 +2,27 @@ package Sistema;
 
 import java.awt.Image;
 
-//Al final le sacamos a  esta verga el abstract?'
 
 
 public class Criptomoneda extends Moneda{
-
+	private float volatilidad;
 	
-	public Criptomoneda(String nombre, String sigla, float precio, float volatilidad,float cant) {
-		super(nombre,sigla,precio,volatilidad,cant );
-		setTipo("Cripto");
+	public Criptomoneda(String nombre, String sigla, float precio, float volatilidad) {
+		super(nombre,sigla,precio);
+		this.setVolatilidad(volatilidad);
 	}
 	
 	public Criptomoneda() {
-		setTipo("Cripto");
+
 		
+	}
+
+	public float getVolatilidad() {
+		return volatilidad;
+	}
+
+	public void setVolatilidad(float volatilidad) {
+		this.volatilidad = volatilidad;
 	}
 	
 

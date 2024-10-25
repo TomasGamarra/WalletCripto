@@ -12,7 +12,7 @@ public class Sistema{
     private String terminosYCondiciones;
     private GestorStock gestorStock;
     private List<Criptomoneda> listaCriptos;
-    private List<MonedaFiduciaria> listaFidu;
+    private List<MonedaFiat> listaFidu;
 
     // Constructor privado para evitar que se cree una nueva instancia
     private Sistema() {
@@ -61,11 +61,11 @@ public class Sistema{
         this.listaCriptos = listaCriptos;
     }
 
-    public List<MonedaFiduciaria> getListaFidu() {
+    public List<MonedaFiat> getListaFidu() {
         return listaFidu;
     }
 
-    public void setListaFidu(List<MonedaFiduciaria> listaFidu) {
+    public void setListaFidu(List<MonedaFiat> listaFidu) {
         this.listaFidu = listaFidu;
     }
 }   

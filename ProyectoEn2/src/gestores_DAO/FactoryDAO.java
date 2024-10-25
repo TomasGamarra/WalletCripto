@@ -11,19 +11,23 @@ import interfaces_DAO.TransaccionDAO;
 
 public class FactoryDAO {
 	
-	MonedaDAO getMonedaDAO () {
+	public FactoryDAO() {
+		
+	}
+	
+	public MonedaDAO getMonedaDAO () {
 		return new MonedaDAOjdbc();
 	}
 	
-	ActivoFiatDAO getActivoFiatDAO () {
+	public ActivoFiatDAO getActivoFiatDAO () {
 		return new ActivoFiatDAOjdbc() ;
 	}
 	
-	ActivoCriptoDAO getActivoCriptoDAO () {
+	public ActivoCriptoDAO getActivoCriptoDAO () {
 		return new ActivoCriptoDAOjdbc() ;
 	}
 	
-	TransaccionDAO getTransaccionDAO() {
+	public TransaccionDAO getTransaccionDAO() {
 		return new TransaccionDAOjdbc() ;
 	}
 

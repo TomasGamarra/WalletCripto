@@ -32,23 +32,23 @@ public class ActivoCriptoDAOjdbc implements ActivoCriptoDAO {
 		}
 	}
 
-	@Override
-	public ActivoCripto find(String nomenclatura) {
-		String sql = "SELECT * FROM ACTIVO_CRIPTO WHERE nomenclatura=?";
-		try {
-			Connection con = MyConnection.getConnection();
-			PreparedStatement ps = con.prepareStatement(sql);
-			ps.setString(1,nomenclatura);
-			ResultSet res = ps.executeQuery();
-			res.next();
-			ActivoCripto act = new ActivoCripto(res.getFloat("cantidad"),res.getString(0),res.getString("direccion"));;
-			
-			
-		}catch (SQLException e) {
-			
-		}
-		return null;
-	}
+	//@Override
+//	public ActivoCripto find(String nomenclatura) {
+//		String sql = "SELECT * FROM ACTIVO_CRIPTO WHERE nomenclatura=?";
+//		try {
+//			Connection con = MyConnection.getConnection();
+//			PreparedStatement ps = con.prepareStatement(sql);
+//			ps.setString(1,nomenclatura);
+//			ResultSet res = ps.executeQuery();
+//			res.next();
+//			ActivoCripto act = new ActivoCripto(res.getFloat("cantidad"),res.getString(0),res.getString("direccion"));;
+//			
+//			
+//		}catch (SQLException e) {
+//			
+//		}
+//		return null;
+//	}
 
 	@Override
 	public void update(ActivoCripto activo) {
