@@ -5,7 +5,7 @@ public class MyConnection {
  
  static { //Se ejecuta cuando la clase se carga en memoria , previo a cualquier llamado a metodo o instanciacion (En este caso no hay x ser Singleton)
 	 try {
-		 connection = DriverManager.getConnection("jdbc:sqlite:test.db");
+		 connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
 	  } catch (java.sql.SQLException e) {
 		 System.out.println("Error de SQL: "+e.getMessage());
       } 

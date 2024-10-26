@@ -21,9 +21,9 @@ public class MonedaDAOjdbc implements MonedaDAO {
 	@Override
 	public void create(Moneda moneda) {
 		String sql = "INSERT INTO MONEDA (nombre, nomenclatura, valor_dolar, volatilidad, tipo) VALUES (?, ?, ?, ?, ?)";
-		try (Connection con = MyConnection.getConnection();
-			PreparedStatement ps = con.prepareStatement(sql);) {
-			
+		try {
+			Connection con = MyConnection.getConnection();
+			PreparedStatement ps = con.prepareStatement(sql);
 			//Extraigo valores comunes a las monedas
 			ps.setString(1, moneda.getNombre());
 			ps.setString(2, moneda.getSigla());
@@ -38,7 +38,7 @@ public class MonedaDAOjdbc implements MonedaDAO {
 			ps.setString(5, moneda.getClass().getSimpleName()); //CHECKED ?
 			//Chequeo de errores
 			int filasAfectadas =ps.executeUpdate();
-			if (filasAfectadas < 0) 
+			if (filasAfectadas <= 0) 
 				throw new SQLException ("Error al insertar moneda , ninguna fila fue afectada");
 			
 		} catch (SQLException e) {

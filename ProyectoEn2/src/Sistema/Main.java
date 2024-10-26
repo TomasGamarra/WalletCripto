@@ -2,13 +2,14 @@ package Sistema;
 import java.util.Scanner;
 import gestores_DAO.FactoryDAO;
 import interfaces_DAO.MonedaDAO;
+import interfaces_DAO.StockDAO;
 
 public class Main {
 
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
 		int opcion;
-
+		//MENU DE SELECCION
 		while (true) {
 		System.out.println("----- Menú -----");
 		System.out.println("1. Crear Monedas");
@@ -23,10 +24,12 @@ public class Main {
 		System.out.print("Seleccione una opción: ");
 		            
 		opcion = scanner.nextInt();
+		//Limpio el Buffer
+		scanner.nextLine();
 
 		switch (opcion) {
 			case 1:
-				crearMonedas();
+				crearMonedas(scanner);
 				break;
 			case 2:
 				listarMonedas();
@@ -58,13 +61,17 @@ public class Main {
                 break;
 		   }
 		}
+
 }
 
 
-public static void crearMonedas() {
-	try(Scanner in = new Scanner(System.in);){
+public static void crearMonedas(Scanner in) {	
 		System.out.println("Ingrese tipo de moneda (Cripto/Fiat)");
 		String tipo=in.next();
+		if (!(tipo.equals("Cripto") || tipo.equals("Fiat"))) {
+			System.out.println("La moneda seleccionada no es Cripto o Fiat!");
+			return;
+		}
 		System.out.println("Ingrese nombre de la moneda:");
 		String nombre=in.next();
 		System.out.println("Ingrese nomenclatura:");
@@ -72,31 +79,32 @@ public static void crearMonedas() {
 		System.out.println("Ingrese valor en USD:");
 		float valorUsd = in.nextFloat();
 		System.out.println("Ingrese el stock disponible:");
-		float stock=in.nextFloat();
+		float cantStock=in.nextFloat();
 		System.out.println("Desea confirmar para guardar en la Base de Datos ? (Y/N):");
 		String choice =in.next();
 		if (choice.equals("Y")) {
 			FactoryDAO factory = new FactoryDAO();
-			MonedaDAO dao =factory.getMonedaDAO();
-			
+			MonedaDAO mondao =factory.getMonedaDAO();
+			StockDAO stockdao = factory.getStockDAO();
 			Moneda mon;
-			Sistema sis = Sistema.getInstance();
+			Stock stock;
 			if (tipo.equals("Cripto")) {
 				mon = new Criptomoneda(nombre,nomenclatura,valorUsd,0);
-				//sis.getGestorStock().agregarStock(mon, stock) Tengo que hacer cambios en el gestor para que funcione
-				dao.create(mon);
+				mondao.create(mon);
+				stock = new Stock (cantStock , mon);
+				stockdao.create(stock);
 			}
 			else 
 				if (tipo.equals("Fiat")) {
 					mon=new MonedaFiat(nombre,nomenclatura,valorUsd);
-					dao.create(mon);
+					mondao.create(mon);
+					stock = new Stock (cantStock,mon);
+					stockdao.create(stock);
 				}
 		}else {
-			System.out.println("No se ha creado ninguna moneda");
+			System.out.println("No se ha creado ninguna moneda , la creacion fue cancelada");
 			return;
 		}
-	
-	} 
 	
 }
 

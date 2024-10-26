@@ -1,5 +1,5 @@
 package Sistema;
-
+//CREO QUE ESTO VA A DESAPARECER
 import java.util.HashMap;
 //tenemos q hacer el actualizarStock
 
