@@ -1,5 +1,7 @@
 package interfaces_DAO;
 
+import java.util.List;
+
 import Sistema.Moneda;
 
 public interface MonedaDAO {
@@ -8,4 +10,5 @@ public interface MonedaDAO {
 	Moneda find (String nomenclatura);
 	void update (Moneda activo);
 	void delete (String nomenclatura);
+	List<Moneda> listarMonedas();
 }

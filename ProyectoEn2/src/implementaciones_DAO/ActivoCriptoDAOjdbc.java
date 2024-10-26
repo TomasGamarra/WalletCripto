@@ -33,7 +33,7 @@ public class ActivoCriptoDAOjdbc implements ActivoCriptoDAO {
 	}
 
 	//@Override
-//	public ActivoCripto find(String nomenclatura) {
+public ActivoCripto find(String nomenclatura) {
 //		String sql = "SELECT * FROM ACTIVO_CRIPTO WHERE nomenclatura=?";
 //		try {
 //			Connection con = MyConnection.getConnection();
@@ -47,8 +47,8 @@ public class ActivoCriptoDAOjdbc implements ActivoCriptoDAO {
 //		}catch (SQLException e) {
 //			
 //		}
-//		return null;
-//	}
+		return null;
+	}
 
 	@Override
 	public void update(ActivoCripto activo) {
@@ -61,5 +61,6 @@ public class ActivoCriptoDAOjdbc implements ActivoCriptoDAO {
 		// TODO Auto-generated method stub
 		
 	}
+
 
 }

@@ -50,9 +50,9 @@ public class MonedaDAOjdbc implements MonedaDAO {
 	public Moneda find(String nomenclatura) {
 		String sql = "SELECT * FROM MONEDA WHERE nomenclatura=?";
 		Moneda moneda= null;
-		try (Connection con= MyConnection.getConnection();
-			PreparedStatement ps= con.prepareStatement(sql);) {
-				
+		try {
+			Connection con= MyConnection.getConnection();
+			PreparedStatement ps= con.prepareStatement(sql); 	
 			ps.setString(1, nomenclatura);
 			ResultSet res= ps.executeQuery();	
 		    if (res.next()) {   
@@ -63,9 +63,9 @@ public class MonedaDAOjdbc implements MonedaDAO {
 		      String tipo = res.getString("tipo"); 
 		      // en SQL lite tenemos que tirar un check en la base de datos para los valores Cripto y Fiat
 		      if(tipo.equals("Cripto")) 
-		      moneda = new Criptomoneda(nombre, nomenclatura1, valor_dolar,volatilidad);
+		    	  moneda = new Criptomoneda(nombre, nomenclatura1, valor_dolar,volatilidad);
 		      else 
-		      moneda = new MonedaFiat(nombre, nomenclatura1, valor_dolar);
+		    	  moneda = new MonedaFiat(nombre, nomenclatura1, valor_dolar);
 		    }
 				
 		} catch (SQLException e) {
@@ -101,15 +101,13 @@ public class MonedaDAOjdbc implements MonedaDAO {
 
 	@Override
 	public void delete(String nomenclatura) {
-		String sql= "DELETE FROM MONEDA WHERE nomenclatura ?";
-		try (Connection con = MyConnection.getConnection();
-			PreparedStatement ps = con.prepareStatement(sql);) {
-			
+		String sql= "DELETE FROM MONEDA WHERE nomenclatura=?";
+		try {
+			Connection con = MyConnection.getConnection();
+			PreparedStatement ps = con.prepareStatement(sql);
 			ps.setString(1, nomenclatura);
 			
-			int res= ps.executeUpdate();
-			
-			if(res != 0) {
+			if(ps.executeUpdate() != 0) {
 				System.out.print("Se elimino la moneda");
 			}else {
 				System.out.print("No se pudo eliminar la moneda porque no se encontro");
@@ -125,10 +123,10 @@ public class MonedaDAOjdbc implements MonedaDAO {
 		String sql = "SELECT * FROM MONEDA";
 		List<Moneda> list = new LinkedList<Moneda>();
 		Moneda mon ;
-		try (Connection con = MyConnection.getConnection();
+		try {
+			Connection con = MyConnection.getConnection();
 			PreparedStatement ps = con.prepareStatement(sql);
-			ResultSet rs = ps.executeQuery();) {
-			
+			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				 String nomenclatura = rs.getString("nomenclatura"); 
 		         String nombre = rs.getString("nombre"); 
@@ -136,7 +134,7 @@ public class MonedaDAOjdbc implements MonedaDAO {
 		         float volatilidad = rs.getFloat("volatilidad");
 		         String tipo = rs.getString("tipo");
 		           // en SQL lite tenemos que tirar un check en la base de datos para los valores Cripto y Fiat
-		         if(tipo.equals("Cripto")) 
+		         if(tipo.equals("Criptomoneda")) 
 		            mon = new Criptomoneda(nombre, nomenclatura, valor_dolar,volatilidad);
 		         else 
 		            mon = new MonedaFiat(nombre, nomenclatura, valor_dolar);

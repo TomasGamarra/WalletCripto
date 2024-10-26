@@ -17,5 +17,5 @@ public class MonedaFiat extends Moneda{
 	public MonedaFiat() {
 	}
 	
-	
+
 }

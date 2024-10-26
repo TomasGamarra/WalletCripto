@@ -27,7 +27,7 @@ public class StockDAOjdbc implements StockDAO {
 		}catch (SQLException e) {
 			System.out.println("Error al crear stock : "+e.getMessage());
 		}
-		
+	
 	}
 
 	@Override

@@ -1,9 +1,11 @@
 package Sistema;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Scanner;
 import gestores_DAO.FactoryDAO;
 import interfaces_DAO.MonedaDAO;
 import interfaces_DAO.StockDAO;
-
+import comparadores.*;
 public class Main {
 
 	public static void main(String[] args) {
@@ -11,6 +13,7 @@ public class Main {
 		int opcion;
 		//MENU DE SELECCION
 		while (true) {
+		
 		System.out.println("----- Menú -----");
 		System.out.println("1. Crear Monedas");
 		System.out.println("2. Listar Monedas");
@@ -32,7 +35,7 @@ public class Main {
 				crearMonedas(scanner);
 				break;
 			case 2:
-				listarMonedas();
+				listarMonedas(scanner);
 				break;
 			case 3:
 				generarStock();
@@ -108,8 +111,31 @@ public static void crearMonedas(Scanner in) {
 	
 }
 
-public static void listarMonedas() {
+public static void listarMonedas(Scanner in) {
+	System.out.println("Ingrese el criterio para ordenar el listado:");
+	System.out.println("1.Nomenclatura");
+	System.out.println("2.Valor en USD");
+	int choice = in.nextInt();
+	if (!(choice == 1 || choice == 2)) { //Valor erroneo
+		System.out.println("Valor erroneo ingresado");
+		return ;
+	}
+	Comparator <Moneda> comparador;
+    if (choice == 1) { //Ordenar por nomenclatura
+    	comparador = new ComparadorMonedaPorNomenclatura();
+    }else { //Ordenar por valor en USD
+    	comparador = new ComparadorMonedaPorValorUsd();
+    }
     
+    FactoryDAO factory = new FactoryDAO();
+    MonedaDAO monedadao = factory.getMonedaDAO();
+    
+    List<Moneda> list = monedadao.listarMonedas();
+    
+    list.sort(comparador);
+    for (Moneda mon : list ) {
+    	System.out.println("["+mon.getSigla()+"] - ValorUsd :"+ mon.getValorUsd());
+    }
 }
 
 public static void generarStock() {

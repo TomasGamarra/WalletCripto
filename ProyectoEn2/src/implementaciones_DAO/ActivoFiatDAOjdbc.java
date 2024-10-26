@@ -34,20 +34,6 @@ public class ActivoFiatDAOjdbc implements ActivoFiatDAO {
 
 	@Override
 	public ActivoFiat find(String nomenclatura) {
-		String sql = "SELECT * FROM ACTIVO_FIAT WHERE nomenclatura=?";
-		try {
-			Connection con = MyConnection.getConnection();
-			PreparedStatement ps = con.prepareStatement(sql);
-			ps.setString(1,nomenclatura);
-			ResultSet res = ps.executeQuery();
-			res.next();
-			ActivoFiat act = new ActivoFiat(res.getMoneda("nomenclatura"),res.getFloat("amount"));
-			
-			
-			
-		}catch (SQLException e) {
-			
-		}
 		return null;
 	}
 
