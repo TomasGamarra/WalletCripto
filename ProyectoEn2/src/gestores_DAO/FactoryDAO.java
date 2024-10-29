@@ -17,23 +17,23 @@ public class FactoryDAO {
 		
 	}
 	
-	public MonedaDAO getMonedaDAO () {
+	public static MonedaDAO getMonedaDAO () {
 		return new MonedaDAOjdbc();
 	}
 	
-	public ActivoFiatDAO getActivoFiatDAO () {
+	public static ActivoFiatDAO getActivoFiatDAO () {
 		return new ActivoFiatDAOjdbc() ;
 	}
 	
-	public ActivoCriptoDAO getActivoCriptoDAO () {
+	public static ActivoCriptoDAO getActivoCriptoDAO () {
 		return new ActivoCriptoDAOjdbc() ;
 	}
 	
-	public TransaccionDAO getTransaccionDAO() {
+	public static TransaccionDAO getTransaccionDAO() {
 		return new TransaccionDAOjdbc() ;
 	}
 	
-	public StockDAO getStockDAO () {
+	public static StockDAO getStockDAO () {
 		return new StockDAOjdbc();
 	}
 }
