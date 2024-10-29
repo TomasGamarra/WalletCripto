@@ -44,11 +44,6 @@ public class StockDAOjdbc implements StockDAO {
 		return null;
 	}
 
-	@Override
-	public void update(Stock stock) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void delete(String nomenclatura) {
@@ -56,23 +51,22 @@ public class StockDAOjdbc implements StockDAO {
 		
 	}
 
-	public void updateCant(Stock stock) {
+	public void update(Stock stock) {
 		String sql=  "UPDATE STOCK SET cantidad = ? WHERE nomenclatura = ? ";
-		Random random = new Random();
-		Float rdm = random.nextFloat(300.00f);
+
 		try {
 			Connection con = MyConnection.getConnection();
 			PreparedStatement ps = con.prepareStatement(sql);
-			ps.setFloat(1, rdm);
-			ps.setString(2, stock.getMoneda().getNombre());
-			int res = ps.executeUpdate();
-			
-			if (res < 0) {
-				throw new SQLException ("Error al cambiar Stock , ninguna fila fue afectada");
+			ps.setFloat(1, stock.getCantidad());
+			ps.setString(2, stock.getMoneda().getSigla());
+	
+			if (ps.executeUpdate()< 0) {
+				throw new SQLException ("Ninguna fila fue afectada");
 			}
 			
 			
 		} catch (SQLException e) {
+			System.out.println("Error al actualizar stock: "+e.getMessage());
 	}
 }
 

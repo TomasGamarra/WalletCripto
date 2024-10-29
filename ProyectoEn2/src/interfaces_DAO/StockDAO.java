@@ -4,9 +4,9 @@ import Sistema.Stock;
 
 public interface StockDAO {
 	
-	void create (Stock activo);
+	void create (Stock stock);
 	Stock find (String nomenclatura);
-	void update (Stock activo);
+	void update (Stock stock);
 	void delete (String nomenclatura);
 
 }

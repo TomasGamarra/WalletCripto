@@ -1,6 +1,7 @@
 package Sistema;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 import gestores_DAO.FactoryDAO;
 import interfaces_DAO.MonedaDAO;
@@ -139,7 +140,13 @@ public static void listarMonedas(Scanner in) {
 }
 
 public static void generarStock() {
-		        
+	Random random = new Random();
+	MonedaDAO monedadao = FactoryDAO.getMonedaDAO();
+	StockDAO stockdao = FactoryDAO.getStockDAO();
+	List<Moneda> list = monedadao.listarMonedas();
+	for (Moneda mon : list)
+		stockdao.update(new Stock (random.nextFloat(300.00f),mon));
+
 }
 
 public static void listarStock() {
