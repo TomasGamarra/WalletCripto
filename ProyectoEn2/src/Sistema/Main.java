@@ -1,5 +1,6 @@
 package Sistema;
 import java.util.Comparator;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
@@ -7,6 +8,8 @@ import gestores_DAO.FactoryDAO;
 import interfaces_DAO.MonedaDAO;
 import interfaces_DAO.StockDAO;
 import comparadores.*;
+import interfaces_DAO.ActivoCriptoDAO;
+import interfaces_DAO.ActivoFiatDAO;
 public class Main {
 
 	public static void main(String[] args) {
@@ -26,10 +29,16 @@ public class Main {
 		System.out.println("8. Simular un SWAP");
 		System.out.println("0. Salir");
 		System.out.print("Seleccione una opción: ");
-		            
-		opcion = scanner.nextInt();
+		try {            
+		opcion = scanner.nextInt(); 
+		}catch (InputMismatchException e) {
+			System.err.println("Error en el tipo ingresado , se solicito un entero");
+			continue;
+		}finally {
+			scanner.nextLine();
+		}
 		//Limpio el Buffer
-		scanner.nextLine();
+
 
 		switch (opcion) {
 			case 1:
@@ -42,10 +51,10 @@ public class Main {
 				generarStock();
 				break;
 			case 4:
-				listarStock();
+				listarStock(scanner);
 				break;
 			case 5:
-				generarMisActivos();
+				generarActivo(scanner);
 				break;
 			case 6:
 				listarMisActivos();
@@ -87,23 +96,19 @@ public static void crearMonedas(Scanner in) {
 		System.out.println("Desea confirmar para guardar en la Base de Datos ? (Y/N):");
 		String choice =in.next();
 		if (choice.equals("Y")) {
-			FactoryDAO factory = new FactoryDAO();
-			MonedaDAO mondao =factory.getMonedaDAO();
-			StockDAO stockdao = factory.getStockDAO();
+			MonedaDAO mondao =FactoryDAO.getMonedaDAO();
+			StockDAO stockdao =FactoryDAO.getStockDAO();
 			Moneda mon;
-			Stock stock;
 			if (tipo.equals("Cripto")) {
 				mon = new Criptomoneda(nombre,nomenclatura,valorUsd,0);
 				mondao.create(mon);
-				stock = new Stock (cantStock , mon);
-				stockdao.create(stock);
+				stockdao.create(new Stock (cantStock, mon));
 			}
 			else 
 				if (tipo.equals("Fiat")) {
 					mon=new MonedaFiat(nombre,nomenclatura,valorUsd);
 					mondao.create(mon);
-					stock = new Stock (cantStock,mon);
-					stockdao.create(stock);
+					stockdao.create(new Stock(cantStock,mon));
 				}
 		}else {
 			System.out.println("No se ha creado ninguna moneda , la creacion fue cancelada");
@@ -122,20 +127,19 @@ public static void listarMonedas(Scanner in) {
 		return ;
 	}
 	Comparator <Moneda> comparador;
-    if (choice == 1) { //Ordenar por nomenclatura
+    if (choice == 1) //Ordenar por nomenclatura
     	comparador = new ComparadorMonedaPorNomenclatura();
-    }else { //Ordenar por valor en USD
+    else  //Ordenar por valor en USD
     	comparador = new ComparadorMonedaPorValorUsd();
-    }
     
-    FactoryDAO factory = new FactoryDAO();
-    MonedaDAO monedadao = factory.getMonedaDAO();
+    
+    MonedaDAO monedadao = FactoryDAO.getMonedaDAO();
     
     List<Moneda> list = monedadao.listarMonedas();
     
     list.sort(comparador);
     for (Moneda mon : list ) {
-    	System.out.println("["+mon.getSigla()+"] - ValorUsd :"+ mon.getValorUsd());
+    	System.out.println("["+mon.getNomenclatura()+"] - ValorUsd :"+ mon.getValorUsd());
     }
 }
 
@@ -145,16 +149,72 @@ public static void generarStock() {
 	StockDAO stockdao = FactoryDAO.getStockDAO();
 	List<Moneda> list = monedadao.listarMonedas();
 	for (Moneda mon : list)
-		stockdao.update(new Stock (random.nextFloat(300.00f),mon));
+		stockdao.update(new Stock (random.nextFloat(1000),mon));
 
 }
 
-public static void listarStock() {
-		        // Implementación
+public static void listarStock(Scanner in) {
+	System.out.println("Seleccione el criterio a filtrar el Stock :");
+	System.out.println("1. Cantidad (Descendente)");
+	System.out.println("2. Nomenclatura");
+	int choice = in.nextInt();
+	if (!(choice == 1 || choice == 2)) {
+		System.out.println("Opcion no valida ...");
+		return;
+	}
+	Comparator <Stock> comp;
+	if (choice == 1)
+		comp=new ComparadorStockPorCantidadDescendente();
+	else
+		comp=new ComparadorStockPorNomenclatura();
+		
+	StockDAO stockdao = FactoryDAO.getStockDAO();
+	List<Stock> list = stockdao.listarStock();
+	list.sort(comp);
+	
+	for (Stock stock : list) 
+		System.out.println("["+stock.getMoneda().getNomenclatura()+"] - Cantidad :"+ stock.getCantidad());
+	
+}
+public static void generarActivo(Scanner in) {
+    System.out.println("Ingrese la nomenclatura de la moneda para crear el activo:");
+    String nomenclatura = in.next();
+    MonedaDAO monedadao = FactoryDAO.getMonedaDAO();
+    Moneda mon = monedadao.find(nomenclatura); //
+
+    if (mon == null) {
+        System.out.println("Error: No se encontró la nomenclatura en la tabla moneda.");
+        return;
+    }
+
+    System.out.println("Ingrese la cantidad del activo:");
+    float cantidad;
+    try {
+        cantidad = in.nextFloat();
+    } catch (InputMismatchException e) {
+        System.out.println("Error: La cantidad debe ser un número decimal.");
+        in.nextLine();
+        return;
+    }
+    if (mon instanceof Criptomoneda)
+    	crearActivoCripto((Criptomoneda)mon, cantidad); 
+    else
+    	crearActivoFiat((MonedaFiat)mon,cantidad);
+
 }
 
-public static void generarMisActivos() {
-		        // Implementación
+private static void crearActivoCripto(Criptomoneda mon, float cantidad) {
+    ActivoCriptoDAO actdao = FactoryDAO.getActivoCriptoDAO();
+    ActivoCripto activo = new ActivoCripto(cantidad, mon, "DireccionRandom");
+    actdao.create(activo);
+    System.out.println("Activo cripto creado correctamente.");
+}
+
+private static void crearActivoFiat(MonedaFiat mon, float cantidad) {
+    ActivoFiatDAO actdao = FactoryDAO.getActivoFiatDAO();
+    ActivoFiat activo = new ActivoFiat(cantidad, mon);
+    actdao.create(activo);
+    System.out.println("Activo fiat creado correctamente.");
 }
 
 public static void listarMisActivos() {

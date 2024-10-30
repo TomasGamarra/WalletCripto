@@ -20,16 +20,16 @@ public class StockDAOjdbc implements StockDAO {
 
 	@Override
 	public void create(Stock stock) {
-		try (Connection con = MyConnection.getConnection();){
-			String sql = "INSERT INTO STOCK (cantidad, nomenclatura) VALUES (?,?)";
+		String sql = "INSERT INTO STOCK (cantidad, nomenclatura) VALUES (?,?)";
+		try {
+			Connection con = MyConnection.getConnection();
 			PreparedStatement ps = con.prepareStatement(sql);
 			
 			ps.setFloat(1,stock.getCantidad());
-			ps.setString(2,stock.getMoneda().getSigla());
+			ps.setString(2,stock.getMoneda().getNomenclatura());
 			
 			if (ps.executeUpdate() < 0)  {
-				System.out.println("No se afecto ninguna fila");
-				throw new SQLException() ;
+				throw new SQLException("No se afecto ninguna fila") ;
 			}
 			
 		}catch (SQLException e) {
@@ -56,13 +56,13 @@ public class StockDAOjdbc implements StockDAO {
 
 		try {
 			Connection con = MyConnection.getConnection();
+			
 			PreparedStatement ps = con.prepareStatement(sql);
 			ps.setFloat(1, stock.getCantidad());
-			ps.setString(2, stock.getMoneda().getSigla());
+			ps.setString(2, stock.getMoneda().getNomenclatura());
 	
-			if (ps.executeUpdate()< 0) {
+			if (ps.executeUpdate()< 0) 
 				throw new SQLException ("Ninguna fila fue afectada");
-			}
 			
 			
 		} catch (SQLException e) {
@@ -73,22 +73,19 @@ public class StockDAOjdbc implements StockDAO {
 	public List<Stock> listarStock () { 
 		String sql = "SELECT * FROM STOCK";
 		List<Stock> list = new LinkedList<Stock>();
-		Stock stk ;
 		try {
 			Connection con = MyConnection.getConnection();
 			PreparedStatement ps = con.prepareStatement(sql);
 			ResultSet rs = ps.executeQuery();
-			// Necesito usar el factory DAO para que me devuelva la moneda cripto lo hago cuando llego a casa
+			MonedaDAO dao = FactoryDAO.getMonedaDAO();
 			while (rs.next()) {
 				 String nomenclatura = rs.getString("nomenclatura");  
 		         float cant = rs.getFloat("cantidad");
-		         MonedaDAO dao = FactoryDAO.getMonedaDAO();
 		         Moneda mon = dao.find(nomenclatura);
-		            stk = new Stock(  cant, mon);
-		         list.add(stk);  
+		         list.add(new Stock(cant, mon)); 
 			}
 		}catch (SQLException e) {
-			System.out.println("No se pudo listar las monedas: "+e.getMessage());
+			System.out.println("No se pudo listar el stock :"+e.getMessage());
 		}
 		return list;
 	}

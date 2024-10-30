@@ -13,26 +13,28 @@ public class ActivoCriptoDAOjdbc implements ActivoCriptoDAO {
 
 	@Override
 	public void create(ActivoCripto activo) {
-		String sql = "INSERT INTO ACTIVO_CRIPTO (nomenclatura, cantidad, direccion) VALUES (?, ?, ?, ?)";
+		String sql = "INSERT INTO ACTIVO_CRIPTO (nomenclatura, cantidad, direccion) VALUES (?, ?, ?)";
+		PreparedStatement ps=null;
 		try {
 			Connection con = MyConnection.getConnection();
-			PreparedStatement ps = con.prepareStatement(sql);
-			ps.setString(1, activo.getMoneda().getSigla());
+			
+			ps = con.prepareStatement(sql);
+			ps.setString(1, activo.getMoneda().getNomenclatura());
 			ps.setFloat(2, activo.getAmount());
 			ps.setString(3,activo.getDireccion());
 			
-			int filasAfectadas =ps.executeUpdate();
-			if (filasAfectadas < 0) {
-				throw new SQLException ("Error al insertar ActivoCripto , ninguna fila fue afectada");
-			}
+		
+			if (ps.executeUpdate() < 0) 
+				throw new SQLException ("Ninguna fila fue afectada");
+			
 			
 			
 		} catch (SQLException e) {
-			System.out.println("Error al insertar ActivoCripto"+e.getMessage());
+			System.out.println("Error al insertar ActivoCripto :"+e.getMessage());
 		}
 	}
 
-	//@Override
+	@Override
 public ActivoCripto find(String nomenclatura) {
 //		String sql = "SELECT * FROM ACTIVO_CRIPTO WHERE nomenclatura=?";
 //		try {

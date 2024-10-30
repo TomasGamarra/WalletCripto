@@ -11,4 +11,5 @@ public interface MonedaDAO {
 	void update (Moneda activo);
 	void delete (String nomenclatura);
 	List<Moneda> listarMonedas();
+	String obtenerTipoMoneda(String nomenclatura);
 }

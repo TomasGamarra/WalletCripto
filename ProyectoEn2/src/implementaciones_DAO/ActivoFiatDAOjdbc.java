@@ -17,18 +17,18 @@ public class ActivoFiatDAOjdbc implements ActivoFiatDAO {
 		String sql = "INSERT INTO ACTIVO_FIAT (nomenclatura, cantidad) VALUES (?, ?)";
 		try {
 			Connection con = MyConnection.getConnection();
-			PreparedStatement ps = con.prepareStatement(sql);
-			ps.setString(1, activo.getMoneda().getSigla());
-			ps.setFloat(2, activo.getAmount());
 			
-			int filasAfectadas =ps.executeUpdate();
-			if (filasAfectadas < 0) {
-				throw new SQLException ("Error al insertar ActivoCripto , ninguna fila fue afectada");
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setString(1, activo.getMoneda().getNomenclatura());
+			ps.setFloat(2, activo.getAmount());
+		
+			if (ps.executeUpdate() < 0) {
+				throw new SQLException ("Ninguna fila fue afectada");
 			}
 			
 			
 		} catch (SQLException e) {
-			System.out.println("Error al insertar ActivoCripto"+e.getMessage());
+			System.out.println("Error al insertar ActivoCripto :"+e.getMessage());
 		}
 	}
 

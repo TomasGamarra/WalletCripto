@@ -1,5 +1,7 @@
 package interfaces_DAO;
 
+import java.util.List;
+
 import Sistema.Stock;
 
 public interface StockDAO {
@@ -8,5 +10,6 @@ public interface StockDAO {
 	Stock find (String nomenclatura);
 	void update (Stock stock);
 	void delete (String nomenclatura);
+	List<Stock> listarStock () ;
 
 }

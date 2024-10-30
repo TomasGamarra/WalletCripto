@@ -9,7 +9,7 @@ import java.awt.Image;
 
 public abstract class Moneda {
 	private String nombre;
-	private String sigla;
+	private String nomenclatura;
 	private float valorUsd;
 
 
@@ -20,9 +20,9 @@ public abstract class Moneda {
 		
 	}
 	
-	public Moneda(String nombre, String sigla, float valorUsd) {
+	public Moneda(String nombre, String nomenclatura, float valorUsd) {
 		this.nombre = nombre;
-		this.sigla = sigla;
+		this.nomenclatura = nomenclatura;
 		this.valorUsd =valorUsd;
 
 	}
@@ -44,15 +44,15 @@ public abstract class Moneda {
 
 
 
-	public String getSigla() {
-		return sigla;
+	public String getNomenclatura() {
+		return nomenclatura;
 	}
 
 
 
 
-	public void setSigla(String sigla) {
-		this.sigla = sigla;
+	public void setNomenclatura(String nomenclatura) {
+		this.nomenclatura = nomenclatura;
 	}
 
 	public float getValorUsd() {

@@ -26,7 +26,7 @@ public class MonedaDAOjdbc implements MonedaDAO {
 			PreparedStatement ps = con.prepareStatement(sql);
 			//Extraigo valores comunes a las monedas
 			ps.setString(1, moneda.getNombre());
-			ps.setString(2, moneda.getSigla());
+			ps.setString(2, moneda.getNomenclatura());
 			ps.setFloat(3, moneda.getValorUsd());
 			
 			//Volatilidad dependiendo del tipo de moneda
@@ -62,7 +62,7 @@ public class MonedaDAOjdbc implements MonedaDAO {
 		      float volatilidad = res.getFloat("volatilidad");
 		      String tipo = res.getString("tipo"); 
 		      // en SQL lite tenemos que tirar un check en la base de datos para los valores Cripto y Fiat
-		      if(tipo.equals("Cripto")) 
+		      if(tipo.equals("Criptomoneda")) 
 		    	  moneda = new Criptomoneda(nombre, nomenclatura1, valor_dolar,volatilidad);
 		      else 
 		    	  moneda = new MonedaFiat(nombre, nomenclatura1, valor_dolar);
@@ -71,7 +71,7 @@ public class MonedaDAOjdbc implements MonedaDAO {
 		} catch (SQLException e) {
 				System.out.println("Error al buscar en la tabla MONEDA:"+e.getMessage());
 		}
-			return moneda;
+		return moneda;
 	}
 
 //	@Override
@@ -144,6 +144,23 @@ public class MonedaDAOjdbc implements MonedaDAO {
 			System.out.println("No se pudo listar las monedas: "+e.getMessage());
 		}
 		return list;
+	}
+	
+	public String obtenerTipoMoneda(String nomenclatura) {
+	    String tipo = null;
+	    try  {
+	    	Connection con = MyConnection.getConnection();
+	        PreparedStatement stmt = con.prepareStatement("SELECT tipo FROM Moneda WHERE nomenclatura = ?");
+	        stmt.setString(1, nomenclatura);
+	        ResultSet rs = stmt.executeQuery();
+	        
+	        if (rs.next()) {
+	            tipo = rs.getString("tipo");
+	        }
+	    } catch (SQLException e) {
+	        System.out.println("Error al obtener tipo de moneda: " + e.getMessage());
+	    }
+	    return tipo;
 	}
 
 }

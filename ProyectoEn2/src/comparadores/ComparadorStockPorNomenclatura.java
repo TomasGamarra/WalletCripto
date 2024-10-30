@@ -8,7 +8,7 @@ public class ComparadorStockPorNomenclatura implements Comparator <Stock>{
 
 	@Override
 	public int compare(Stock o1, Stock o2) {
-		return o1.getMoneda().getSigla().compareTo(o2.getMoneda().getSigla());
+		return o1.getMoneda().getNomenclatura().compareTo(o2.getMoneda().getNomenclatura());
 	}
 
 }
