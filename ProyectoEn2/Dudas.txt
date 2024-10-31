@@ -12,3 +12,4 @@ La otra solucion es crear una tabla stock con una cantidad y referencia a las mo
 -Como funciona el acceso a los datos con la foreign key , relacionado a que nos conviene en ciertos casos , si usarla o directamente usar un atributo para despues con ese valor buscar en otra tabla.
 -Preguntar sobre el tema de por ejemplo ListarStock donde se accede a otro DAO dentro de uno , esta bien eso ? O tengo que usar foreign key o algo para que quede mejor ?
 -Como hago para recuperar el tipo de la moneda para generar un activoCripto o fiat. Necesito hacer un metodo en el DAO de moneda que me devuelva el tipo ? Creo que SI
+-El create/update/delete tendria que devolver un boolean o algo para indicar que se creo correctamente ?

@@ -65,7 +65,8 @@ public class MonedaDAOjdbc implements MonedaDAO {
 		      if(tipo.equals("Criptomoneda")) 
 		    	  moneda = new Criptomoneda(nombre, nomenclatura1, valor_dolar,volatilidad);
 		      else 
-		    	  moneda = new MonedaFiat(nombre, nomenclatura1, valor_dolar);
+		    	  if (tipo.equals("MonedaFiat"))
+		    		  moneda = new MonedaFiat(nombre, nomenclatura1, valor_dolar);
 		    }
 				
 		} catch (SQLException e) {

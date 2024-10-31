@@ -1,6 +1,7 @@
 package Sistema;
 import java.util.Comparator;
 import java.util.InputMismatchException;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
@@ -57,7 +58,7 @@ public class Main {
 				generarActivo(scanner);
 				break;
 			case 6:
-				listarMisActivos();
+				listarMisActivos(scanner);
 				break;
 			case 7:
 				simularCompra();
@@ -199,6 +200,7 @@ public static void generarActivo(Scanner in) {
     if (mon instanceof Criptomoneda)
     	crearActivoCripto((Criptomoneda)mon, cantidad); 
     else
+    	if (mon instanceof MonedaFiat)
     	crearActivoFiat((MonedaFiat)mon,cantidad);
 
 }
@@ -214,11 +216,40 @@ private static void crearActivoFiat(MonedaFiat mon, float cantidad) {
     ActivoFiatDAO actdao = FactoryDAO.getActivoFiatDAO();
     ActivoFiat activo = new ActivoFiat(cantidad, mon);
     actdao.create(activo);
-    System.out.println("Activo fiat creado correctamente.");
+    System.out.println("Activo fiat creado correctamente."); //TENGO QUE CHEQUEAR ESTO , PODRIA METERLE QUE DEVUELVA UN BOOLEAN EL FIND
 }
 
-public static void listarMisActivos() {
-		        // Implementación
+public static void listarMisActivos(Scanner in) {
+		System.out.println("Seleccione el criterio para listar los activos :");
+		System.out.println("1.Cantidad (Descendente)");
+		System.out.println("2.Nomenclatura");
+		int choice;
+		try {
+		choice = in.nextInt(); 
+		} catch (InputMismatchException e) {
+			System.err.println("Error : Se esperaba un entero");
+			return;
+		}finally {
+			in.nextLine(); //Limpio buffer
+		}
+		if (!(choice == 1 || choice == 2)) {
+			System.out.println("Error : Seleccion distinta de 1 o 2");
+			return;
+		}
+		Comparator <Activo> comp;
+		if (choice == 1) {
+			comp = new ComparadorActivoPorCantidadDescendente();
+		}else
+			comp = new ComparadorActivoPorNomenclatura();
+		List <ActivoCripto> listCripto = FactoryDAO.getActivoCriptoDAO().listarActivosCriptos();
+		List <ActivoFiat> listFiat = FactoryDAO.getActivoFiatDAO().listarActivosFiat();
+		List <Activo> listActivo = new LinkedList<Activo>() ;
+		listActivo.addAll(listCripto);
+		listActivo.addAll(listFiat);
+		listActivo.sort(comp);
+		for (Activo act : listActivo) {
+			System.out.println("["+act.getMoneda().getNomenclatura()+"] - Cantidad : ["+act.getAmount()+"]");
+		}
 }
 
 public static void simularCompra() {

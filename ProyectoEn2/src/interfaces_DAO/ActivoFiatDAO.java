@@ -1,5 +1,7 @@
 package interfaces_DAO;
 
+import java.util.List;
+
 import Sistema.ActivoFiat;
 
 public interface ActivoFiatDAO {
@@ -8,5 +10,5 @@ public interface ActivoFiatDAO {
 	ActivoFiat find (String nomenclatura);
 	void update (ActivoFiat activo);
 	void delete (String nomenclatura);
-
+	List <ActivoFiat> listarActivosFiat();
 }

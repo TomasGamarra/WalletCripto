@@ -1,5 +1,7 @@
 package interfaces_DAO;
 
+import java.util.List;
+
 import Sistema.ActivoCripto;
 
 public interface ActivoCriptoDAO {
@@ -8,4 +10,5 @@ public interface ActivoCriptoDAO {
 	ActivoCripto find (String nomenclatura);
 	void update (ActivoCripto activo);
 	void delete (String nomenclatura);
+	List<ActivoCripto> listarActivosCriptos ();
 }
