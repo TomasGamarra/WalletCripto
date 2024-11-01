@@ -40,6 +40,20 @@ public abstract class Moneda {
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
+	
+	public static float convertir(float cantidad, Moneda monedaOrigen, Moneda monedaDestino) {
+	    // Asegúrate de que las monedas no sean nulas
+	    if (monedaOrigen == null || monedaDestino == null) {
+	        throw new IllegalArgumentException("Las monedas no pueden ser nulas.");
+	    }
+
+	    // Obtén el valor en USD de ambas monedas
+	    float valorUsdOrigen = monedaOrigen.getValorUsd();
+	    float valorUsdDestino = monedaDestino.getValorUsd();
+
+	    // Realiza la conversión
+	    return (cantidad * valorUsdOrigen) / valorUsdDestino;
+	}
 
 
 

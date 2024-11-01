@@ -10,6 +10,7 @@ import java.util.List;
 import Sistema.ActivoCripto;
 import Sistema.ActivoFiat;
 import Sistema.Moneda;
+import Sistema.MonedaFiat;
 import gestores.FactoryDAO;
 import gestores.MyConnection;
 import interfaces_DAO.ActivoFiatDAO;
@@ -24,7 +25,7 @@ public class ActivoFiatDAOjdbc implements ActivoFiatDAO {
 			Connection con = MyConnection.getConnection();
 			
 			PreparedStatement ps = con.prepareStatement(sql);
-			ps.setString(1, activo.getMoneda().getNomenclatura());
+			ps.setString(1, activo.getMonedaFiat().getNomenclatura());
 			ps.setFloat(2, activo.getAmount());
 		
 			if (ps.executeUpdate() == 0) {
@@ -53,6 +54,38 @@ public class ActivoFiatDAOjdbc implements ActivoFiatDAO {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	@Override
+	public int incrementarCantidad(String nomenclatura, float cantidadIncremento) {
+	    String sqlSelect = "SELECT cantidad FROM ACTIVO_FIAT WHERE nomenclatura = ?";
+	    String sqlUpdate = "UPDATE ACTIVO_FIAT SET cantidad = ? WHERE nomenclatura = ?";
+	    
+	    try {
+	        Connection con = MyConnection.getConnection();
+	        PreparedStatement psSelect = con.prepareStatement(sqlSelect);
+	        psSelect.setString(1, nomenclatura);
+
+	        ResultSet rs = psSelect.executeQuery();
+	        if (rs.next()) {
+	            float cantidadActual = rs.getFloat("cantidad");
+	            float nuevaCantidad = cantidadActual + cantidadIncremento;
+
+	            PreparedStatement psUpdate = con.prepareStatement(sqlUpdate);
+	            psUpdate.setFloat(1, nuevaCantidad);
+	            psUpdate.setString(2, nomenclatura);
+	            
+	            int filasAfectadas = psUpdate.executeUpdate();
+	            if (filasAfectadas > 0) {
+	                return 0; // Actualización exitosa
+	            }
+	        } else {
+	            return -1; // No se encontró la moneda
+	        }
+	    } catch (SQLException e) {
+	        System.out.println("Error al incrementar cantidad en ACTIVO_FIAT: " + e.getMessage());
+	    }
+	    return -1;
+	}
 
 	@Override
 	public List<ActivoFiat> listarActivosFiat() {
@@ -67,8 +100,8 @@ public class ActivoFiatDAOjdbc implements ActivoFiatDAO {
 			Moneda mon;
 			while (rs.next()) {
 				mon = mondao.find(rs.getString("nomenclatura"));
-				if (mon != null)
-					list.add(new ActivoFiat(rs.getFloat("cantidad"),mon ));
+				if (mon != null && mon instanceof MonedaFiat)
+					list.add(new ActivoFiat(rs.getFloat("cantidad"),(MonedaFiat)mon ));
 			}
 			
 		}catch (SQLException e) {

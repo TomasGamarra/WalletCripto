@@ -1,5 +1,6 @@
 package Sistema;
 import java.sql.Statement;
+import java.time.LocalDateTime;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Comparator;
@@ -10,10 +11,12 @@ import java.util.Random;
 import java.util.Scanner;
 import interfaces_DAO.MonedaDAO;
 import interfaces_DAO.StockDAO;
+import interfaces_DAO.TransaccionDAO;
 import comparadores.*;
 import interfaces_DAO.ActivoCriptoDAO;
 import interfaces_DAO.ActivoFiatDAO;
 import gestores.*;
+
 public class Main {
 
 	public static void main(String[] args)  {
@@ -84,22 +87,33 @@ public class Main {
 
 public static void crearMonedas() {	
 		Scanner in =MyScanner.getScanner();
+		String tipo;
+		String choice;
+		float cantStock;
+		String nombre;
+		String nomenclatura;
+		float valorUsd;
+		try {
 		System.out.println("Ingrese tipo de moneda (Cripto/Fiat)");
-		String tipo=in.next();
+		tipo=in.next();
 		if (!(tipo.equals("Cripto") || tipo.equals("Fiat"))) {
 			System.out.println("La moneda seleccionada no es Cripto o Fiat!");
 			return;
 		}
 		System.out.println("Ingrese nombre de la moneda:");
-		String nombre=in.next();
+		nombre=in.next();
 		System.out.println("Ingrese nomenclatura:");
-		String nomenclatura = in.next();
+		nomenclatura = in.next();
 		System.out.println("Ingrese valor en USD:");
-		float valorUsd = in.nextFloat();
+		valorUsd = in.nextFloat();
 		System.out.println("Ingrese el stock disponible:");
-		float cantStock=in.nextFloat();
+		cantStock=in.nextFloat();
 		System.out.println("Desea confirmar para guardar en la Base de Datos ? (Y/N):");
-		String choice =in.next();
+		 choice =in.next();
+		}catch(InputMismatchException e) {
+			System.out.println("Se ingreso un valor no esperado");
+			return;
+		}
 		if (choice.equals("Y")) {
 			MonedaDAO mondao =FactoryDAO.getMonedaDAO();
 			StockDAO stockdao =FactoryDAO.getStockDAO();
@@ -245,18 +259,28 @@ public static void listarMisActivos() {
 			return;
 		}
 		Comparator <Activo> comp;
+		Comparator <ActivoCripto> compCripto;
+		Comparator <ActivoFiat> compFiat;
 		if (choice == 1) {
-			comp = new ComparadorActivoPorCantidadDescendente();
-		}else
-			comp = new ComparadorActivoPorNomenclatura();
+			compCripto = new ComparadorActivoCriptoPorCantidadDescendente();
+			compFiat = new ComparadorActivoFiatPorCantidadDescendente();
+		}else {
+			compCripto = new ComparadorActivoCriptoPorNomenclatura();
+			compFiat = new ComparadorActivoFiatPorNomenclatura();
+			}
 		List <ActivoCripto> listCripto = FactoryDAO.getActivoCriptoDAO().listarActivosCriptos();
 		List <ActivoFiat> listFiat = FactoryDAO.getActivoFiatDAO().listarActivosFiat();
-		List <Activo> listActivo = new LinkedList<Activo>() ;
-		listActivo.addAll(listCripto);
-		listActivo.addAll(listFiat);
-		listActivo.sort(comp);
-		for (Activo act : listActivo) 
-			System.out.println("["+act.getMoneda().getNomenclatura()+"] - Cantidad : ["+act.getAmount()+"]");
+		
+		listCripto.sort(compCripto);
+		System.out.println("Lista de ActivosCripto:");
+		for (ActivoCripto act : listCripto) {
+			System.out.println("["+act.getCripto().getNomenclatura()+"] - Cantidad :"+ act.getAmount());
+		}
+		System.out.println("Lista de ActivosFiat:");
+		listFiat.sort(compFiat);	
+		for (ActivoFiat act : listFiat) {
+			System.out.println("["+act.getMonedaFiat().getNomenclatura()+"] - Cantidad :"+ act.getAmount());
+		}
 		
 }
 
@@ -270,14 +294,16 @@ public static void simularCompra() {
 	System.out.println("Ingrese la nomenclatura de la criptomoneda a comprar:");
 	String nomCripto =in.next();
 	Moneda monCripto = mondao.find(nomCripto);
-	while (monCripto == null) {
-		System.out.println("Nomenclatura no existente dentro de la tabla. Ingrese nuevamente: ");
+	
+	while (monCripto == null || monCripto instanceof MonedaFiat) {
+		System.out.println("Nomenclatura no existente dentro de la tabla o se ingreso una FIAT. Ingrese nuevamente: ");
 		nomCripto = in.next();
 		monCripto = mondao.find(nomCripto);
 	}
 	System.out.println("Ingrese la nomenclatura de la moneda FIAT con la que hara la compra:");
 	String nomFiat = in.next();
 	Moneda monFiat = mondao.find(nomFiat);
+	
 	while (monFiat == null) {
 		System.out.println("Nomenclatura no existente dentro de la tabla. Ingrese nuevamente:");
 		nomFiat = in.next();
@@ -290,11 +316,38 @@ public static void simularCompra() {
 		cantFiat = in.nextFloat();
 	}
 	
-	//Chequeos
-	if ( actcriptodao.find(nomCripto) == null ) { //No existe el activo cripto a comprar , lo creo
-		actcriptodao.create(new ActivoCripto(0.f,monCripto,"DireccionRandom"));
+	System.out.println("Ingrese si desea confirmar la COMPRA (Y/N)");
+	String choice = in.next();
+	if ( !(choice.equals("Y")) ) {
+		System.out.println("Se ha cancelado la operacion.");
+		return;
 	}
-	    }
+		
+
+	//Chequeo Stock disponible
+	ActivoFiat activoFiat = actfiatdao.find(nomFiat);
+	if (activoFiat == null || activoFiat.getAmount() < cantFiat) {
+		System.out.println("Dinero insuficiente o activo Fiat inexistente. La operacion no se ha realizado");
+		return;
+	}
+	StockDAO stockdao = FactoryDAO.getStockDAO();
+	float cantEq=Moneda.convertir(cantFiat, monFiat, monCripto);
+	if (stockdao.find(nomCripto).getCantidad() < cantEq) {
+		System.out.println("No hay stock suficiente para realizar la compra");
+	    return;
+	}
+	//Chequeo si existe el activoCripto
+	if ( actcriptodao.find(nomCripto) == null ) //No existe el activo cripto a comprar , lo creo
+		actcriptodao.create(new ActivoCripto(0.f,(Criptomoneda)monCripto,"DireccionRandom"));
+	//Actualizacion de activos
+	actcriptodao.incrementarCantidad(nomCripto,cantEq);
+	actfiatdao.incrementarCantidad(nomFiat, -cantFiat);
+	
+	TransaccionDAO transdao = FactoryDAO.getTransaccionDAO();
+	String mensaje = String.format("Se realizó una compra de %.2f %s por su equivalente en %s de %.2f", cantFiat, nomFiat, nomCripto, cantEq);
+	transdao.create(new Transaccion(mensaje ,"Compra",LocalDateTime.now()));
+
+}
 
 public static void simularSwap() {
     // Implementación

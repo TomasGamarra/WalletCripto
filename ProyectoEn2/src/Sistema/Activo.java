@@ -5,7 +5,7 @@ package Sistema;
 
 public abstract class Activo {
  private float amount;
- private Moneda moneda;
+
 
 
  public Activo() {
@@ -13,9 +13,9 @@ public abstract class Activo {
  }
 
  
- public Activo(float amount, Moneda moneda) {
+ public Activo(float amount) {
 	this.amount = amount;
-	this.moneda = moneda;
+
 }
 
   
@@ -32,14 +32,6 @@ public void setAmount(float amount) {
 }
 
 
-public Moneda getMoneda() {
-	return moneda;
-}
 
-
-public void setMoneda(Moneda moneda) {
-	this.moneda = moneda;
-}
- 
 
 }

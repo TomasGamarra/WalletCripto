@@ -2,7 +2,7 @@ package Sistema;
 
 public class ActivoFiat extends Activo{
 	
-	
+	private MonedaFiat fiat;
 	
 	
 	
@@ -10,8 +10,17 @@ public class ActivoFiat extends Activo{
     	
     }
 	
-	public ActivoFiat(float amount, Moneda moneda) {
-		super(amount,moneda);
+	public ActivoFiat(float amount, MonedaFiat fiat) {
+		super(amount);
+		this.fiat=fiat;
+	}
+
+	public MonedaFiat getMonedaFiat() {
+		return fiat;
+	}
+
+	public void setMonedaFiat(MonedaFiat fiat) {
+		this.fiat = fiat;
 	}
 
 }

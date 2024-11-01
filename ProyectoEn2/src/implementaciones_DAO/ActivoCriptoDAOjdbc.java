@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import Sistema.ActivoCripto;
+import Sistema.Criptomoneda;
 import Sistema.Moneda;
 import gestores.FactoryDAO;
 import gestores.MyConnection;
@@ -25,7 +26,7 @@ public class ActivoCriptoDAOjdbc implements ActivoCriptoDAO {
 			
 			ps = con.prepareStatement(sql);
 			
-			ps.setString(1, activo.getMoneda().getNomenclatura());
+			ps.setString(1, activo.getCripto().getNomenclatura());
 			ps.setFloat(2, activo.getAmount());
 			ps.setString(3,activo.getDireccion());
 			
@@ -57,7 +58,40 @@ public class ActivoCriptoDAOjdbc implements ActivoCriptoDAO {
 		// Codigo del Delete
 		
 	}
+	
+	@Override
+	public int incrementarCantidad(String nomenclatura, float cantidadIncremento) {
+	    String sqlSelect = "SELECT cantidad FROM ACTIVO_CRIPTO WHERE nomenclatura = ?";
+	    String sqlUpdate = "UPDATE ACTIVO_CRIPTO SET cantidad = ? WHERE nomenclatura = ?";
+	    
+	    try {
+	        Connection con = MyConnection.getConnection();
+	        PreparedStatement psSelect = con.prepareStatement(sqlSelect);
+	        psSelect.setString(1, nomenclatura);
 
+	        ResultSet rs = psSelect.executeQuery();
+	        if (rs.next()) {
+	            float cantidadActual = rs.getFloat("cantidad");
+	            float nuevaCantidad = cantidadActual + cantidadIncremento;
+
+	            PreparedStatement psUpdate = con.prepareStatement(sqlUpdate);
+	            psUpdate.setFloat(1, nuevaCantidad);
+	            psUpdate.setString(2, nomenclatura);
+	            
+	            int filasAfectadas = psUpdate.executeUpdate();
+	            if (filasAfectadas > 0) {
+	                return 0; // Actualización exitosa
+	            }
+	        } else {
+	            return -1; // No se encontró la moneda
+	        }
+	    } catch (SQLException e) {
+	        System.out.println("Error al incrementar cantidad en ACTIVO_CRIPTO: " + e.getMessage());
+	    }
+	    return -1;
+	}
+	
+	
 	@Override
 	public List<ActivoCripto> listarActivosCriptos() {
 		String sql = "SELECT * FROM ACTIVO_CRIPTO";
@@ -70,8 +104,8 @@ public class ActivoCriptoDAOjdbc implements ActivoCriptoDAO {
 			MonedaDAO mondao =FactoryDAO.getMonedaDAO();
 			while (rs.next()) {
 				mon = mondao.find(rs.getString("nomenclatura"));
-				if(mon != null)
-					list.add(new ActivoCripto(rs.getFloat("cantidad"),mon, "DireccionRandom"));
+				if(mon != null && mon instanceof Criptomoneda)
+					list.add(new ActivoCripto(rs.getFloat("cantidad"),(Criptomoneda)mon, "DireccionRandom"));
 			}
 
 		}catch (SQLException e) {

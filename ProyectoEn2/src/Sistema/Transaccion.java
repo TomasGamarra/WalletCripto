@@ -1,99 +1,60 @@
 package Sistema;
 
-public abstract class Transaccion {
- private float amount;
- private float comision;
- private String estado;
- private String identificador;
- private Moneda moneda;
- private Fecha fecha;
+import java.time.LocalDateTime;
 
-public Transaccion() {
+public class Transaccion {
+ private String resumen;
+ private String tipo;
+ private LocalDateTime fecha;
+
+
+public Transaccion(String resumen , String tipo, LocalDateTime fecha) {
 	
-	
+	this.resumen=resumen;
+	this.tipo=tipo;
+	this.fecha=fecha;
 }
- 
- 
- 
- public Transaccion(float amount, float comision, String estado, String identificador, Moneda moneda, Fecha fecha) {
-	this.amount = amount;
-	this.comision = comision;
-	this.estado = estado;
-	this.identificador = identificador;
-	this.moneda = moneda;
-	this.fecha = fecha;
+
+public Transaccion (String resumen, String tipo) {
+	this.tipo=tipo;
+	this.resumen=resumen;
 }
 
 
-
-public float getAmount() {
-	return amount;
+public String getResumen() {
+	return resumen;
 }
 
 
-
-public void setAmount(float amount) {
-	this.amount = amount;
+public void setResumen(String resumen) {
+	this.resumen = resumen;
 }
 
 
-
-public float getComision() {
-	return comision;
+public String getTipo() {
+	return tipo;
 }
 
 
-
-public void setComision(float comision) {
-	this.comision = comision;
+public void setTipo(String tipo) {
+	this.tipo = tipo;
 }
 
 
-
-public String getEstado() {
-	return estado;
-}
-
-
-
-public void setEstado(String estado) {
-	this.estado = estado;
-}
-
-
-
-public String getIdentificador() {
-	return identificador;
-}
-
-
-
-public void setIdentificador(String identificador) {
-	this.identificador = identificador;
-}
-
-
-
-public Moneda getMoneda() {
-	return moneda;
-}
-
-
-
-public void setMoneda(Moneda moneda) {
-	this.moneda = moneda;
-}
-
-
-
-public Fecha getFecha() {
+public LocalDateTime getFecha() {
 	return fecha;
 }
 
 
-
-public void setFecha(Fecha fecha) {
+public void setFecha(LocalDateTime fecha) {
 	this.fecha = fecha;
 }
+ 
+ 
+ 
+ 
+
+
+
  
 }

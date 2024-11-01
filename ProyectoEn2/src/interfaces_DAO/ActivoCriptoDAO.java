@@ -11,4 +11,5 @@ public interface ActivoCriptoDAO {
 	void update (ActivoCripto activo);
 	void delete (String nomenclatura);
 	List<ActivoCripto> listarActivosCriptos ();
+	int incrementarCantidad(String nomenclatura, float cantidadIncremento);
 }
