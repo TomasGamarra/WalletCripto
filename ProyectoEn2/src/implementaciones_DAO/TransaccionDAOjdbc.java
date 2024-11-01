@@ -5,7 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import Sistema.Transaccion;
-import gestores_DAO.MyConnection;
+import gestores.MyConnection;
 import interfaces_DAO.TransaccionDAO;
 
 public class TransaccionDAOjdbc implements TransaccionDAO {

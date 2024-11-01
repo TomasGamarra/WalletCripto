@@ -1,4 +1,4 @@
-package gestores_DAO;
+package gestores;
 
 import implementaciones_DAO.ActivoCriptoDAOjdbc;
 import implementaciones_DAO.ActivoFiatDAOjdbc;
@@ -13,9 +13,6 @@ import interfaces_DAO.TransaccionDAO;
 
 public class FactoryDAO {
 	
-	public FactoryDAO() {
-		
-	}
 	
 	public static MonedaDAO getMonedaDAO () {
 		return new MonedaDAOjdbc();

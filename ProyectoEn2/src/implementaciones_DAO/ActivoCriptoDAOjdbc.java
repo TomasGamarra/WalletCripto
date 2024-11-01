@@ -9,8 +9,8 @@ import java.util.List;
 
 import Sistema.ActivoCripto;
 import Sistema.Moneda;
-import gestores_DAO.FactoryDAO;
-import gestores_DAO.MyConnection;
+import gestores.FactoryDAO;
+import gestores.MyConnection;
 import interfaces_DAO.ActivoCriptoDAO;
 import interfaces_DAO.MonedaDAO;
 
@@ -30,7 +30,7 @@ public class ActivoCriptoDAOjdbc implements ActivoCriptoDAO {
 			ps.setString(3,activo.getDireccion());
 			
 		
-			if (ps.executeUpdate() < 0) 
+			if (ps.executeUpdate() <= 0) 
 				throw new SQLException ("Ninguna fila fue afectada");
 			
 			
@@ -41,32 +41,20 @@ public class ActivoCriptoDAOjdbc implements ActivoCriptoDAO {
 	}
 
 	@Override
-public ActivoCripto find(String nomenclatura) {
-//		String sql = "SELECT * FROM ACTIVO_CRIPTO WHERE nomenclatura=?";
-//		try {
-//			Connection con = MyConnection.getConnection();
-//			PreparedStatement ps = con.prepareStatement(sql);
-//			ps.setString(1,nomenclatura);
-//			ResultSet res = ps.executeQuery();
-//			res.next();
-//			ActivoCripto act = new ActivoCripto(res.getFloat("cantidad"),res.getString(0),res.getString("direccion"));;
-//			
-//			
-//		}catch (SQLException e) {
-//			
-//		}
+	public ActivoCripto find(String nomenclatura) {
+		// Codigo del Find
 		return null;
 	}
 
 	@Override
 	public void update(ActivoCripto activo) {
-		// TODO Auto-generated method stub
+		// Codigo del Update
 		
 	}
 
 	@Override
 	public void delete(String nomenclatura) {
-		// TODO Auto-generated method stub
+		// Codigo del Delete
 		
 	}
 

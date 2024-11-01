@@ -12,8 +12,8 @@ import Sistema.Criptomoneda;
 import Sistema.GestorStock;
 import Sistema.MonedaFiat;
 import Sistema.Sistema;
+import gestores.MyConnection;
 import Sistema.Moneda;
-import gestores_DAO.MyConnection;
 import interfaces_DAO.MonedaDAO;
 
 public class MonedaDAOjdbc implements MonedaDAO {

@@ -1,4 +1,4 @@
-package gestores_DAO;
+package gestores;
 import java.sql.*;
 public class MyConnection {
  private static Connection connection = null; 
@@ -6,7 +6,7 @@ public class MyConnection {
  static { //Se ejecuta cuando la clase se carga en memoria , previo a cualquier llamado a metodo o instanciacion (En este caso no hay x ser Singleton)
 	 try {
 		 connection = DriverManager.getConnection("jdbc:sqlite:src/BaseDeDatos.db");
-	  } catch (java.sql.SQLException e) {
+	  } catch (SQLException e) {
 		 System.out.println("Error de SQL: "+e.getMessage());
       } 
 }
@@ -19,6 +19,16 @@ public static Connection getConnection() {
  	
  }
 
+public static void cerrarCon() {
+		try {
+			
+			if (connection != null) connection.close();
+			
+		} catch (SQLException e) {
+			
+			System.out.println("Error al cerrar la conexion: " + e.getMessage());	
+		}
+	}
 }
 
 

@@ -11,8 +11,8 @@ import java.util.Random;
 import Sistema.Criptomoneda;
 import Sistema.Moneda;
 import Sistema.Stock;
-import gestores_DAO.FactoryDAO;
-import gestores_DAO.MyConnection;
+import gestores.FactoryDAO;
+import gestores.MyConnection;
 import interfaces_DAO.MonedaDAO;
 import interfaces_DAO.StockDAO;
 
