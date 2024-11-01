@@ -40,7 +40,27 @@ public class ActivoFiatDAOjdbc implements ActivoFiatDAO {
 
 	@Override
 	public ActivoFiat find(String nomenclatura) {
-		return null;
+	    ActivoFiat activoFiat = null;
+	    String sql = "SELECT cantidad FROM ACTIVO_FIAT WHERE nomenclatura = ?";
+
+	    try  {
+	    	Connection con = MyConnection.getConnection();
+	        PreparedStatement ps = con.prepareStatement(sql);
+	        ps.setString(1, nomenclatura); 
+	        ResultSet rs = ps.executeQuery();
+
+	       
+	        if (rs.next()) {
+	            float cantidad = rs.getFloat("cantidad");
+	            Moneda moneda =  FactoryDAO.getMonedaDAO().find(nomenclatura);
+	            if(moneda != null && moneda instanceof MonedaFiat)
+	            	activoFiat = new ActivoFiat(cantidad,(MonedaFiat)moneda );
+	        }
+	    } catch (SQLException e) {
+	        System.out.println("Error al buscar ActivoFiat: " + e.getMessage());
+	    }
+
+	    return activoFiat; 
 	}
 
 	@Override

@@ -229,15 +229,15 @@ public static void generarActivo() {
 private static void crearActivoCripto(Criptomoneda mon, float cantidad) {
     ActivoCriptoDAO actdao = FactoryDAO.getActivoCriptoDAO();
     ActivoCripto activo = new ActivoCripto(cantidad, mon, "DireccionRandom");
-    actdao.create(activo);
-    System.out.println("Activo cripto creado correctamente.");
+    if (actdao.find(mon.getNomenclatura())==null)
+    	actdao.create(activo);
+
 }
 
 private static void crearActivoFiat(MonedaFiat mon, float cantidad) {
     ActivoFiatDAO actdao = FactoryDAO.getActivoFiatDAO();
     ActivoFiat activo = new ActivoFiat(cantidad, mon);
     actdao.create(activo);
-    System.out.println("Activo fiat creado correctamente."); //TENGO QUE CHEQUEAR ESTO , PODRIA METERLE QUE DEVUELVA UN BOOLEAN EL FIND
 }
 
 public static void listarMisActivos() {
@@ -255,7 +255,7 @@ public static void listarMisActivos() {
 			in.nextLine(); //Limpio buffer
 		}
 		if (!(choice == 1 || choice == 2)) {
-			System.out.println("Error : Seleccion distinta de 1 o 2");
+			System.err.println("Error : Seleccion distinta de 1 o 2");
 			return;
 		}
 		Comparator <Activo> comp;
@@ -304,10 +304,9 @@ public static void simularCompra() {
 	String nomFiat = in.next();
 	Moneda monFiat = mondao.find(nomFiat);
 	
-	while (monFiat == null) {
-		System.out.println("Nomenclatura no existente dentro de la tabla. Ingrese nuevamente:");
-		nomFiat = in.next();
-		monFiat = mondao.find(nomFiat);
+	if (monFiat == null) {
+		System.out.println("Nomenclatura no existente dentro de la tabla.");
+		return;
 	}
 	System.out.println("Ingrese la cantidad de "+ monFiat.getNomenclatura()+" que desea utilizar para la compra.");
 	float cantFiat = in.nextFloat();
@@ -332,16 +331,24 @@ public static void simularCompra() {
 	}
 	StockDAO stockdao = FactoryDAO.getStockDAO();
 	float cantEq=Moneda.convertir(cantFiat, monFiat, monCripto);
-	if (stockdao.find(nomCripto).getCantidad() < cantEq) {
+	Stock stock = stockdao.find(nomCripto);
+	if (stock !=null) {
+		if (stock.getCantidad() < cantEq) {
 		System.out.println("No hay stock suficiente para realizar la compra");
 	    return;
+	}}else {
+		System.out.println("No se encontro el stock en la tabla asociado a la cripto");
+		return;
 	}
+	
 	//Chequeo si existe el activoCripto
 	if ( actcriptodao.find(nomCripto) == null ) //No existe el activo cripto a comprar , lo creo
 		actcriptodao.create(new ActivoCripto(0.f,(Criptomoneda)monCripto,"DireccionRandom"));
 	//Actualizacion de activos
 	actcriptodao.incrementarCantidad(nomCripto,cantEq);
 	actfiatdao.incrementarCantidad(nomFiat, -cantFiat);
+	//Actualizacion de stock
+	stockdao.incrementarCantidad(nomCripto, -cantEq);
 	
 	TransaccionDAO transdao = FactoryDAO.getTransaccionDAO();
 	String mensaje = String.format("Se realizó una compra de %.2f %s por su equivalente en %s de %.2f", cantFiat, nomFiat, nomCripto, cantEq);
@@ -379,9 +386,11 @@ private static void creacionDeTablasEnBD() {
         stmt.executeUpdate(sql);
         
         sql = "CREATE TABLE IF NOT EXISTS TRANSACCION (" +
-              "resumen VARCHAR(1000) NOT NULL, " +
-              "fecha_hora DATETIME NOT NULL, " +
-              "tipo VARCHAR(30) PRIMARY KEY NOT NULL);";
+        	      "id INTEGER PRIMARY KEY AUTOINCREMENT, " +  
+        	      "resumen VARCHAR(1000) NOT NULL, " +
+        	      "fecha_hora DATETIME NOT NULL, " +
+        	      "tipo VARCHAR(30) NOT NULL" +
+        	      ");";
         stmt.executeUpdate(sql);
         
         sql = "CREATE TABLE IF NOT EXISTS STOCK (" +

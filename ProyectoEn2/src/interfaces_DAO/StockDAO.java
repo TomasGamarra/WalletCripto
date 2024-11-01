@@ -11,5 +11,6 @@ public interface StockDAO {
 	void update (Stock stock);
 	void delete (String nomenclatura);
 	List<Stock> listarStock () ;
+	void incrementarCantidad(String nomenclatura, float cantidadASumar);
 
 }

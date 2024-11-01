@@ -43,9 +43,35 @@ public class ActivoCriptoDAOjdbc implements ActivoCriptoDAO {
 
 	@Override
 	public ActivoCripto find(String nomenclatura) {
-		// Codigo del Find
-		return null;
+	    ActivoCripto activoCripto = null;
+	    String sql = "SELECT cantidad, direccion FROM ACTIVO_CRIPTO WHERE nomenclatura = ?";
+
+	    try {
+	        Connection con = MyConnection.getConnection();
+	        PreparedStatement ps = con.prepareStatement(sql);
+	        ps.setString(1, nomenclatura);
+	        ResultSet rs = ps.executeQuery();
+
+	        if (rs.next()) {
+	            // Recuperar los valores de cantidad y dirección
+	            float cantidad = rs.getFloat("cantidad");
+	            String direccion = rs.getString("direccion");
+
+	            // Obtener la moneda correspondiente desde el DAO
+	            MonedaDAO monedaDAO = FactoryDAO.getMonedaDAO();
+	            Moneda moneda = monedaDAO.find(nomenclatura);
+
+	            if (moneda != null && moneda instanceof Criptomoneda) {
+	                activoCripto = new ActivoCripto(cantidad, (Criptomoneda) moneda, direccion);
+	            }
+	        }
+	    } catch (SQLException e) {
+	        System.out.println("Error al buscar ActivoCripto: " + e.getMessage());
+	    }
+
+	    return activoCripto;
 	}
+
 
 	@Override
 	public void update(ActivoCripto activo) {

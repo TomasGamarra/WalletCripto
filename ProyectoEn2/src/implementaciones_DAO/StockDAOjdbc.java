@@ -40,8 +40,28 @@ public class StockDAOjdbc implements StockDAO {
 
 	@Override
 	public Stock find(String nomenclatura) {
-		// TODO Auto-generated method stub
-		return null;
+	    Stock stock = null;
+	    String sql = "SELECT cantidad FROM STOCK WHERE nomenclatura = ?";
+
+	    try  {
+	    	Connection con = MyConnection.getConnection();
+	        PreparedStatement ps = con.prepareStatement(sql);
+	        ps.setString(1, nomenclatura);
+	        ResultSet rs = ps.executeQuery();
+	        if (rs.next()) {
+	              float cantidad = rs.getFloat("cantidad");
+	              Moneda moneda = FactoryDAO.getMonedaDAO().find(nomenclatura);
+	                
+	              if (moneda != null) {
+	                  stock = new Stock(cantidad, moneda);
+	               }
+	            }
+	        
+	    } catch (SQLException e) {
+	        System.out.println("Error al buscar stock: " + e.getMessage());
+	    }
+
+	    return stock;
 	}
 
 
@@ -69,6 +89,41 @@ public class StockDAOjdbc implements StockDAO {
 			System.out.println("Error al actualizar stock: "+e.getMessage());
 	}
 }
+@Override
+	public void incrementarCantidad(String nomenclatura, float cantidadASumar) {
+	    String sqlSelect = "SELECT cantidad FROM STOCK WHERE nomenclatura = ?";
+	    String sqlUpdate = "UPDATE STOCK SET cantidad = ? WHERE nomenclatura = ?";
+	    
+	    try {
+	        Connection con = MyConnection.getConnection();
+	        
+	        // Seleccionar la cantidad actual
+	        PreparedStatement psSelect = con.prepareStatement(sqlSelect);
+	        psSelect.setString(1, nomenclatura);
+	        ResultSet rs = psSelect.executeQuery();
+
+	        if (rs.next()) {
+	            // Obtener la cantidad actual y sumar el valor proporcionado
+	            float cantidadActual = rs.getFloat("cantidad");
+	            float nuevaCantidad = cantidadActual + cantidadASumar;
+
+	            // Actualizar la cantidad en la base de datos
+	            PreparedStatement psUpdate = con.prepareStatement(sqlUpdate);
+	            psUpdate.setFloat(1, nuevaCantidad);
+	            psUpdate.setString(2, nomenclatura);
+	            
+	            if (psUpdate.executeUpdate() < 0) {
+	                throw new SQLException("No se afectó ninguna fila");
+	            }
+
+	        } else {
+	            System.out.println("No se encontró stock para la nomenclatura: " + nomenclatura);
+	        }
+	        
+	    } catch (SQLException e) {
+	        System.out.println("Error al incrementar cantidad de stock: " + e.getMessage());
+	    }
+	}
 
 	public List<Stock> listarStock () { 
 		String sql = "SELECT * FROM STOCK";
