@@ -35,7 +35,7 @@ public class MonedaDAOjdbc implements MonedaDAO {
 			else
 				ps.setNull(4, java.sql.Types.FLOAT);	
 			
-			ps.setString(5, moneda.getClass().getSimpleName()); //CHECKED ?
+			ps.setString(5, moneda.getClass().getSimpleName()); 
 			//Chequeo de errores
 			int filasAfectadas =ps.executeUpdate();
 			if (filasAfectadas <= 0) 
@@ -61,7 +61,7 @@ public class MonedaDAOjdbc implements MonedaDAO {
 		      float valor_dolar = res.getFloat("valor_dolar"); 
 		      float volatilidad = res.getFloat("volatilidad");
 		      String tipo = res.getString("tipo"); 
-		      // en SQL lite tenemos que tirar un check en la base de datos para los valores Cripto y Fiat
+		      
 		      if(tipo.equals("Criptomoneda")) 
 		    	  moneda = new Criptomoneda(nombre, nomenclatura1, valor_dolar,volatilidad);
 		      else 
@@ -80,27 +80,8 @@ public class MonedaDAOjdbc implements MonedaDAO {
 
 //	@Override
 	public void update(Moneda moneda) {
-//		String sql = "UPDATE MONEDA SET nombre= ?, nomenclatura = ?, valor_dolar = ?, volatilidad = ?, stock = ?, tipo = ?";
-//		try (Connection con = MyConnection.getConnection();
-//			PreparedStatement ps = con.prepareStatement(sql);){
-//			if (moneda.)
-//			ps.setString(1, moneda.getNombre());
-//			ps.setString(2, moneda.getSigla());
-//			ps.setFloat(3, moneda.getValorUsd());
-//			ps.setString(5, moneda.getTipo());
-//			ps.setFloat(6, moneda.getCant());
-//			
-//			int res = ps.executeUpdate();
-//			
-//			if (res < 0) {
-//				throw new SQLException ("Error al insertar monedaCripto , ninguna fila fue afectada");
-//			}
-//			
-//			
-//		} catch (SQLException e) {
-//			System.out.println("Error al insertar monedaCripto"+e.getMessage());
-//		}
-//		
+		//Codigo del update
+	
 	}
 
 	@Override
@@ -137,7 +118,7 @@ public class MonedaDAOjdbc implements MonedaDAO {
 		         float valor_dolar = rs.getFloat("valor_dolar"); 
 		         float volatilidad = rs.getFloat("volatilidad");
 		         String tipo = rs.getString("tipo");
-		           // en SQL lite tenemos que tirar un check en la base de datos para los valores Cripto y Fiat
+		           
 		         if(tipo.equals("Criptomoneda")) 
 		            mon = new Criptomoneda(nombre, nomenclatura, valor_dolar,volatilidad);
 		         else 

@@ -96,10 +96,10 @@ public class ActivoFiatDAOjdbc implements ActivoFiatDAO {
 	            
 	            int filasAfectadas = psUpdate.executeUpdate();
 	            if (filasAfectadas > 0) {
-	                return 0; // Actualización exitosa
+	                return 0; // Actualizacion exitosa
 	            }
 	        } else {
-	            return -1; // No se encontró la moneda
+	            return -1; // No se encontro la moneda
 	        }
 	    } catch (SQLException e) {
 	        System.out.println("Error al incrementar cantidad en ACTIVO_FIAT: " + e.getMessage());

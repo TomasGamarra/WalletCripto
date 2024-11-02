@@ -75,9 +75,26 @@ public class ActivoCriptoDAOjdbc implements ActivoCriptoDAO {
 
 	@Override
 	public void update(ActivoCripto activo) {
-		// Codigo del Update
-		
+	    String sql = "UPDATE ACTIVO_CRIPTO SET cantidad = ?, direccion = ? WHERE nomenclatura = ?";
+	    try {
+	        Connection con = MyConnection.getConnection();
+	        PreparedStatement ps = con.prepareStatement(sql);
+
+	        // Configurar los parámetros del PreparedStatement
+	        ps.setFloat(1, activo.getAmount());
+	        ps.setString(2, activo.getDireccion());
+	        ps.setString(3, activo.getCripto().getNomenclatura());
+
+	        
+
+	        if (ps.executeUpdate() <= 0) {
+	            throw new SQLException("No se actualizó ninguna fila");
+	        }
+	    } catch (SQLException e) {
+	        System.out.println("Error al actualizar ActivoCripto: " + e.getMessage());
+	    }
 	}
+
 
 	@Override
 	public void delete(String nomenclatura) {
@@ -106,10 +123,10 @@ public class ActivoCriptoDAOjdbc implements ActivoCriptoDAO {
 	            
 	            int filasAfectadas = psUpdate.executeUpdate();
 	            if (filasAfectadas > 0) {
-	                return 0; // Actualización exitosa
+	                return 0; 
 	            }
 	        } else {
-	            return -1; // No se encontró la moneda
+	            return -1; 
 	        }
 	    } catch (SQLException e) {
 	        System.out.println("Error al incrementar cantidad en ACTIVO_CRIPTO: " + e.getMessage());
