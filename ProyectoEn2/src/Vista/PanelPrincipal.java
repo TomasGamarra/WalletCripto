@@ -7,19 +7,19 @@ import javax.swing.JPanel;
 public class PanelPrincipal extends JPanel {
 	
 	private PanelLogin panelLogin;	
-	private PanelMenu panelMenu;
+	private PanelActivos panelActivos;
 	private PanelRegistro panelRegistro;
 	
 	public PanelPrincipal () {
 		this.setLayout(new CardLayout());
         // Agregar paneles al CardLayout
 		panelLogin = new PanelLogin();
-		panelMenu = new PanelMenu();
+		panelActivos = new PanelActivos();
 		panelRegistro = new PanelRegistro();
-        //add(panelLogin, "login");
-        //add(panelMenu, "menu");
+		//add(panelLogin, "login");
+        add(panelActivos, "activos");
         add(panelRegistro, "registro");
-       // add(new , "activos");
+       
 	}
 	public PanelLogin getPanelLogin() {
 		return panelLogin;
@@ -27,10 +27,10 @@ public class PanelPrincipal extends JPanel {
 	public void setPanelLogin(PanelLogin panelLogin) {
 		this.panelLogin = panelLogin;
 	}
-	public PanelMenu getPanelMenu() {
-		return panelMenu;
+	public PanelActivos getPanelActivos() {
+		return panelActivos;
 	}
-	public void setPanelMenu(PanelMenu panelMenu) {
-		this.panelMenu = panelMenu;
+	public void setPanelActivos(PanelActivos panelActivos) {
+		this.panelActivos = panelActivos;
 	}
 }

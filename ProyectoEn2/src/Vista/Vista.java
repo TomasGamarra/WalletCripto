@@ -11,7 +11,7 @@ public class Vista extends JFrame {
         	
         setTitle("CryptoWallet MG");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(400, 400);
+        setSize(500, 800);
      
         
         //Panel principal

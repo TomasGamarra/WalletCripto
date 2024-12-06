@@ -2,6 +2,7 @@ package Vista;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
@@ -32,12 +33,21 @@ public class PanelLogin extends JPanel {
 	
 	public PanelLogin () {
 		setLayout(new BorderLayout());
+		setPreferredSize(new Dimension(0, 80));
 		
 		topPanel = new JPanel();
-        topPanel.setOpaque(false); // Fondo transparente
+        topPanel.setBackground(Color.WHITE); // Fondo transparente
         logoLabel = new JLabel();
-        logoLabel.setIcon(new ImageIcon("CryptoWallet.png")); // Ruta al logo
+        logoLabel.setIcon(new ImageIcon("wallet.png")); // Ruta al logo
         topPanel.add(logoLabel);
+        topPanel.setLayout(new BorderLayout());
+        JLabel titulo = new JLabel("Wallet Crypto", JLabel.CENTER);
+        titulo.setFont(new Font("Arial", Font.BOLD, 24));
+        titulo.setForeground(Color.DARK_GRAY);
+
+        topPanel.add(logoLabel, BorderLayout.WEST);
+        topPanel.add(titulo, BorderLayout.CENTER);
+
         add(topPanel, BorderLayout.NORTH);
 		
 		panelCenter = new JPanel();
@@ -108,7 +118,8 @@ public class PanelLogin extends JPanel {
         panelCenter.add(registerButton,gbc);
         
         add(panelCenter, BorderLayout.CENTER);
-
+        
+        
 	}
 	
 	@Override
@@ -116,7 +127,7 @@ public class PanelLogin extends JPanel {
         super.paintComponent(g);
         // Dibujar fondo con gradiente
         Graphics2D g2d = (Graphics2D) g;
-        g2d.setPaint(new GradientPaint(0, 0, new Color(145,56,115), getWidth(), getHeight(),new Color (228,201,103)));
+        g2d.setPaint(new GradientPaint(0, 0, new Color(47,224,189), getWidth(), getHeight(),new Color (255,127,172)));
         g2d.fillRect(0, 0, getWidth(), getHeight());
     }
 

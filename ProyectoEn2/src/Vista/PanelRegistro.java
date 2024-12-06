@@ -32,6 +32,7 @@ public class PanelRegistro extends JPanel {
 	private JPasswordField fieldContra2;
 	private JCheckBox termsCheckBox;
 	private JButton registerButton;
+	private JButton volverButton;
 	
 	public PanelRegistro () { 
 		setLayout(new BorderLayout());
@@ -142,11 +143,21 @@ public class PanelRegistro extends JPanel {
         registerButton.setBackground(Color.DARK_GRAY);
         registerButton.setForeground(Color.WHITE);
         registerButton.setFont(new Font("Arial", Font.BOLD, 16));
-        registerButton.setFocusPainted(false);
+  
         gbc.gridx=1;
         gbc.gridy=6;
         
         mainPanel.add(registerButton,gbc);
+        
+        //Button Volver
+        volverButton = new JButton("Volver");
+        volverButton.setBackground(Color.DARK_GRAY);
+        volverButton.setForeground(Color.WHITE);
+        volverButton.setFont(new Font("Arial", Font.BOLD, 16));
+        
+        gbc.gridx=0;
+        
+        mainPanel.add(volverButton,gbc);
         
         add(mainPanel,BorderLayout.CENTER);
    
@@ -157,7 +168,7 @@ public class PanelRegistro extends JPanel {
         super.paintComponent(g);
         // Dibujar fondo con gradiente
         Graphics2D g2d = (Graphics2D) g;
-        g2d.setPaint(new GradientPaint(0, 0, new Color(145,56,115), getWidth(), getHeight(),new Color (228,201,103)));
+        g2d.setPaint(new GradientPaint(0, 0, new Color(47,224,189), getWidth(), getHeight(),new Color (255,127,172)));
         g2d.fillRect(0, 0, getWidth(), getHeight());
     }
 }
