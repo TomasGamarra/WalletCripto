@@ -10,6 +10,7 @@ public class PanelPrincipal extends JPanel {
 	private PanelActivos panelActivos;
 	private PanelRegistro panelRegistro;
 	
+	
 	public PanelPrincipal () {
 		this.setLayout(new CardLayout());
         // Agregar paneles al CardLayout
@@ -33,4 +34,12 @@ public class PanelPrincipal extends JPanel {
 	public void setPanelActivos(PanelActivos panelActivos) {
 		this.panelActivos = panelActivos;
 	}
+	public PanelRegistro getPanelRegistro() {
+		return panelRegistro;
+	}
+	public void setPanelRegistro(PanelRegistro panelRegistro) {
+		this.panelRegistro = panelRegistro;
+	}
+	
+	
 }

@@ -38,10 +38,10 @@ public class PanelLogin extends JPanel {
 		topPanel = new JPanel();
         topPanel.setBackground(Color.WHITE); // Fondo transparente
         logoLabel = new JLabel();
-        logoLabel.setIcon(new ImageIcon("wallet.png")); // Ruta al logo
+        logoLabel.setIcon(new ImageIcon("hodl.png")); // Ruta al logo
         topPanel.add(logoLabel);
         topPanel.setLayout(new BorderLayout());
-        JLabel titulo = new JLabel("Wallet Crypto", JLabel.CENTER);
+        JLabel titulo = new JLabel("HODL", JLabel.CENTER);
         titulo.setFont(new Font("Arial", Font.BOLD, 24));
         titulo.setForeground(Color.DARK_GRAY);
 

@@ -11,7 +11,7 @@ public class Vista extends JFrame {
         	
         setTitle("CryptoWallet MG");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(500, 800);
+        setSize(800, 800);
      
         
         //Panel principal
@@ -30,6 +30,11 @@ public class Vista extends JFrame {
 			this.panelMain = panelMain;
 		}
 
-		
+		public void cambiarCarta(String nombreCarta) {
+	        // Obtener el layout del PanelPrincipal (que es un CardLayout)
+	        CardLayout layout = (CardLayout) panelMain.getLayout();
+	        // Cambiar a la carta especificada
+	        layout.show(panelMain, nombreCarta);
+	    }
 }
 
