@@ -31,6 +31,7 @@ public class PanelActivos extends JPanel {
 	private JPanel panelWestTop;
 	private JPanel panelWest;
 	private JPanel panelEast;
+	private JPanel panelSouth;
 	private JButton botonPrueba;
 	private JButton botonExportar;
 	private JButton botonHistorial;
@@ -42,6 +43,7 @@ public class PanelActivos extends JPanel {
 	private ModeloTablaActivos tablaModelo;
 	private Object [][] datos ={ {new ImageIcon("Bitcoin.png"),"Bitcoin",0} , {new ImageIcon("Ethereum.png"),"Ethereum",0}, {new ImageIcon("Tether.png"),"Tether",0}};
 	private JScrollPane scrollPane ;
+	private JLabel labelNombre;
 	
 	public PanelActivos () {
 		setLayout(new BorderLayout());
@@ -57,7 +59,7 @@ public class PanelActivos extends JPanel {
 				
 		panelCentral.add(scrollPane);
 		
-		add(panelCentral,BorderLayout.CENTER);
+		
 		
         // Configurar panel superior (NORTH)
         panelTop = new JPanel(new BorderLayout());
@@ -78,7 +80,23 @@ public class PanelActivos extends JPanel {
         panelWestTop = new JPanel(new FlowLayout());
         
         componenteIniciales = new ComponenteCircular("MG"); // Iniciales del usuario
+        
         panelWestTop.add(componenteIniciales);
+        
+
+        
+        labelNombre = new JLabel("Nombre Apellido");
+        labelNombre.setOpaque(false);
+        labelNombre.setFont(new Font("Arial", Font.BOLD, 15));
+        labelNombre.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+
+        panelWestTop.add(labelNombre);
+        
+        panelTop.add(panelWestTop,BorderLayout.WEST);
+        
+        //Panel West
+        panelWest = new JPanel (new FlowLayout()) ;
+        panelWest.setOpaque(false);
         
         botonLogout = new JButton ("Cerrar Sesion");
         botonLogout.setBackground(new Color(189, 0, 3));  // Color de fondo
@@ -86,14 +104,28 @@ public class PanelActivos extends JPanel {
         botonLogout.setFont(new Font("Arial", Font.BOLD, 14));  // Fuente y tamaño del texto
         botonLogout.setFocusPainted(false);  // Quitar el borde de enfoque cuando se hace clic
         botonLogout.setBorderPainted(false);  // Quitar el borde por defecto
-
-
-        panelWestTop.add(botonLogout);
-        panelTop.add(panelWestTop,BorderLayout.WEST);
+       
         
-        //Panel West
-        panelWest = new JPanel (new FlowLayout()) ;
-        panelWest.setOpaque(false);
+        panelWest.add(botonLogout);
+        
+        
+        
+        //Panel East
+        panelEast = new JPanel(new FlowLayout());
+        panelEast.setOpaque(false);
+   
+      
+        botonExportar = new JButton("Exportar como CSV");
+        botonExportar.setBackground(new Color(20,225,20));
+        botonExportar.setForeground(Color.WHITE);
+        botonExportar.setFont(new Font("Arial", Font.PLAIN, 12));
+        botonExportar.setFocusPainted(false);
+        botonExportar.setBorderPainted(false);
+        
+        
+        panelEast.add(botonExportar);
+       
+        
         //Boton de GenerarDatosDePrueba
         botonPrueba = new JButton("Generar stock aleatorio");
         botonPrueba.setBackground(new Color(30,20,10));
@@ -101,23 +133,14 @@ public class PanelActivos extends JPanel {
         botonPrueba.setFont(new Font("Arial", Font.BOLD, 12));
         botonPrueba.setFocusPainted(false);
         botonPrueba.setBorderPainted(false);
+       
+   
         
-        panelWest.add(botonPrueba);
+        panelEast.add(botonPrueba);
         
-        //Panel East
-        panelEast = new JPanel(new FlowLayout());
-        panelEast.setOpaque(false);
-        botonExportar = new JButton("Exportar como CSV");
-        botonExportar.setBackground(new Color(20,225,20));
-        botonExportar.setForeground(Color.WHITE);
-        botonExportar.setFont(new Font("Arial", Font.PLAIN, 12));
-        botonExportar.setFocusPainted(false);
-        botonExportar.setBorderPainted(false);
-        panelEast.add(botonExportar);
-        
-        
-        JPanel panelSouth = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10)); // Alineación centrada con margen
+        panelSouth = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10)); // Alineación centrada con margen
         panelSouth.setOpaque(false);
+        
         //Boton Historial
        
         botonHistorial = new JButton("Historial");
@@ -147,7 +170,6 @@ public class PanelActivos extends JPanel {
         
       
         panelSouth.add(botonHistorial);
-   
         panelSouth.add(botonCotizaciones);
    
         add(panelSouth,BorderLayout.SOUTH);

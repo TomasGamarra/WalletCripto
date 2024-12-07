@@ -19,10 +19,13 @@ public class PanelPrincipal extends JPanel {
 		panelActivos = new PanelActivos();
 		panelRegistro = new PanelRegistro();
 		panelHistorial = new PanelHistorial();
-		add(panelLogin, "login");
 		add(panelHistorial,"historial");
-        add(panelActivos, "activos");
+		
         add(panelRegistro, "registro");
+        add(panelActivos, "activos");
+		add(panelLogin, "login");
+		
+        
         
        
 	}
@@ -43,6 +46,18 @@ public class PanelPrincipal extends JPanel {
 	}
 	public void setPanelRegistro(PanelRegistro panelRegistro) {
 		this.panelRegistro = panelRegistro;
+	}
+	public PanelHistorial getPanelHistorial() {
+		return panelHistorial;
+	}
+	public void setPanelHistorial(PanelHistorial panelHistorial) {
+		this.panelHistorial = panelHistorial;
+	}
+	public PanelCotizaciones getPanelCotizaciones() {
+		return panelCotizaciones;
+	}
+	public void setPanelCotizaciones(PanelCotizaciones panelCotizaciones) {
+		this.panelCotizaciones = panelCotizaciones;
 	}
 	
 	

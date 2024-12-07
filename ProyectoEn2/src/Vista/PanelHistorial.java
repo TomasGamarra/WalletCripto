@@ -101,6 +101,86 @@ public class PanelHistorial extends JPanel{
 	        g2d.setPaint(new GradientPaint(0, 0, new Color(47,224,189), getWidth(), getHeight(),new Color (255,127,172)));
 	        g2d.fillRect(0, 0, getWidth(), getHeight());
 	    }
+
+
+		public JTable getTablaTransacciones() {
+			return tablaTransacciones;
+		}
+
+
+		public void setTablaTransacciones(JTable tablaTransacciones) {
+			this.tablaTransacciones = tablaTransacciones;
+		}
+
+
+		public DefaultTableModel getModeloTabla() {
+			return modeloTabla;
+		}
+
+
+		public void setModeloTabla(DefaultTableModel modeloTabla) {
+			this.modeloTabla = modeloTabla;
+		}
+
+
+		public JLabel getLabelTitulo() {
+			return labelTitulo;
+		}
+
+
+		public void setLabelTitulo(JLabel labelTitulo) {
+			this.labelTitulo = labelTitulo;
+		}
+
+
+		public JScrollPane getScrollPane() {
+			return scrollPane;
+		}
+
+
+		public void setScrollPane(JScrollPane scrollPane) {
+			this.scrollPane = scrollPane;
+		}
+
+
+		public JTextField getCampoFiltro() {
+			return campoFiltro;
+		}
+
+
+		public void setCampoFiltro(JTextField campoFiltro) {
+			this.campoFiltro = campoFiltro;
+		}
+
+
+		public JPanel getPanelInferior() {
+			return panelInferior;
+		}
+
+
+		public void setPanelInferior(JPanel panelInferior) {
+			this.panelInferior = panelInferior;
+		}
+
+
+		public JPanel getPanelFiltros() {
+			return panelFiltros;
+		}
+
+
+		public void setPanelFiltros(JPanel panelFiltros) {
+			this.panelFiltros = panelFiltros;
+		}
+
+
+		public void setBotonVolver(JButton botonVolver) {
+			this.botonVolver = botonVolver;
+		}
+
+
+		public void setBotonFiltrar(JButton botonFiltrar) {
+			this.botonFiltrar = botonFiltrar;
+		}
 	    
 	}
 
