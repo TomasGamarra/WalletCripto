@@ -1,6 +1,7 @@
 package Sistema;
 
 import java.awt.Image;
+import java.net.URL;
 
 
 // Cambio USD Y CONVERSION  debo esperar a terner la base de datos para conectarlos
@@ -11,14 +12,7 @@ public abstract class Moneda {
 	private String nombre;
 	private String nomenclatura;
 	private float valorUsd;
-
-
 	
-	
-	public Moneda() {
-		
-		
-	}
 	
 	public Moneda(String nombre, String nomenclatura, float valorUsd) {
 		this.nombre = nombre;
@@ -28,13 +22,9 @@ public abstract class Moneda {
 	}
 
 
-
-
 	public String getNombre() {
 		return nombre;
 	}
-
-
 
 
 	public void setNombre(String nombre) {
@@ -56,14 +46,9 @@ public abstract class Moneda {
 	}
 
 
-
-
 	public String getNomenclatura() {
 		return nomenclatura;
 	}
-
-
-
 
 	public void setNomenclatura(String nomenclatura) {
 		this.nomenclatura = nomenclatura;
@@ -77,9 +62,5 @@ public abstract class Moneda {
 		this.valorUsd = valorUsd;
 	}
 
-
-
-	
-	
 	
 }

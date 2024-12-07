@@ -3,12 +3,7 @@ package Sistema;
 public class ActivoFiat extends Activo{
 	
 	private MonedaFiat fiat;
-	
-	
-	
-    public ActivoFiat() {
-    	
-    }
+
 	
 	public ActivoFiat(float amount, MonedaFiat fiat) {
 		super(amount);

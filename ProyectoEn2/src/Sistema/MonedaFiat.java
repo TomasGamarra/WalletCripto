@@ -9,13 +9,12 @@ public class MonedaFiat extends Moneda{
 
 
 	
-	public MonedaFiat(String nombre, String sigla, float precio) {
-		super(nombre,sigla,precio);
+	public MonedaFiat(String nombre, String nomenclatura, float precio) {
+		super(nombre,nomenclatura,precio);
 
 	}
 	
-	public MonedaFiat() {
-	}
+	
 	
 
 }
