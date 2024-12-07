@@ -10,6 +10,7 @@ public class PanelPrincipal extends JPanel {
 	private PanelActivos panelActivos;
 	private PanelRegistro panelRegistro;
 	private PanelHistorial panelHistorial;
+	private PanelCotizaciones panelCotizaciones;
 	
 	public PanelPrincipal () {
 		this.setLayout(new CardLayout());
@@ -17,9 +18,12 @@ public class PanelPrincipal extends JPanel {
 		panelLogin = new PanelLogin();
 		panelActivos = new PanelActivos();
 		panelRegistro = new PanelRegistro();
-		//add(panelLogin, "login");
+		panelHistorial = new PanelHistorial();
+		add(panelLogin, "login");
+		add(panelHistorial,"historial");
         add(panelActivos, "activos");
         add(panelRegistro, "registro");
+        
        
 	}
 	public PanelLogin getPanelLogin() {
