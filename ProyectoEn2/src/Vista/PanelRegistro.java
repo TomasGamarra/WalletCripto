@@ -171,4 +171,116 @@ public class PanelRegistro extends JPanel {
         g2d.setPaint(new GradientPaint(0, 0, new Color(47,224,189), getWidth(), getHeight(),new Color (255,127,172)));
         g2d.fillRect(0, 0, getWidth(), getHeight());
     }
+
+	public JPanel getMainPanel() {
+		return mainPanel;
+	}
+
+	public void setMainPanel(JPanel mainPanel) {
+		this.mainPanel = mainPanel;
+	}
+
+	public JLabel getLabelNombre() {
+		return labelNombre;
+	}
+
+	public void setLabelNombre(JLabel labelNombre) {
+		this.labelNombre = labelNombre;
+	}
+
+	public JLabel getLabelApellido() {
+		return labelApellido;
+	}
+
+	public void setLabelApellido(JLabel labelApellido) {
+		this.labelApellido = labelApellido;
+	}
+
+	public JTextField getFieldNombre() {
+		return fieldNombre;
+	}
+
+	public void setFieldNombre(JTextField fieldNombre) {
+		this.fieldNombre = fieldNombre;
+	}
+
+	public JTextField getFieldApellido() {
+		return fieldApellido;
+	}
+
+	public void setFieldApellido(JTextField fieldApellido) {
+		this.fieldApellido = fieldApellido;
+	}
+
+	public JLabel getLabelEmail() {
+		return labelEmail;
+	}
+
+	public void setLabelEmail(JLabel labelEmail) {
+		this.labelEmail = labelEmail;
+	}
+
+	public JTextField getFieldEmail() {
+		return fieldEmail;
+	}
+
+	public void setFieldEmail(JTextField fieldEmail) {
+		this.fieldEmail = fieldEmail;
+	}
+
+	public JLabel getLabelContra() {
+		return labelContra;
+	}
+
+	public void setLabelContra(JLabel labelContra) {
+		this.labelContra = labelContra;
+	}
+
+	public JPasswordField getFieldContra() {
+		return fieldContra;
+	}
+
+	public void setFieldContra(JPasswordField fieldContra) {
+		this.fieldContra = fieldContra;
+	}
+
+	public JLabel getLabelContra2() {
+		return labelContra2;
+	}
+
+	public void setLabelContra2(JLabel labelContra2) {
+		this.labelContra2 = labelContra2;
+	}
+
+	public JPasswordField getFieldContra2() {
+		return fieldContra2;
+	}
+
+	public void setFieldContra2(JPasswordField fieldContra2) {
+		this.fieldContra2 = fieldContra2;
+	}
+
+	public JCheckBox getTermsCheckBox() {
+		return termsCheckBox;
+	}
+
+	public void setTermsCheckBox(JCheckBox termsCheckBox) {
+		this.termsCheckBox = termsCheckBox;
+	}
+
+	public JButton getRegisterButton() {
+		return registerButton;
+	}
+
+	public void setRegisterButton(JButton registerButton) {
+		this.registerButton = registerButton;
+	}
+
+	public JButton getVolverButton() {
+		return volverButton;
+	}
+
+	public void setVolverButton(JButton volverButton) {
+		this.volverButton = volverButton;
+	}
 }

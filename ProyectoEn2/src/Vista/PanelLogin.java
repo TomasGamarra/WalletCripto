@@ -194,4 +194,20 @@ public class PanelLogin extends JPanel {
 	public void setRegisterButton(JButton registerButton) {
 		this.registerButton = registerButton;
 	}
+
+	public JPanel getTopPanel() {
+		return topPanel;
+	}
+
+	public void setTopPanel(JPanel topPanel) {
+		this.topPanel = topPanel;
+	}
+
+	public JLabel getLogoLabel() {
+		return logoLabel;
+	}
+
+	public void setLogoLabel(JLabel logoLabel) {
+		this.logoLabel = logoLabel;
+	}
 }

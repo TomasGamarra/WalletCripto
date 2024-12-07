@@ -207,6 +207,165 @@ public class PanelActivos extends JPanel {
             repaint(); // Vuelve a dibujar el componente
         }
 	}
+
+	public JPanel getPanelCentral() {
+		return panelCentral;
+	}
+
+
+	public void setPanelCentral(JPanel panelCentral) {
+		this.panelCentral = panelCentral;
+	}
+
+
+	public JPanel getPanelTop() {
+		return panelTop;
+	}
+
+
+	public void setPanelTop(JPanel panelTop) {
+		this.panelTop = panelTop;
+	}
+
+
+	public JPanel getPanelWestTop() {
+		return panelWestTop;
+	}
+
+
+	public void setPanelWestTop(JPanel panelWestTop) {
+		this.panelWestTop = panelWestTop;
+	}
+
+
+	public JPanel getPanelWest() {
+		return panelWest;
+	}
+
+
+	public void setPanelWest(JPanel panelWest) {
+		this.panelWest = panelWest;
+	}
+
+
+	public JPanel getPanelEast() {
+		return panelEast;
+	}
+
+
+	public void setPanelEast(JPanel panelEast) {
+		this.panelEast = panelEast;
+	}
+
+
+	public JButton getBotonPrueba() {
+		return botonPrueba;
+	}
+
+
+	public void setBotonPrueba(JButton botonPrueba) {
+		this.botonPrueba = botonPrueba;
+	}
+
+
+	public JButton getBotonExportar() {
+		return botonExportar;
+	}
+
+
+	public void setBotonExportar(JButton botonExportar) {
+		this.botonExportar = botonExportar;
+	}
+
+
+	public JButton getBotonHistorial() {
+		return botonHistorial;
+	}
+
+
+	public void setBotonHistorial(JButton botonHistorial) {
+		this.botonHistorial = botonHistorial;
+	}
+
+
+	public JButton getBotonCotizaciones() {
+		return botonCotizaciones;
+	}
+
+
+	public void setBotonCotizaciones(JButton botonCotizaciones) {
+		this.botonCotizaciones = botonCotizaciones;
+	}
+
+
+	public ComponenteCircular getComponenteIniciales() {
+		return componenteIniciales;
+	}
+
+
+	public void setComponenteIniciales(ComponenteCircular componenteIniciales) {
+		this.componenteIniciales = componenteIniciales;
+	}
+
+
+	public JButton getBotonLogout() {
+		return botonLogout;
+	}
+
+
+	public void setBotonLogout(JButton botonLogout) {
+		this.botonLogout = botonLogout;
+	}
+
+
+	public JLabel getLabelBalance() {
+		return labelBalance;
+	}
+
+
+	public void setLabelBalance(JLabel labelBalance) {
+		this.labelBalance = labelBalance;
+	}
+
+
+	public JTable getTablaActivos() {
+		return tablaActivos;
+	}
+
+
+	public void setTablaActivos(JTable tablaActivos) {
+		this.tablaActivos = tablaActivos;
+	}
+
+
+	public ModeloTablaActivos getTablaModelo() {
+		return tablaModelo;
+	}
+
+
+	public void setTablaModelo(ModeloTablaActivos tablaModelo) {
+		this.tablaModelo = tablaModelo;
+	}
+
+
+	public Object[][] getDatos() {
+		return datos;
+	}
+
+
+	public void setDatos(Object[][] datos) {
+		this.datos = datos;
+	}
+
+
+	public JScrollPane getScrollPane() {
+		return scrollPane;
+	}
+
+
+	public void setScrollPane(JScrollPane scrollPane) {
+		this.scrollPane = scrollPane;
+	}
 	
 	
 }

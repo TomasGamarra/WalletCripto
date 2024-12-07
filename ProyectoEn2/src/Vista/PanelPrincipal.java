@@ -9,7 +9,7 @@ public class PanelPrincipal extends JPanel {
 	private PanelLogin panelLogin;	
 	private PanelActivos panelActivos;
 	private PanelRegistro panelRegistro;
-	
+	private PanelHistorial panelHistorial;
 	
 	public PanelPrincipal () {
 		this.setLayout(new CardLayout());
