@@ -7,8 +7,8 @@ import java.awt.Image;
 public class Criptomoneda extends Moneda{
 	private float volatilidad;
 	
-	public Criptomoneda(String nombre, String nomenclatura, float precio, float volatilidad) {
-		super(nombre,nomenclatura,precio);
+	public Criptomoneda(String nombre, String nomenclatura, float precio, float volatilidad, String nombreIcono) {
+		super(nombre,nomenclatura,precio,nombreIcono);
 		this.setVolatilidad(volatilidad);
 	}
 	

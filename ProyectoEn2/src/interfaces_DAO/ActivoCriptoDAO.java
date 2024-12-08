@@ -7,9 +7,9 @@ import Sistema.ActivoCripto;
 public interface ActivoCriptoDAO {
 
 	void create (ActivoCripto activo);
-	ActivoCripto find (String nomenclatura);
+	ActivoCripto find (int idUsuario,String nomenclatura);
 	void update (ActivoCripto activo);
-	void delete (String nomenclatura);
+	void delete (int idUsuario,String nomenclatura);
 	List<ActivoCripto> listarActivosCriptos ();
-	int incrementarCantidad(String nomenclatura, float cantidadIncremento);
+	int incrementarCantidad(int idUsuario,String nomenclatura, float cantidadIncremento);
 }

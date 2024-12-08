@@ -17,59 +17,61 @@ import interfaces_DAO.MonedaDAO;
 
 public class ActivoCriptoDAOjdbc implements ActivoCriptoDAO {
 
-	@Override
-	public void create(ActivoCripto activo) {
-		String sql = "INSERT INTO ACTIVO_CRIPTO (nomenclatura, cantidad, direccion) VALUES (?, ?, ?)";
-		PreparedStatement ps;
-		try {
-			Connection con = MyConnection.getConnection();
-			
-			ps = con.prepareStatement(sql);
-			
-			ps.setString(1, activo.getCripto().getNomenclatura());
-			ps.setFloat(2, activo.getAmount());
-			ps.setString(3,activo.getDireccion());
-			
-		
-			if (ps.executeUpdate() <= 0) 
-				throw new SQLException ("Ninguna fila fue afectada");
-			
-			
-			
-		} catch (SQLException e) {
-			System.out.println("Error al insertar ActivoCripto :"+e.getMessage());
-		}
-	}
+	public boolean create(int idUsuario, int idCriptomoneda, double cantidad) {
+        Connection connection = MyConnection.getConnection();
+        
+        try {
+           
+            String sql = "INSERT INTO ACTIVO_CRIPTO (ID_USUARIO, ID_CRIPTOMONEDA, CANTIDAD) VALUES (?, ?, ?)";
+            try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+                pstmt.setInt(1, idUsuario);
+                pstmt.setInt(2, idCriptomoneda);
+                pstmt.setDouble(3, cantidad);
+                pstmt.executeUpdate();
+                return true;
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al crear el activo cripto: " + e.getMessage());
+            return false;
+        }
+    }
 
 	@Override
-	public ActivoCripto find(String nomenclatura) {
-	    ActivoCripto activoCripto = null;
-	    String sql = "SELECT cantidad, direccion FROM ACTIVO_CRIPTO WHERE nomenclatura = ?";
+	public ActivoCripto find(int idUsuario, String nombreCripto) {
+	    Connection connection = MyConnection.getConnection();
+	    String sql = "SELECT ac.CANTIDAD, c.NOMBRE, c.NOMENCLATURA, c.VALOR_DOLAR, " +
+	                 "c.VOLATILIDAD, c.NOMBRE_ICONO " +
+	                 "FROM ACTIVO_CRIPTO ac " +
+	                 "JOIN CRIPTOMONEDA c ON ac.ID_CRIPTOMONEDA = c.ID " +
+	                 "WHERE ac.ID_USUARIO = ? AND c.NOMBRE = ?";
 
-	    try {
-	        Connection con = MyConnection.getConnection();
-	        PreparedStatement ps = con.prepareStatement(sql);
-	        ps.setString(1, nomenclatura);
-	        ResultSet rs = ps.executeQuery();
+	    try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+	        pstmt.setInt(1, idUsuario);
+	        pstmt.setString(2, nombreCripto);
+
+	        ResultSet rs = pstmt.executeQuery();
 
 	        if (rs.next()) {
-	            // Recuperar los valores de cantidad y dirección
-	            float cantidad = rs.getFloat("cantidad");
-	            String direccion = rs.getString("direccion");
+	            float cantidad = rs.getFloat("CANTIDAD");
 
-	            // Obtener la moneda correspondiente desde el DAO
-	            MonedaDAO monedaDAO = FactoryDAO.getMonedaDAO();
-	            Moneda moneda = monedaDAO.find(nomenclatura);
+	            Criptomoneda cripto = new Criptomoneda(
+	                rs.getString("NOMBRE"),
+	                rs.getString("NOMENCLATURA"),
+	                rs.getFloat("VALOR_DOLAR"),
+	                rs.getFloat("VOLATILIDAD"),
+	                rs.getString("NOMBRE_ICONO")
+	            );
 
-	            if (moneda != null && moneda instanceof Criptomoneda) {
-	                activoCripto = new ActivoCripto(cantidad, (Criptomoneda) moneda, direccion);
-	            }
+	            // Generación aleatoria de dirección (simulación)
+	            String direccion = generarDireccionAleatoria();
+
+	            return new ActivoCripto(cantidad, cripto, direccion);
 	        }
 	    } catch (SQLException e) {
-	        System.out.println("Error al buscar ActivoCripto: " + e.getMessage());
+	        System.out.println("Error al buscar el activo cripto: " + e.getMessage());
 	    }
-
-	    return activoCripto;
+	    return null;  // Si no se encuentra
 	}
 
 

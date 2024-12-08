@@ -12,12 +12,14 @@ public abstract class Moneda {
 	private String nombre;
 	private String nomenclatura;
 	private float valorUsd;
+	private String nombreIcono;
 	
 	
-	public Moneda(String nombre, String nomenclatura, float valorUsd) {
+	public Moneda(String nombre, String nomenclatura, float valorUsd, String nombreIcono) {
 		this.nombre = nombre;
 		this.nomenclatura = nomenclatura;
 		this.valorUsd =valorUsd;
+		this.nombreIcono=nombreIcono;
 
 	}
 
@@ -60,6 +62,16 @@ public abstract class Moneda {
 
 	public void setValorUsd(float valorUsd) {
 		this.valorUsd = valorUsd;
+	}
+
+
+	public String getNombreIcono() {
+		return nombreIcono;
+	}
+
+
+	public void setNombreIcono(String nombreIcono) {
+		this.nombreIcono = nombreIcono;
 	}
 
 	
