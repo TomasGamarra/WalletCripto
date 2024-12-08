@@ -8,6 +8,8 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
+import Sistema.Usuario;
+
 public class Controlador {
 	private Vista vista;
 	private Modelo modelo;
@@ -17,12 +19,12 @@ public class Controlador {
 		this.modelo= modelo;
 		this.vista= vista;
 		
-		//vista.getPanelMain().getPanelLogin().getLoginButton().addActionListener(new Boton_login());
+		vista.getPanelMain().getPanelLogin().getLoginButton().addActionListener(new Boton_login());
 		vista.getPanelMain().getPanelLogin().getRegisterButton().addActionListener(new Boton_vista_registrar());
 		
 		
 		vista.getPanelMain().getPanelRegistro().getVolverButton().addActionListener(new Boton_cancelar_registro());
-		//vista.getPanelMain().getPanelRegistro().getRegisterButton().addActionListener(new Boton_registrar());
+		vista.getPanelMain().getPanelRegistro().getRegisterButton().addActionListener(new Boton_registrar());
 		//Tengo que terminar el boton registrar
 		
 		vista.getPanelMain().getPanelActivos().getBotonLogout().addActionListener(new Boton_Logout_Activos());
@@ -127,58 +129,57 @@ public class Boton_cancelar_compra implements ActionListener{
 
 
 
-//public class Boton_login implements ActionListener{
-//	public void actionPerformed(ActionEvent e) {
-//		if(vista.getPanelMain().getPanelLogin().getUserField().getText().isBlank() || (new String(vista.getPanelMain().getPanelLogin().getPasswdField().getText())==null)) {
-//			//Ver como queda centrado pq la posta ni idea
-//			JOptionPane.showMessageDialog(vista.getPanelMain().getPanelLogin(), "Por favor complete todos campos para proceder");
-//			return;}
-//			else {
-//				//Usuario user = modelo.getUsuarioDao(vista.getPanelMain().getPanelLogin().getUserField().getText());
-//				if (user == null || !user.getPasswr.equals(new String(vista.getPanelMain().getPanelLogin().getPasswdField().getText())) ) {
-//					JOptionPane.showMessageDialog(vista.getPanelMain().getPanelLogin(), "Usuario o contraseña desconocidos");
-//					return;
-//				}else {
-//					iniciarMenu(user);
-//				
-//			}
-//			}
-//		}
-//	}
-//	
+public class Boton_login implements ActionListener{
+	public void actionPerformed(ActionEvent e) {
+		if(vista.getPanelMain().getPanelLogin().getUserField().getText().isBlank() || (new String(vista.getPanelMain().getPanelLogin().getPasswdField().getText())==null)) {
+			//Ver como queda centrado pq la posta ni idea
+			JOptionPane.showMessageDialog(vista.getPanelMain().getPanelLogin(), "Por favor complete todos campos para proceder");
+			return;}
+			else {
+				Usuario user = modelo.getUsuarioDao(vista.getPanelMain().getPanelLogin().getUserField().getText());
+				if (user == null || !user.getPasswr().equals(new String(vista.getPanelMain().getPanelLogin().getPasswdField().getText())) ) {
+					JOptionPane.showMessageDialog(vista.getPanelMain().getPanelLogin(), "Usuario o contraseña desconocidos");
+					return;
+				}else {
+					iniciarMenu(user);
+				
+               }
+			}
+      }
+	}
 
 
 
 
-//public class Boton_registrar implements ActionListener{
+
+public class Boton_registrar implements ActionListener{
 	
-//	
-//	public void actionPerformed(ActionEvent e) {
-//		if(vista.getPanelMain().getPanelLogin().getUserField().getText().isBlank() || (new String(vista.getPanelMain().getPanelLogin().getPasswdField().getText())==null)) {
-//			//Ver como queda centrado pq la posta ni idea
-//			JOptionPane.showMessageDialog(vista.getPanelMain().getPanelLogin(), "Por favor complete todos campos para proceder");
-//			return;}
-//			else {
-//				// En este caso estoy tomando como si usuario devuelve null si no existe en la base de datos
-//				Usuario user = modelo.getUsuarioDao(vista.getPanelMain().getPanelLogin().getUserField().getText());
-//				if ( user == null || ==null) {
-//					JOptionPane.showMessageDialog(vista.getvistaLogin(), "Usuario o contraseña desconocidos");
-//					return;
-//				}}
-//				
-//				vista.cambiarCarta("login");
-//		}
+	
+	public void actionPerformed(ActionEvent e) {
+		if(vista.getPanelMain().getPanelLogin().getUserField().getText().isBlank() || (new String(vista.getPanelMain().getPanelLogin().getPasswdField().getText())==null)) {
+			//Ver como queda centrado pq la posta ni idea
+			JOptionPane.showMessageDialog(vista.getPanelMain().getPanelLogin(), "Por favor complete todos campos para proceder");
+		return;}
+			else {
+			// En este caso estoy tomando como si usuario devuelve null si no existe en la base de datos
+				Usuario user = modelo.getUsuarioDao(vista.getPanelMain().getPanelLogin().getUserField().getText());
+				if ( user == null || user.==null) {
+					JOptionPane.showMessageDialog(vista.getvistaLogin(), "Usuario o contraseña desconocidos");
+					return;
+				}}
+				
+				vista.cambiarCarta("login");
+		}
 	}
 	
 
-//	public  void iniciarMenu(Usuario user) {
-//		vista.cambiarCarta("activos");
-//		vista.getPanelMain().getPanelActivos().getLabelNombre().setText(user.getNombre()+ ""+ user.getApellido());
-//		
+	public  void iniciarMenu(Usuario user) {
+		vista.cambiarCarta("activos");
+		vista.getPanelMain().getPanelActivos().getLabelNombre().setText(user.getNombre()+ ""+ user.getApellido());
+		
 	
 	
+		
+} 
 	
-	
-//} 
-	
-//}
+}

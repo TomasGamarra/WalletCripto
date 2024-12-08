@@ -1,5 +1,7 @@
 package Sistema;
 
+import java.sql.Date;
+
 /**
  * Esta clase representa la billetera personal de cada usuario, con datos como
  * la comision y su balance en USD.
@@ -20,7 +22,7 @@ public class Billetera {
 
 	private float balanceUsd;
 	private float comision;
-	private Fecha fechaRegistracion;
+	private Date fechaRegistracion;
 
 	public Billetera() {
 
@@ -34,7 +36,7 @@ public class Billetera {
 	 * @param fechaRegistracion Fecha en que la billetera se creo para el usuario
 	 */
 
-	public Billetera(float balanceUsd, float comision, Fecha fechaRegistracion) {
+	public Billetera(float balanceUsd, float comision, Date fechaRegistracion) {
 		super();
 		this.balanceUsd = balanceUsd;
 		this.comision = comision;
@@ -82,11 +84,11 @@ public class Billetera {
 	 *         {@code Fecha}.
 	 */
 
-	public Fecha getFechaRegistracion() {
+	public Date getFechaRegistracion() {
 		return fechaRegistracion;
 	}
 
-	public void setFechaRegistracion(Fecha fechaRegistracion) {
+	public void setFechaRegistracion(Date fechaRegistracion) {
 		this.fechaRegistracion = fechaRegistracion;
 	}
 
