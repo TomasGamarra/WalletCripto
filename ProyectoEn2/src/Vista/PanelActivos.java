@@ -194,7 +194,7 @@ public class PanelActivos extends JPanel {
         g2d.fillRect(0, 0, getWidth(), getHeight());
     }
 	
-	private static class ComponenteCircular extends JComponent {
+	public static class ComponenteCircular extends JComponent {
         private String iniciales;
         private final int diameter = 75; 
 
@@ -387,6 +387,26 @@ public class PanelActivos extends JPanel {
 
 	public void setScrollPane(JScrollPane scrollPane) {
 		this.scrollPane = scrollPane;
+	}
+
+
+	public JPanel getPanelSouth() {
+		return panelSouth;
+	}
+
+
+	public void setPanelSouth(JPanel panelSouth) {
+		this.panelSouth = panelSouth;
+	}
+
+
+	public JLabel getLabelNombre() {
+		return labelNombre;
+	}
+
+
+	public void setLabelNombre(JLabel labelNombre) {
+		this.labelNombre = labelNombre;
 	}
 	
 	

@@ -20,7 +20,6 @@ public class PanelPrincipal extends JPanel {
 		panelRegistro = new PanelRegistro();
 		panelHistorial = new PanelHistorial();
 		add(panelHistorial,"historial");
-		
         add(panelRegistro, "registro");
         add(panelActivos, "activos");
 		add(panelLogin, "login");

@@ -1,6 +1,6 @@
 package Sistema;
 
-import java.awt.Image;
+
 
 
 //me Flata unacampo q en teoria es unaenum asi q tegno q hablar con tomi de q onda eso

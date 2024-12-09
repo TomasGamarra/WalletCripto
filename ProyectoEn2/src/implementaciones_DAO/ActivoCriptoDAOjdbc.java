@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -152,6 +153,43 @@ public class ActivoCriptoDAOjdbc implements ActivoCriptoDAO {
 	    return lista;
 	}
 
+	public List<ActivoCripto> obtenerActivosCriptoPorUsuario(int idUsuario) {
+        List<ActivoCripto> activosCripto = new ArrayList<>();
+        String sql = "SELECT a.CANTIDAD, a.ID_CRIPTOMONEDA, c.NOMBRE, c.NOMENCLATURA, c.VALOR_DOLAR, c.NOMBRE_ICONO " +
+                     "FROM ACTIVO_CRIPTO a " +
+                     "JOIN CRIPTOMONEDA c ON a.ID_CRIPTOMONEDA = c.ID " +
+                     "WHERE a.ID_USUARIO = ?";
+
+        try  {
+        	Connection con = MyConnection.getConnection();
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setInt(1, idUsuario);
+            ResultSet rs = stmt.executeQuery();
+
+           
+            while (rs.next()) {
+                float cantidad = rs.getFloat("CANTIDAD");
+                int idCripto = rs.getInt("ID_CRIPTOMONEDA");
+                String nombreCripto = rs.getString("NOMBRE");
+                String nomenclatura = rs.getString("NOMENCLATURA");
+                float valorDolar = rs.getFloat("VALOR_DOLAR");
+                String nombreIcono = rs.getString("NOMBRE_ICONO");
+
+                Criptomoneda cripto = new Criptomoneda(nombreCripto, nomenclatura,valorDolar,1,nombreIcono );
+
+                ActivoCripto activoCripto = new ActivoCripto(cantidad, cripto, null);  //Ver tema de la direccion
+
+       
+                activosCripto.add(activoCripto);
+            }
+
+        } catch (SQLException e) {
+           System.out.println("Error SQL :"+e.getMessage());
+        }
+
+        return activosCripto;
+    }
+	
 	@Override
 	public void update(int idUsuario, int idCriptomoneda, float cantidad) {
 		//Codigo del update

@@ -24,9 +24,9 @@ public class ModeloTablaActivos extends DefaultTableModel {
 
 		    @Override
 		    public boolean isCellEditable(int row, int column) {
-		        // Deshabilitar la edición de todas las columnas excepto la tercera (Monto)
-		        return column == 2;
+		        return false; //Ninguna columna es editable
 		    }
+		    
 }
 
 		

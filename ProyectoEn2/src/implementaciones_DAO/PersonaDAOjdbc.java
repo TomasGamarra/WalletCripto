@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
+import java.sql.Statement;
 
 import Sistema.Persona;
 import gestores.FactoryDAO;
@@ -59,6 +59,28 @@ public class PersonaDAOjdbc implements PersonaDAO {
 		return per;
 	}
 	
+	public void create(Persona persona) {
+	    String sql = "INSERT INTO PERSONA (NOMBRES, APELLIDOS) VALUES (?, ?)";
+	    
+	    try  {
+	    	Connection con = MyConnection.getConnection();
+	        PreparedStatement stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+	        
+	        stmt.setString(1, persona.getNombre());
+	        stmt.setString(2, persona.getApellido());
+	        
+	        
+	        if (stmt.executeUpdate() > 0) {
+	           ResultSet rs = stmt.getGeneratedKeys();
+	           if (rs.next()) {
+	               persona.setId(rs.getInt(1));  // Asignar el ID al objeto 
+	            }
+	        }
+	        
+	    } catch (SQLException e) {
+	        System.out.println("Error al crear Persona: " + e.getMessage());
+	    }
 	
-
+	
+	}
 }

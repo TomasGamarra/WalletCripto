@@ -8,9 +8,15 @@ import java.sql.Statement;
 
 import Controlador.Controlador;
 import Controlador.Modelo;
+import gestores.MyConnection;
 
 public class PruebaVista {
     public static void main(String[] args) {
+    	try {
+    	creacionDeTablasEnBD(MyConnection.getConnection()); 
+    	} catch (SQLException e) {
+    		System.out.println("Error SQL: "+e.getMessage());
+    	}
     	Vista vista =new Vista();
     	Modelo modelo = new Modelo();
     	Controlador cont = new Controlador(vista,modelo);
@@ -23,7 +29,7 @@ public class PruebaVista {
     * @param connection objeto conexion a la base de datos SQLite
     * @throws SQLException
     */
-    private static void creaciónDeTablasEnBD(Connection connection) throws SQLException {
+    private static void creacionDeTablasEnBD(Connection connection) throws SQLException {
     	Statement stmt;
     	stmt = connection.createStatement();
     	String sql = "CREATE TABLE  IF NOT EXISTS PERSONA "
@@ -53,7 +59,8 @@ public class PruebaVista {
     			+ " NOMENCLATURA VARCHAR(10)  NOT NULL, "
     			+ " VALOR_DOLAR	REAL     NOT NULL, "
     			+ " VOLATILIDAD	REAL     NULL, "
-    			+ " NOMBRE_ICONO       VARCHAR(50)    NOT NULL "
+    			+ " NOMBRE_ICONO       VARCHAR(50)    NOT NULL, "
+    			+ " CONSTRAINT unique_constraint UNIQUE (NOMBRE, NOMENCLATURA)"
     			+ ")";
     	
     	stmt.executeUpdate(sql);
@@ -64,7 +71,8 @@ public class PruebaVista {
     			+ " NOMBRE       VARCHAR(50)    NOT NULL, "
     			+ " NOMENCLATURA VARCHAR(10)  NOT NULL, "
     			+ " VALOR_DOLAR	REAL     NOT NULL, "    			
-    			+ " NOMBRE_ICONO       VARCHAR(50)    NOT NULL "
+    			+ " NOMBRE_ICONO       VARCHAR(50)    NOT NULL, "
+    			+ " CONSTRAINT unique_constraint UNIQUE (NOMBRE, NOMENCLATURA)"
     			+ ")";
     	
     	stmt.executeUpdate(sql);
@@ -98,7 +106,7 @@ public class PruebaVista {
     			+ " ID     INTEGER   PRIMARY KEY AUTOINCREMENT NOT NULL , "
     			+ " RESUMEN VARCHAR(1000)   NOT NULL, "
     			+ " TIPO VARCHAR(20) NOT NULL,"
-    			+ " FECHA_HORA		DATETIME  NOT NULL, " //Por ahi conviene string , fijarse
+    			+ " FECHA_HORA		DATETIME  NOT NULL, " 
     			+ " ID_USUARIO INTEGER    NOT NULL, "
     			+ " FOREIGN KEY(ID_USUARIO) REFERENCES USUARIO(ID)"
     			+ ")";

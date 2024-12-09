@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -152,5 +153,41 @@ public class ActivoFiatDAOjdbc implements ActivoFiatDAO {
 	    }
 	    return lista;
 	}
+	
+	public List<ActivoFiat> obtenerActivosFiatPorUsuario(int idUsuario) {
+        List<ActivoFiat> activosFiat = new ArrayList<>();
+        String sql = "SELECT a.CANTIDAD, a.ID_MONEDAFIAT, m.NOMBRE, m.NOMENCLATURA, m.VALOR_DOLAR, m.NOMBRE_ICONO " +
+                     "FROM ACTIVO_FIAT a " +
+                     "JOIN MONEDAFIAT m ON a.ID_MONEDAFIAT = m.ID " +
+                     "WHERE a.ID_USUARIO = ?";
+
+        try {
+        	Connection con = MyConnection.getConnection();
+            PreparedStatement stmt = con.prepareStatement(sql);
+            // Establecer el idUsuario en la consulta
+            stmt.setInt(1, idUsuario);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) { 
+                float cantidad = rs.getFloat("CANTIDAD");
+                int idMonedaFiat = rs.getInt("ID_MONEDAFIAT");
+                String nombreMonedaFiat = rs.getString("NOMBRE");
+                String nomenclatura = rs.getString("NOMENCLATURA");
+                float valorDolar = rs.getFloat("VALOR_DOLAR");
+                String nombreIcono = rs.getString("NOMBRE_ICONO");
+
+                MonedaFiat monedaFiat = new MonedaFiat(nombreMonedaFiat,nomenclatura,  valorDolar,nombreIcono );
+
+                ActivoFiat activoFiat = new ActivoFiat(cantidad, monedaFiat);
+
+                activosFiat.add(activoFiat);
+            }
+
+        } catch (SQLException e) {
+        	System.out.println("Error al listar activos cripto: " + e.getMessage());
+        }
+
+        return activosFiat;
+    }
 
 }

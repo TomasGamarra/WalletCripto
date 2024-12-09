@@ -11,7 +11,7 @@ public class ServicioCotizaciones {
         "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,usd-coin,tether,dogecoin&vs_currencies=usd";
 
    
-    public static String[][] consultarPreciosDesdeAPI() {
+    public static String[][] consultarPreciosParaTabla() {
         HttpClient cliente = HttpClient.newHttpClient();
         HttpRequest solicitud = HttpRequest.newBuilder()
                 .uri(URI.create(URL_API))
@@ -32,15 +32,45 @@ public class ServicioCotizaciones {
     }
 
    
+    public static float obtenerPrecio (String nombreCripto) {
+    	HttpClient cliente = HttpClient.newHttpClient();
+        HttpRequest solicitud = HttpRequest.newBuilder()
+                .uri(URI.create(URL_API))
+                .GET()
+                .build();
+
+        try {
+            HttpResponse<String> respuesta = cliente.send(solicitud, HttpResponse.BodyHandlers.ofString());
+            if (respuesta.statusCode() == 200) {
+                return obtenerPrecioHelper(respuesta.body(),nombreCripto);
+            } else {
+                System.out.println("Error: " + respuesta.statusCode());
+            }
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return -1; 	
+    }
+    
+    private static float obtenerPrecioHelper (String cuerpoRespuesta,String nombreCripto) {
+    	JSONObject json = new JSONObject(cuerpoRespuesta);
+    	if (json.has(nombreCripto)) {
+            return json.getJSONObject(nombreCripto).getFloat("usd");
+        } else {
+            System.err.println("Criptomoneda no encontrada: " + nombreCripto);
+            return -1;
+        }
+    }
+    
     private static String[][] parsearPrecios(String cuerpoRespuesta) {
         JSONObject json = new JSONObject(cuerpoRespuesta);
 
         return new String[][]{
-            {"images/Bitcoin.png", "Bitcoin(BTC)", "$"+String.valueOf(json.getJSONObject("bitcoin").getDouble("usd"))},
-            {"images/Ethereum.png", "Ethereum(ETH)","$"+ String.valueOf(json.getJSONObject("ethereum").getDouble("usd"))},
-            {"images/Usdc.png", "USDC","$"+ String.valueOf(json.getJSONObject("usd-coin").getDouble("usd"))},
-            {"images/Tether.png", "USDT", "$"+String.valueOf(json.getJSONObject("tether").getDouble("usd"))},
-            {"images/Dogecoin.png", "Dogecoin(DOGE)","$"+ String.valueOf(json.getJSONObject("dogecoin").getDouble("usd"))}
+            {"images/Bitcoin.png", "Bitcoin(BTC)", "$"+String.valueOf(json.getJSONObject("bitcoin").getFloat("usd"))},
+            {"images/Ethereum.png", "Ethereum(ETH)","$"+ String.valueOf(json.getJSONObject("ethereum").getFloat("usd"))},
+            {"images/Usdc.png", "USDC","$"+ String.valueOf(json.getJSONObject("usd-coin").getFloat("usd"))},
+            {"images/Tether.png", "USDT", "$"+String.valueOf(json.getJSONObject("tether").getFloat("usd"))},
+            {"images/Dogecoin.png", "Dogecoin(DOGE)","$"+ String.valueOf(json.getJSONObject("dogecoin").getFloat("usd"))}
         };
     }
 }

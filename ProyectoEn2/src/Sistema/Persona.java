@@ -1,6 +1,7 @@
 package Sistema;
 
 public class Persona {
+	private int idPersona;
 	private String nombre;
 	private String apellido;
 	
@@ -24,6 +25,12 @@ public class Persona {
 	}
 	public void setApellido(String apellido) {
 		this.apellido = apellido;
+	}
+	public int getId() {
+		return idPersona;
+	}
+	public void setId(int idPersona) {
+		this.idPersona = idPersona;
 	}
 	
 	

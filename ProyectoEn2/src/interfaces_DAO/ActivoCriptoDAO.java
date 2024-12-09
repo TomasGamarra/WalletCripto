@@ -12,4 +12,5 @@ public interface ActivoCriptoDAO {
 	void delete (int idUsuario,String nomenclatura);
 	List<ActivoCripto> listarActivosCriptos ();
 	int incrementarCantidad(int idUsuario,String nomenclatura, float cantidadIncremento);
+	public List<ActivoCripto> obtenerActivosCriptoPorUsuario(int idUsuario);
 }

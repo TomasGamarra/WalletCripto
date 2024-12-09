@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Vista extends JFrame {
+	
 	private PanelPrincipal panelMain;
 	
 	
@@ -15,7 +16,7 @@ public class Vista extends JFrame {
      
         
         //Panel principal
-        panelMain = new PanelPrincipal ();
+        panelMain = new PanelPrincipal (); //Usa CardLayout
     
 
         add(panelMain);

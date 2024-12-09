@@ -1,14 +1,20 @@
 package Controlador;
 
-import Vista.Vista;
-
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
 
+import Sistema.ActivoCripto;
+import Sistema.ActivoFiat;
+import Sistema.GestorDeUsuarioActual;
+import Sistema.Persona;
 import Sistema.Usuario;
+import Vista.ModeloTablaActivos;
+import Vista.Vista;
 
 public class Controlador {
 	private Vista vista;
@@ -19,7 +25,7 @@ public class Controlador {
 		this.modelo= modelo;
 		this.vista= vista;
 		
-		//vista.getPanelMain().getPanelLogin().getLoginButton().addActionListener(new Boton_login());
+		vista.getPanelMain().getPanelLogin().getLoginButton().addActionListener(new Boton_login());
 		vista.getPanelMain().getPanelLogin().getRegisterButton().addActionListener(new Boton_vista_registrar());
 		
 		
@@ -29,7 +35,7 @@ public class Controlador {
 		
 		vista.getPanelMain().getPanelActivos().getBotonLogout().addActionListener(new Boton_Logout_Activos());
 		vista.getPanelMain().getPanelActivos().getBotonCotizaciones().addActionListener(new Boton_cotizacion());
-		vista.getPanelMain().getPanelActivos().getBotonExportar().addActionListener(new Boton_exportar);
+		//vista.getPanelMain().getPanelActivos().getBotonExportar().addActionListener(new Boton_exportar);
 	
 		
 		vista.getPanelMain().getPanelActivos().getBotonHistorial().addActionListener(new Boton_trans());
@@ -39,20 +45,21 @@ public class Controlador {
 		vista.getPanelMain().getPanelHistorial().getBotonVolver().addActionListener(new Boton_salir_trans());
 		
 		
-		vista.getPanelMain().getPanelCotizaciones().getVolverButton().addActionListener(new Boton_salir_cotizacion());
+		//vista.getPanelMain().getPanelCotizaciones().getVolverButton().addActionListener(new Boton_salir_cotizacion());
 		//new Boton_salir_cotizacion()
-		vista.getPanelMain().getPanelCotizaciones().getLogOutButton().addActionListener(new Boton_Logout_Cotizacion());
+		//vista.getPanelMain().getPanelCotizaciones().getLogOutButton().addActionListener(new Boton_Logout_Cotizacion());
 		//new Boton_Logout_Cotizacion()
 		//Falta boton comprar 
 		
 		
 		
-		vista.getPanelMain().getPanelCompra().getCancelarButton().addActionListener(new Boton_cancelar_compra());
+		//vista.getPanelMain().getPanelCompra().getCancelarButton().addActionListener(new Boton_cancelar_compra());
 		//Falta boton conversion, lista de monedas, boton de compra
 	
 	}
 	
 	public class Boton_vista_registrar implements ActionListener{
+		
 		
 		public void actionPerformed(ActionEvent e) {
 			vista.cambiarCarta("registro");
@@ -143,90 +150,106 @@ public class Boton_cancelar_compra implements ActionListener{
 
 
 
-
-
-
-
-
-
-
 public class Boton_login implements ActionListener{
+	
 	public void actionPerformed(ActionEvent e) {
-		if(vista.getPanelMain().getPanelLogin().getUserField().getText().isBlank() || (new String(vista.getPanelMain().getPanelLogin().getPasswdField().getText())==null)) {
-			//Ver como queda centrado pq la posta ni idea
-			JOptionPane.showMessageDialog(vista.getPanelMain().getPanelLogin(), "Por favor complete todos campos para proceder");
-			return;}
-			else {
-				Usuario user = modelo.getUsuarioDao(vista.getPanelMain().getPanelLogin().getUserField().getText());
-				if (user == null || !user.getPasswr().equals(new String(vista.getPanelMain().getPanelLogin().getPasswdField().getText()) || !user.getEmail().equals(vista.getPanelMain().getPanelLogin().getLabelEmail().getText())) ) {
-					JOptionPane.showMessageDialog(vista.getPanelMain().getPanelLogin(), "Usuario o contraseña desconocidos");
-					return;
-				}else {
+		
+		if (vista.getPanelMain().getPanelLogin().getUserField().getText().isBlank() || (new String(vista.getPanelMain().getPanelLogin().getPasswdField().getPassword()).isBlank())) {
+			JOptionPane.showMessageDialog(vista.getPanelMain().getPanelLogin(), "Por favor complete todos los campos.");
+			return;
+		}
+		else {
+			System.out.println(vista.getPanelMain().getPanelLogin().getUserField().getText());
+			Usuario user = modelo.getUsuarioDao().findByEmail(vista.getPanelMain().getPanelLogin().getUserField().getText()); // Obtengo el usuario de la DB
+			if ( user == null ) {
+				JOptionPane.showMessageDialog(vista.getPanelMain().getPanelLogin(), "Email no asociado a ninguna cuenta.");
+			}else 
+				if (!(user.getPassword().equals(new String(vista.getPanelMain().getPanelLogin().getPasswdField().getPassword()))))
+					JOptionPane.showMessageDialog(vista.getPanelMain().getPanelLogin(), "Contraseña incorrecta.");	
+				else {
+					GestorDeUsuarioActual.setUser(user);
 					iniciarMenu(user);
-				
-               }
-			}
-      }
+				}
+             }
 	}
+	
+	
+	private void iniciarMenu(Usuario user) {
+		vista.cambiarCarta("activos");
+		//Nombre y apellido
+		String nombre = user.getPersona().getNombre();
+		String apellido =user.getPersona().getApellido();
+		vista.getPanelMain().getPanelActivos().getLabelNombre().setText(nombre+ " "+apellido );
+		
+		//Actualizo iniciales
+		String iniciales = nombre.toUpperCase().charAt(0) +""+apellido.toUpperCase().charAt(0);
+		vista.getPanelMain().getPanelActivos().getComponenteIniciales().setIniciales(iniciales); 
+		
+		//Actualizo tabla de activos
+		List <ActivoCripto> listaCripto = modelo.getActivoCriptoDao().obtenerActivosCriptoPorUsuario(user.getIdUsuario());
+		List <ActivoFiat> listaFiat= modelo.getActivoFiatDao().obtenerActivosFiatPorUsuario(user.getIdUsuario());
+		//cargarActivosCripto();
+		//cargarActivosFiat();
+		
+	}
+	
+	
+	
+ }
+	
 
+ 
 
 
 
 
 public class Boton_registrar implements ActionListener{
-	//Hay q tengo q cambiar
+	
 	
 	public void actionPerformed(ActionEvent e) {
-		String nombre = vista.getPanelMain().getPanelRegistro().getLabelNombre().getText();
-		String apellido= vista.getPanelMain().getPanelRegistro().getLabelApellido().getText();
-		String mail = vista.getPanelMain().getPanelRegistro().getLabelEmail().getText();
-		String contra = vista.getPanelMain().getPanelRegistro().getLabelApellido().getText();
-		String contra2 = vista.getPanelMain().getPanelRegistro().getLabelContra2().getText();
+		String nombre = vista.getPanelMain().getPanelRegistro().getFieldNombre().getText();
+		String apellido= vista.getPanelMain().getPanelRegistro().getFieldApellido().getText();
+		String mail = vista.getPanelMain().getPanelRegistro().getFieldEmail().getText();
+		String contra = String.valueOf(vista.getPanelMain().getPanelRegistro().getFieldContra().getPassword());
+		String contra2 = String.valueOf(vista.getPanelMain().getPanelRegistro().getFieldContra2().getPassword());
 		boolean terminos= vista.getPanelMain().getPanelRegistro().getTermsCheckBox().isSelected();
-		
-		
-			if (nombre.isEmpty() || apellido.isEmpty() || mail.isEmpty() || contra.isEmpty() || contra2.isEmpty()) {
+		if (nombre.isEmpty() || apellido.isEmpty() || mail.isEmpty() || contra.isEmpty() || contra2.isEmpty()) {
 				JOptionPane.showMessageDialog(null, "No se han completado todos los campos.", "ERROR", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 			if(!terminos) {
-				JOptionPane.showMessageDialog(null, "No se aceptaron los temrinos y condiciones de la aplicacion.", "ERROR", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, "No se aceptaron los terminos y condiciones de la aplicacion.", "ERROR", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
-			
-			Usuario user = modelo.getUsuarioDao(mail);
-			
-			if( user == null) {
-				JOptionPane.showMessageDialog(null, "El email referenciado ya esta en uso.", "ERROR", JOptionPane.ERROR_MESSAGE);
+			if (!(contra.equals(contra2))) {
+				JOptionPane.showMessageDialog(null, "La contraseña no coincide", "ERROR", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
+			Usuario user = modelo.getUsuarioDao().findByEmail(mail);
 			
+			if( user != null) {
+				JOptionPane.showMessageDialog(null, "El email ya esta en uso.", "ERROR", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			Persona persona = new Persona(nombre,apellido);
+			modelo.getPersonaDao().create(persona);
+			user = new Usuario(0,mail,contra,terminos,persona);
+			modelo.getUsuarioDao().create(user); 
 			
-			modelo.insertarUsuario(nombre,apellido,mail,contra,terminos);
-			JOptionPane.showConfirmDialog(
+			JOptionPane.showMessageDialog(
 		            null, 
-		            "Usuario creado exitosamente, se le ha enviado un mail de confirmacion de cuenta para verficar su persona", 
+		            "Usuario creado exitosamente, se le ha enviado un mail de confirmacion.", 
 		            "Creación de usuario", 
-		            JOptionPane.OK_OPTION, 
-		            JOptionPane.INFORMATION_MESSAGE
-		        );
+		            JOptionPane.NO_OPTION );
 			vista.cambiarCarta("login");
-
-			
+			GestorDeUsuarioActual.setUser(user);
 			
 		}
 	}
 	
 	
 
-	public  void iniciarMenu(Usuario user) {
-		vista.cambiarCarta("activos");
-		vista.getPanelMain().getPanelActivos().getLabelNombre().setText(user.getNombre()+ ""+ user.getApellido());
-		
 	
-	
-		
-} 
 	
 
 public class  Boton_exportar implements ActionListener{

@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -42,6 +43,35 @@ public class UsuarioDAOjdbc implements UsuarioDAO{
 		
 	}
 
+	 public int create(Usuario usuario) {
+	        
+	        String sql = "INSERT INTO USUARIO (email, password, acepta_terminos, id_persona) VALUES (?, ?, ?, ?)";
+	        
+	        try  {
+	        	Connection con = MyConnection.getConnection();
+	            PreparedStatement stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+	           
+	            stmt.setString(1, usuario.getEmail());
+	            stmt.setString(2, usuario.getPassword());
+	            stmt.setBoolean(3, usuario.isAceptoTerminos());
+	            stmt.setInt(4, usuario.getPersona().getId()); 
+	            
+	   	            
+	            if (stmt.executeUpdate() > 0) {
+	            	ResultSet generatedKeys = stmt.getGeneratedKeys();
+	                 if (generatedKeys.next()) {
+	                     int idGenerado = generatedKeys.getInt(1);
+	                     usuario.setIdUsuario(idGenerado); 
+	                     return idGenerado; 
+	                    
+	                }
+	            }
+	        } catch (SQLException e) {
+	            System.out.println("Error SQL : "+e.getMessage());
+	        }
+	        
+	        return -1; 
+	    }
 	@Override
 	public Usuario find(int idPersona, String nombre, String apellido) {
 		 Usuario user = null;
@@ -84,6 +114,37 @@ public class UsuarioDAOjdbc implements UsuarioDAO{
 
 		    return user; 
 	}
+	
+	public Usuario findByEmail(String email) {
+	    String sql = "SELECT u.ID, u.EMAIL, u.PASSWORD, u.ACEPTA_TERMINOS, " +
+	                 "p.NOMBRES, p.APELLIDOS " +
+	                 "FROM USUARIO u " +
+	                 "JOIN PERSONA p ON u.ID_PERSONA = p.ID " +
+	                 "WHERE u.EMAIL = ?";
+
+	    try  {
+	    	Connection con = MyConnection.getConnection();
+	        PreparedStatement stmt = con.prepareStatement(sql);
+	        stmt.setString(1, email);
+	        
+	        ResultSet rs = stmt.executeQuery();
+	        if (rs.next()) {
+	             int idUsuario = rs.getInt("ID");
+	             String password = rs.getString("PASSWORD");
+	             boolean aceptoTerminos = rs.getBoolean("ACEPTA_TERMINOS");
+	             String nombre = rs.getString("NOMBRES");
+	             String apellido = rs.getString("APELLIDOS");
+	             Persona persona = new Persona(nombre, apellido);
+	             return new Usuario(idUsuario, email, password, aceptoTerminos, persona);
+	         }
+	        
+	    } catch (SQLException e) {
+	        System.out.println("Error al buscar el usuario: " + e.getMessage());
+	    }
+
+	    return null; // Devuelve null si no se encuentra el usuario
+	}
+
 	
 	
 }
