@@ -2,7 +2,10 @@ package implementaciones_DAO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
 
 import Sistema.Criptomoneda;
 import gestores.MyConnection;
@@ -35,4 +38,21 @@ public class CriptoDAOjdbc implements CriptoDAO {
             System.out.println("Error SQL:"+ e.getMessage());
         }
     }
+	
+	public List<Criptomoneda> obtenerCriptomonedas () {
+		List<Criptomoneda> lista = new LinkedList<>();
+		String sql = "SELECT * FROM CRIPTOMONEDA";
+		try {
+			Connection con = MyConnection.getConnection();
+			PreparedStatement pstmt = con.prepareStatement(sql);
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				Criptomoneda cripto = new Criptomoneda(rs.getString("NOMBRE"),rs.getString("NOMENCLATURA"),rs.getFloat("VALOR_DOLAR"),rs.getFloat("VOLATILIDAD"),rs.getString("NOMBRE_ICONO"));
+				lista.add(cripto);
+			}
+		}catch (SQLException e) {
+			System.out.println("Error SQL :"+e.getMessage());
+		}
+		return lista;
+	}
 }

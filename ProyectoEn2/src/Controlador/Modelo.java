@@ -1,5 +1,11 @@
 package Controlador;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
 import Sistema.Criptomoneda;
 import Sistema.MonedaFiat;
 import Sistema.ServicioCotizaciones;
@@ -32,12 +38,18 @@ public class Modelo {
 		activoFiatDAO=FactoryDAO.getActivoFiatDAO();
 		criptoDAO =FactoryDAO.getCriptoDAO();
 		fiatDAO = FactoryDAO.getFiatDAO();
-		//Cargar Criptos y Fiat
-		criptoDAO.create(new Criptomoneda("Bitcoin","BTC",ServicioCotizaciones.obtenerPrecio("bitcoin"),1,"/images/Bitcoin.png"));
-		criptoDAO.create(new Criptomoneda("Ethereum","ETH",ServicioCotizaciones.obtenerPrecio("ethereum"),1,"/images/Ethereum.png"));
-		criptoDAO.create(new Criptomoneda("Dogecoin","DOGE",ServicioCotizaciones.obtenerPrecio("dogecoin"),1,"/images/Dogecoin.png"));
-		criptoDAO.create(new Criptomoneda("Usdc","USDC",ServicioCotizaciones.obtenerPrecio("usd-coin"),1,"/images/Usdc.png"));
-		criptoDAO.create(new Criptomoneda("Tether","USDT",ServicioCotizaciones.obtenerPrecio("tether"),1,"/images/Tether.png"));
+		
+		String[] array = {"bitcoin", "ethereum", "dogecoin","usd-coin","tether"};
+		
+		//Todo lo de map es para solucionar error 409 por acceder muchas veces seguidas , perdon por ser tan hardcode
+        LinkedList<String> lista = new LinkedList<>(Arrays.asList(array));
+		Map <String,Float> map = ServicioCotizaciones.obtenerPrecios(lista);
+		
+		criptoDAO.create(new Criptomoneda("Bitcoin","BTC",map.get("bitcoin"),1,"/images/Bitcoin.png"));
+		criptoDAO.create(new Criptomoneda("Ethereum","ETH",map.get("ethereum"),1,"/images/Ethereum.png"));
+		criptoDAO.create(new Criptomoneda("Dogecoin","DOGE",map.get("dogecoin"),1,"/images/Dogecoin.png"));
+		criptoDAO.create(new Criptomoneda("Usdc","USDC",map.get("usd-coin"),1,"/images/Usdc.png"));
+		criptoDAO.create(new Criptomoneda("Tether","USDT",map.get("tether"),1,"/images/Tether.png"));
 		
 		fiatDAO.create(new MonedaFiat("Pesos Argentinos","ARS",1077,"/images/Ars.png"));
 		fiatDAO.create(new MonedaFiat("Dolares","USD",1,"/images/Usd.png"));
@@ -67,6 +79,64 @@ public class Modelo {
 	public TransaccionDAO getTransaccionDao() {
 		return transaccionDAO;
 	}
+
+
+	public ActivoCriptoDAO getActivoCriptoDAO() {
+		return activoCriptoDAO;
+	}
+
+
+
+
+	public ActivoFiatDAO getActivoFiatDAO() {
+		return activoFiatDAO;
+	}
+
+
+
+
+	public PersonaDAO getPersonaDAO() {
+		return personaDAO;
+	}
+
+
+
+
+	public StockDAO getStockDAO() {
+		return stockDAO;
+	}
+
+
+
+
+	public TransaccionDAO getTransaccionDAO() {
+		return transaccionDAO;
+	}
+
+
+	public void setTransaccionDAO(TransaccionDAO transaccionDAO) {
+		this.transaccionDAO = transaccionDAO;
+	}
+
+
+	public UsuarioDAO getUsuarioDAO() {
+		return usuarioDAO;
+	}
+
+
+
+
+	public CriptoDAO getCriptoDAO() {
+		return criptoDAO;
+	}
+
+
+
+	public FiatDAO getFiatDAO() {
+		return fiatDAO;
+	}
+
+
 	
 	
 	

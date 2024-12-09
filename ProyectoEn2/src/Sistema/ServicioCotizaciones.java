@@ -4,6 +4,10 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.json.JSONObject;
 
 public class ServicioCotizaciones {
@@ -32,8 +36,38 @@ public class ServicioCotizaciones {
     }
 
    
-    public static float obtenerPrecio (String nombreCripto) {
-    	HttpClient cliente = HttpClient.newHttpClient();
+//    public static float obtenerPrecio (String nombreCripto) {
+//    	HttpClient cliente = HttpClient.newHttpClient();
+//        HttpRequest solicitud = HttpRequest.newBuilder()
+//                .uri(URI.create(URL_API))
+//                .GET()
+//                .build();
+//
+//        try {
+//            HttpResponse<String> respuesta = cliente.send(solicitud, HttpResponse.BodyHandlers.ofString());
+//            if (respuesta.statusCode() == 200) {
+//                return obtenerPrecioHelper(respuesta.body(),nombreCripto);
+//            } else {
+//                System.out.println("Error: " + respuesta.statusCode());
+//            }
+//        } catch (IOException | InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//        return -1; 	
+//    }
+//    
+//    private static float obtenerPrecioHelper (String cuerpoRespuesta,String nombreCripto) {
+//    	JSONObject json = new JSONObject(cuerpoRespuesta);
+//    	if (json.has(nombreCripto)) {
+//            return json.getJSONObject(nombreCripto).getFloat("usd");
+//        } else {
+//            System.err.println("Criptomoneda no encontrada: " + nombreCripto);
+//            return -1;
+//        }
+//    }
+    
+    public static Map<String, Float> obtenerPrecios(List<String> nombresCripto) {
+        HttpClient cliente = HttpClient.newHttpClient();
         HttpRequest solicitud = HttpRequest.newBuilder()
                 .uri(URI.create(URL_API))
                 .GET()
@@ -42,25 +76,33 @@ public class ServicioCotizaciones {
         try {
             HttpResponse<String> respuesta = cliente.send(solicitud, HttpResponse.BodyHandlers.ofString());
             if (respuesta.statusCode() == 200) {
-                return obtenerPrecioHelper(respuesta.body(),nombreCripto);
+                return obtenerPreciosHelper(respuesta.body(), nombresCripto);
             } else {
                 System.out.println("Error: " + respuesta.statusCode());
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
-        return -1; 	
+        return new HashMap<>();
     }
-    
-    private static float obtenerPrecioHelper (String cuerpoRespuesta,String nombreCripto) {
-    	JSONObject json = new JSONObject(cuerpoRespuesta);
-    	if (json.has(nombreCripto)) {
-            return json.getJSONObject(nombreCripto).getFloat("usd");
-        } else {
-            System.err.println("Criptomoneda no encontrada: " + nombreCripto);
-            return -1;
+
+    private static Map<String, Float> obtenerPreciosHelper(String cuerpoRespuesta, List<String> nombresCripto) {
+        JSONObject json = new JSONObject(cuerpoRespuesta);
+        Map<String, Float> precios = new HashMap<>();
+
+        
+        for (String nombreCripto : nombresCripto) {
+            if (json.has(nombreCripto)) {
+                float precio = json.getJSONObject(nombreCripto).getFloat("usd");
+                precios.put(nombreCripto, precio);
+            } else {
+                System.err.println("Criptomoneda no encontrada: " + nombreCripto);
+                precios.put(nombreCripto, -1f); // Si no se encuentra, asignamos -1 como valor
+            }
         }
+        return precios;
     }
+
     
     private static String[][] parsearPrecios(String cuerpoRespuesta) {
         JSONObject json = new JSONObject(cuerpoRespuesta);

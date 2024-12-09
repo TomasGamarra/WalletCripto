@@ -63,7 +63,7 @@ public class ActivoCriptoDAOjdbc implements ActivoCriptoDAO {
 	                rs.getString("NOMBRE_ICONO")
 	            );
 
-	            // Generación aleatoria de dirección (simulación)
+	            // 
 	            String direccion = generarDireccionAleatoria();
 
 	            return new ActivoCripto(cantidad, cripto, direccion);
@@ -177,7 +177,7 @@ public class ActivoCriptoDAOjdbc implements ActivoCriptoDAO {
 
                 Criptomoneda cripto = new Criptomoneda(nombreCripto, nomenclatura,valorDolar,1,nombreIcono );
 
-                ActivoCripto activoCripto = new ActivoCripto(cantidad, cripto, null);  //Ver tema de la direccion
+                ActivoCripto activoCripto = new ActivoCripto(cantidad, cripto, "DireccionAleatoria");  //Ver tema de la direccion
 
        
                 activosCripto.add(activoCripto);

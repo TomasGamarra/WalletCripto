@@ -3,6 +3,7 @@ package Controlador;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
+import java.util.Random;
 
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -10,7 +11,9 @@ import javax.swing.JTable;
 
 import Sistema.ActivoCripto;
 import Sistema.ActivoFiat;
+import Sistema.Criptomoneda;
 import Sistema.GestorDeUsuarioActual;
+import Sistema.MonedaFiat;
 import Sistema.Persona;
 import Sistema.Usuario;
 import Vista.ModeloTablaActivos;
@@ -35,12 +38,14 @@ public class Controlador {
 		
 		vista.getPanelMain().getPanelActivos().getBotonLogout().addActionListener(new Boton_Logout_Activos());
 		vista.getPanelMain().getPanelActivos().getBotonCotizaciones().addActionListener(new Boton_cotizacion());
-		//vista.getPanelMain().getPanelActivos().getBotonExportar().addActionListener(new Boton_exportar);
+		
 	
 		
 		vista.getPanelMain().getPanelActivos().getBotonHistorial().addActionListener(new Boton_trans());
 		
 		// Falta boton csv y boton generar datos de prueba
+		vista.getPanelMain().getPanelActivos().getBotonPrueba().addActionListener(new Boton_generar_datos());
+		vista.getPanelMain().getPanelActivos().getBotonExportar().addActionListener(new Boton_exportar()); //Falta implementar listener
 		
 		vista.getPanelMain().getPanelHistorial().getBotonVolver().addActionListener(new Boton_salir_trans());
 		
@@ -156,6 +161,7 @@ public class Boton_login implements ActionListener{
 		
 		if (vista.getPanelMain().getPanelLogin().getUserField().getText().isBlank() || (new String(vista.getPanelMain().getPanelLogin().getPasswdField().getPassword()).isBlank())) {
 			JOptionPane.showMessageDialog(vista.getPanelMain().getPanelLogin(), "Por favor complete todos los campos.");
+			
 			return;
 		}
 		else {
@@ -168,17 +174,19 @@ public class Boton_login implements ActionListener{
 					JOptionPane.showMessageDialog(vista.getPanelMain().getPanelLogin(), "Contraseña incorrecta.");	
 				else {
 					GestorDeUsuarioActual.setUser(user);
-					iniciarMenu(user);
+					iniciarMenu();
 				}
              }
+		
+		
 	}
+}	
 	
-	
-	private void iniciarMenu(Usuario user) {
+	public void iniciarMenu() {
 		vista.cambiarCarta("activos");
 		//Nombre y apellido
-		String nombre = user.getPersona().getNombre();
-		String apellido =user.getPersona().getApellido();
+		String nombre = GestorDeUsuarioActual.getUser().getPersona().getNombre();
+		String apellido =GestorDeUsuarioActual.getUser().getPersona().getApellido();
 		vista.getPanelMain().getPanelActivos().getLabelNombre().setText(nombre+ " "+apellido );
 		
 		//Actualizo iniciales
@@ -186,21 +194,47 @@ public class Boton_login implements ActionListener{
 		vista.getPanelMain().getPanelActivos().getComponenteIniciales().setIniciales(iniciales); 
 		
 		//Actualizo tabla de activos
-		List <ActivoCripto> listaCripto = modelo.getActivoCriptoDao().obtenerActivosCriptoPorUsuario(user.getIdUsuario());
-		List <ActivoFiat> listaFiat= modelo.getActivoFiatDao().obtenerActivosFiatPorUsuario(user.getIdUsuario());
-		//cargarActivosCripto();
-		//cargarActivosFiat();
+		List <ActivoCripto> listaCripto = modelo.getActivoCriptoDao().obtenerActivosCriptoPorUsuario(GestorDeUsuarioActual.getUser().getIdUsuario());
+		List <ActivoFiat> listaFiat= modelo.getActivoFiatDao().obtenerActivosFiatPorUsuario(GestorDeUsuarioActual.getUser().getIdUsuario());
+		
+		cargarActivosCriptoEnTabla(listaCripto,vista.getPanelMain().getPanelActivos().getTablaActivos());
+		cargarActivosFiatEnTabla(listaFiat,vista.getPanelMain().getPanelActivos().getTablaActivos());
+		
+		//Tendria que inicializar todos los activos vacios para despues hacer update de esos
+		
+		vista.getPanelMain().getPanelActivos().repaint();
 		
 	}
 	
+	private void cargarActivosCriptoEnTabla (List<ActivoCripto> activos, JTable tabla) {
+		ModeloTablaActivos modelo =new ModeloTablaActivos(null);
+		tabla.setModel(modelo);
+			for (ActivoCripto activo : activos) {
+				Object[] fila = new Object[3];
+				fila[0]=new ImageIcon(activo.getCripto().getNombreIcono());
+				fila[1]=activo.getCripto().getNombre();
+				fila[2]=String.format("$%.2f", activo.getAmount());;
+				modelo.addRow(fila);
+			}
+	}
+	
+	private void cargarActivosFiatEnTabla (List<ActivoFiat> activos, JTable tabla) {
+		ModeloTablaActivos modelo =new ModeloTablaActivos(null);
+		tabla.setModel(modelo);
+			for (ActivoFiat activo : activos) {
+				Object[] fila = new Object[3];
+				fila[0]=new ImageIcon(activo.getMonedaFiat().getNombreIcono());
+				fila[1]=activo.getMonedaFiat().getNombre();
+				fila[2]=String.format("$%.2f", activo.getAmount());;
+				modelo.addRow(fila);
+			}
+	}
 	
 	
- }
+ 
 	
 
  
-
-
 
 
 public class Boton_registrar implements ActionListener{
@@ -241,13 +275,38 @@ public class Boton_registrar implements ActionListener{
 		            "Usuario creado exitosamente, se le ha enviado un mail de confirmacion.", 
 		            "Creación de usuario", 
 		            JOptionPane.NO_OPTION );
-			vista.cambiarCarta("login");
 			GestorDeUsuarioActual.setUser(user);
-			
+			iniciarMenu();
+				
+		
 		}
 	}
 	
+public class  Boton_generar_datos implements ActionListener{
+	 
+		@Override
+	    public void actionPerformed(ActionEvent e) {
+	        Random random = new Random();
+
+	        List<Criptomoneda> criptomonedas = modelo.getCriptoDAO().obtenerCriptomonedas();
+	        List<MonedaFiat> monedasFiduciarias = modelo.getFiatDAO().obtenerFiats();
+
+	        for (Criptomoneda cripto : criptomonedas) {
+	            float cantidad = random.nextFloat() * 20;  
+	            modelo.getActivoCriptoDao().create(GestorDeUsuarioActual.getUser().getIdUsuario(),modelo.getCriptoDAO().obtenerIdCripto(cripto.getNomenclatura()),cantidad); //Tendria que ser update y crearlos la primera vez (iniciarMenu)
+	        }
+
+	        for (MonedaFiat moneda : monedasFiduciarias) {
+	            float cantidad = random.nextFloat() * 20;  // Cantidad aleatoria
+	            modelo.getActivoFiatDao().create(GestorDeUsuarioActual.getUser().getIdUsuario(),modelo.getFiatDAO().obtenerIdFiat(), cantidad);//Tendria que ser update y crearlos la primera vez (iniciarMenu)
+	        }
+
+	        // Mensaje de confirmación
+	        JOptionPane.showMessageDialog(null, "Datos de prueba generados correctamente.");
+	    }
 	
+	
+}	
 
 	
 	
