@@ -7,4 +7,5 @@ import Sistema.MonedaFiat;
 public interface FiatDAO {
 	public void create (MonedaFiat moneda);
 	public List<MonedaFiat> obtenerFiats () ;
+	int obtenerIdFiat(String nomenclatura);
 }

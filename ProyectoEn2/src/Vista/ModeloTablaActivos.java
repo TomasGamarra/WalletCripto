@@ -17,7 +17,7 @@ public class ModeloTablaActivos extends DefaultTableModel {
 		    public Class<?> getColumnClass(int columnIndex) {
 		        switch (columnIndex) {
 		            case 0: return ImageIcon.class; // Primera columna para imágenes
-		            case 2: return Double.class;    // Tercera columna para montos
+		            case 2: return String.class;    // Tercera columna para montos
 		            default: return String.class;  // Segunda columna para nombres
 		        }
 		    }

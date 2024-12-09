@@ -55,4 +55,24 @@ public class FiatDAOjdbc implements FiatDAO {
 		return lista;
 	}
 	
+	@Override
+    public int obtenerIdFiat(String nomenclatura) {
+        int id= 0;
+        String sql = "SELECT ID FROM MONEDAFIAT WHERE NOMENCLATURA = ? ";
+        try  {
+            Connection con = MyConnection.getConnection();
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, nomenclatura);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                  id = rs.getInt("ID");
+              }
+
+            } catch (SQLException e) {
+            System.out.println("Error al buscar id: " + e.getMessage());
+        }
+
+        return id;
+    }
+	
 }

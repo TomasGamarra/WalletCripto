@@ -196,6 +196,19 @@ public class ActivoCriptoDAOjdbc implements ActivoCriptoDAO {
 		
 	}
 
+	
+	public void eliminarActivosCriptoPorUsuario(int idUsuario) {
+	    String sql = "DELETE FROM ACTIVO_CRIPTO WHERE ID_USUARIO = ?";
+	    try  {
+	    	Connection con = MyConnection.getConnection();
+	        PreparedStatement pstmt = con.prepareStatement(sql);
+	        pstmt.setInt(1, idUsuario);
+	        pstmt.executeUpdate();
+	        
+	    } catch (SQLException e) {
+	        System.out.println("Error al eliminar activos cripto: " + e.getMessage());
+	    }
+	}
 
 	
 

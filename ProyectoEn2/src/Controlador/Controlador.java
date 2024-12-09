@@ -197,39 +197,40 @@ public class Boton_login implements ActionListener{
 		List <ActivoCripto> listaCripto = modelo.getActivoCriptoDao().obtenerActivosCriptoPorUsuario(GestorDeUsuarioActual.getUser().getIdUsuario());
 		List <ActivoFiat> listaFiat= modelo.getActivoFiatDao().obtenerActivosFiatPorUsuario(GestorDeUsuarioActual.getUser().getIdUsuario());
 		
-		cargarActivosCriptoEnTabla(listaCripto,vista.getPanelMain().getPanelActivos().getTablaActivos());
-		cargarActivosFiatEnTabla(listaFiat,vista.getPanelMain().getPanelActivos().getTablaActivos());
 		
-		//Tendria que inicializar todos los activos vacios para despues hacer update de esos
+		if (!listaCripto.isEmpty() && !listaFiat.isEmpty()) {
+			cargarActivosEnTabla(listaCripto,listaFiat,vista.getPanelMain().getPanelActivos().getTablaActivos());
+			
+		}
+		
+		
 		
 		vista.getPanelMain().getPanelActivos().repaint();
 		
 	}
 	
-	private void cargarActivosCriptoEnTabla (List<ActivoCripto> activos, JTable tabla) {
-		ModeloTablaActivos modelo =new ModeloTablaActivos(null);
-		tabla.setModel(modelo);
-			for (ActivoCripto activo : activos) {
-				Object[] fila = new Object[3];
-				fila[0]=new ImageIcon(activo.getCripto().getNombreIcono());
-				fila[1]=activo.getCripto().getNombre();
-				fila[2]=String.format("$%.2f", activo.getAmount());;
-				modelo.addRow(fila);
-			}
+	private void cargarActivosEnTabla(List<ActivoCripto> activosCripto, List<ActivoFiat> activosFiat, JTable tabla) {
+	    ModeloTablaActivos modelo = new ModeloTablaActivos(new Object[0][3]);
+	    tabla.setModel(modelo);
+
+	    // Cargar activos cripto
+	    for (ActivoCripto activo : activosCripto) {
+	        Object[] fila = new Object[3];
+	        fila[0] = new ImageIcon(getClass().getResource(activo.getCripto().getNombreIcono()));
+	        fila[1] = activo.getCripto().getNombre();
+	        fila[2] = String.format("$%.2f", activo.getAmount());
+	        modelo.addRow(fila);
+	    }
+
+	    // Cargar activos fiduciarios
+	    for (ActivoFiat activo : activosFiat) {
+	        Object[] fila = new Object[3];
+	        fila[0] = new ImageIcon(activo.getMonedaFiat().getNombreIcono());
+	        fila[1] = activo.getMonedaFiat().getNombre();
+	        fila[2] = String.format("$%.2f", activo.getAmount());
+	        modelo.addRow(fila);
+	    }
 	}
-	
-	private void cargarActivosFiatEnTabla (List<ActivoFiat> activos, JTable tabla) {
-		ModeloTablaActivos modelo =new ModeloTablaActivos(null);
-		tabla.setModel(modelo);
-			for (ActivoFiat activo : activos) {
-				Object[] fila = new Object[3];
-				fila[0]=new ImageIcon(activo.getMonedaFiat().getNombreIcono());
-				fila[1]=activo.getMonedaFiat().getNombre();
-				fila[2]=String.format("$%.2f", activo.getAmount());;
-				modelo.addRow(fila);
-			}
-	}
-	
 	
  
 	
@@ -287,10 +288,15 @@ public class  Boton_generar_datos implements ActionListener{
 		@Override
 	    public void actionPerformed(ActionEvent e) {
 	        Random random = new Random();
-
+	        
+	        modelo.getActivoCriptoDao().eliminarActivosCriptoPorUsuario(GestorDeUsuarioActual.getUser().getIdUsuario());;
+	        modelo.getActivoFiatDao().eliminarActivosFiatPorUsuario(GestorDeUsuarioActual.getUser().getIdUsuario());;
+	        
 	        List<Criptomoneda> criptomonedas = modelo.getCriptoDAO().obtenerCriptomonedas();
 	        List<MonedaFiat> monedasFiduciarias = modelo.getFiatDAO().obtenerFiats();
 
+	      
+	        
 	        for (Criptomoneda cripto : criptomonedas) {
 	            float cantidad = random.nextFloat() * 20;  
 	            modelo.getActivoCriptoDao().create(GestorDeUsuarioActual.getUser().getIdUsuario(),modelo.getCriptoDAO().obtenerIdCripto(cripto.getNomenclatura()),cantidad); //Tendria que ser update y crearlos la primera vez (iniciarMenu)
@@ -298,13 +304,22 @@ public class  Boton_generar_datos implements ActionListener{
 
 	        for (MonedaFiat moneda : monedasFiduciarias) {
 	            float cantidad = random.nextFloat() * 20;  // Cantidad aleatoria
-	            modelo.getActivoFiatDao().create(GestorDeUsuarioActual.getUser().getIdUsuario(),modelo.getFiatDAO().obtenerIdFiat(), cantidad);//Tendria que ser update y crearlos la primera vez (iniciarMenu)
+	            modelo.getActivoFiatDao().create(GestorDeUsuarioActual.getUser().getIdUsuario(),modelo.getFiatDAO().obtenerIdFiat(moneda.getNomenclatura()), cantidad);//Tendria que ser update y crearlos la primera vez (iniciarMenu)
 	        }
+	        
+	    
+	        List <ActivoCripto> listaCripto = modelo.getActivoCriptoDao().obtenerActivosCriptoPorUsuario(GestorDeUsuarioActual.getUser().getIdUsuario());
+			List <ActivoFiat> listaFiat= modelo.getActivoFiatDao().obtenerActivosFiatPorUsuario(GestorDeUsuarioActual.getUser().getIdUsuario());
+	        
+			
+			
+	        cargarActivosEnTabla(listaCripto,listaFiat,vista.getPanelMain().getPanelActivos().getTablaActivos());
 
+
+			vista.getPanelMain().getPanelActivos().getTablaActivos().repaint();
 	        // Mensaje de confirmación
 	        JOptionPane.showMessageDialog(null, "Datos de prueba generados correctamente.");
 	    }
-	
 	
 }	
 

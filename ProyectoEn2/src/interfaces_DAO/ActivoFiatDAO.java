@@ -13,4 +13,5 @@ public interface ActivoFiatDAO {
 	List <ActivoFiat> listarActivosFiat();
 	int incrementarCantidad(int idUsuario,String nomenclatura, float cantidadIncremento);
 	public List<ActivoFiat> obtenerActivosFiatPorUsuario(int idUsuario);
+	public void eliminarActivosFiatPorUsuario(int idUsuario); 
 }

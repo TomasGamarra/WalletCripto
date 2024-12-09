@@ -9,4 +9,5 @@ public interface CriptoDAO {
 	
 	public void create (Criptomoneda moneda);
 	public List<Criptomoneda> obtenerCriptomonedas () ;
+	int obtenerIdCripto(String nomenclatura);
 }
