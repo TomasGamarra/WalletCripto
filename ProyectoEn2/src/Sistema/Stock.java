@@ -2,9 +2,9 @@ package Sistema;
 
 public class Stock {
 	private float cantidad;
-	private Moneda moneda;
+	private Criptomoneda moneda;
 	
-	public Stock (float cantidad, Moneda moneda) {
+	public Stock (float cantidad, Criptomoneda moneda) {
 		this.moneda=moneda;
 		this.cantidad=cantidad;
 	}
@@ -22,7 +22,7 @@ public class Stock {
 	public Moneda getMoneda() {
 		return moneda;
 	}
-	public void setMoneda(Moneda moneda) {
+	public void setMoneda(Criptomoneda moneda) {
 		this.moneda = moneda;
 	}
 	

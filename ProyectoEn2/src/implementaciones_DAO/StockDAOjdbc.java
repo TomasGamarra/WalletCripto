@@ -10,6 +10,7 @@ import java.util.Random;
 
 import Sistema.Criptomoneda;
 import Sistema.Moneda;
+import Sistema.MonedaFiat;
 import Sistema.Stock;
 import gestores.FactoryDAO;
 import gestores.MyConnection;
@@ -19,14 +20,14 @@ import interfaces_DAO.StockDAO;
 public class StockDAOjdbc implements StockDAO {
 
 	@Override
-	public void create(Stock stock) {
-		String sql = "INSERT INTO STOCK (cantidad, nomenclatura) VALUES (?,?)";
+	public void create(int idCripto, double cantidad) {
+		String sql = "INSERT INTO STOCK (ID_CRIPTOMONEDA, CANTIDAD) VALUES (?,?)";
 		try {
 			Connection con = MyConnection.getConnection();
 			PreparedStatement ps = con.prepareStatement(sql);
 			
-			ps.setFloat(1,stock.getCantidad());
-			ps.setString(2,stock.getMoneda().getNomenclatura());
+			ps.setInt(1,idCripto);
+			ps.setDouble(2,cantidad);
 			
 			if (ps.executeUpdate() < 0)  {
 				throw new SQLException("No se afecto ninguna fila") ;
@@ -39,25 +40,38 @@ public class StockDAOjdbc implements StockDAO {
 	}
 
 	@Override
-	public Stock find(String nomenclatura) {
+	public Stock find(int idCripto) {
 	    Stock stock = null;
-	    String sql = "SELECT cantidad FROM STOCK WHERE nomenclatura = ?";
+	    String sql = "SELECT s.CANTIDAD, c.NOMBRE, c.NOMENCLATURA , C.VALOR_DOLAR," +
+	    		"c.VOLATILIDAD, c.NOMBRE_ICONO" +
+	    		"FROM STOCK s"+
+	    		"JOIN CRIPTOMONEDA c ON s.ID_CRIPTOMONEDA = c.ID"+
+	    		"WHERE S.ID_CRIPTOMONEDA =? ";
 
 	    try  {
 	    	Connection con = MyConnection.getConnection();
 	        PreparedStatement ps = con.prepareStatement(sql);
-	        ps.setString(1, nomenclatura);
+	        ps.setInt(1, idCripto);
 	        ResultSet rs = ps.executeQuery();
 	        if (rs.next()) {
-	              float cantidad = rs.getFloat("cantidad");
-	              Moneda moneda = FactoryDAO.getMonedaDAO().find(nomenclatura);
+	              float cantidad = rs.getFloat("CANTIDAD");
+	              while (rs.next()) {
+	  	            Criptomoneda cripto = new Criptomoneda(
+	  	                rs.getString("NOMBRE"),
+	  	                rs.getString("NOMENCLATURA"),
+	  	                rs.getFloat("VALOR_DOLAR"),
+	  	                rs.getFloat("VOLATILIDAD"),
+	  	                rs.getString("NOMBRE_ICONO")
+	  	            );    
+	              
 	                
-	              if (moneda != null) {
-	                  stock = new Stock(cantidad, moneda);
+	              if (cripto != null) {
+	                  stock = new Stock(cantidad, cripto);
 	               }
 	            }
 	        
-	    } catch (SQLException e) {
+	    }
+	        } catch (SQLException e) {
 	        System.out.println("Error al buscar stock: " + e.getMessage());
 	    }
 
@@ -90,34 +104,34 @@ public class StockDAOjdbc implements StockDAO {
 	}
 }
 @Override
-	public void incrementarCantidad(String nomenclatura, float cantidadASumar) {
-	    String sqlSelect = "SELECT cantidad FROM STOCK WHERE nomenclatura = ?";
-	    String sqlUpdate = "UPDATE STOCK SET cantidad = ? WHERE nomenclatura = ?";
+	public void incrementarCantidad(int idCripto, float cantidadASumar) {
+	    String sqlSelect = "SELECT cantidad FROM STOCK WHERE ID_CRIPTOMONEDA = ?";
+	    String sqlUpdate = "UPDATE STOCK SET CANTIDAD = ? WHERE ID_CRIPTOMONEDA = ?";
 	    
 	    try {
 	        Connection con = MyConnection.getConnection();
 	        
 	        // Seleccionar la cantidad actual
 	        PreparedStatement psSelect = con.prepareStatement(sqlSelect);
-	        psSelect.setString(1, nomenclatura);
+	        psSelect.setInt(1, idCripto);
 	        ResultSet rs = psSelect.executeQuery();
 
 	        if (rs.next()) {
 	            // Obtener la cantidad actual y sumar el valor proporcionado
-	            float cantidadActual = rs.getFloat("cantidad");
+	            float cantidadActual = rs.getFloat("CANTIDAD");
 	            float nuevaCantidad = cantidadActual + cantidadASumar;
 
 	            // Actualizar la cantidad en la base de datos
 	            PreparedStatement psUpdate = con.prepareStatement(sqlUpdate);
 	            psUpdate.setFloat(1, nuevaCantidad);
-	            psUpdate.setString(2, nomenclatura);
+	            psUpdate.setInt(2, idCripto);
 	            
 	            if (psUpdate.executeUpdate() < 0) {
 	                throw new SQLException("No se afectó ninguna fila");
 	            }
 
 	        } else {
-	            System.out.println("No se encontró stock para la nomenclatura: " + nomenclatura);
+	            System.out.println("No se encontró stock para la nomenclatura: " + idCripto);
 	        }
 	        
 	    } catch (SQLException e) {
@@ -126,18 +140,28 @@ public class StockDAOjdbc implements StockDAO {
 	}
 
 	public List<Stock> listarStock () { 
-		String sql = "SELECT * FROM STOCK";
+		String sql = "SELECT s.CANTIDAD, c.NOMBRE, c.NOMENCLATURA , C.VALOR_DOLAR," +
+	    		"c.VOLATILIDAD, c.NOMBRE_ICONO" +
+	    		"FROM STOCK s"+
+	    		"JOIN CRIPTOMONEDA c ON s.ID_CRIPTOMONEDA = c.ID";
+		
+		
 		List<Stock> list = new LinkedList<Stock>();
 		try {
 			Connection con = MyConnection.getConnection();
 			PreparedStatement ps = con.prepareStatement(sql);
 			ResultSet rs = ps.executeQuery();
-			MonedaDAO dao = FactoryDAO.getMonedaDAO();
 			while (rs.next()) {
-				 String nomenclatura = rs.getString("nomenclatura");  
+				 Criptomoneda cripto = new Criptomoneda(
+		  	                rs.getString("NOMBRE"),
+		  	                rs.getString("NOMENCLATURA"),
+		  	                rs.getFloat("VALOR_DOLAR"),
+		  	                rs.getFloat("VOLATILIDAD"),
+		  	                rs.getString("NOMBRE_ICONO")
+		  	                );
+				  
 		         float cant = rs.getFloat("cantidad");
-		         Moneda mon = dao.find(nomenclatura);
-		         list.add(new Stock(cant, mon)); 
+		         list.add(new Stock(cant, cripto)); 
 			}
 		}catch (SQLException e) {
 			System.out.println("No se pudo listar el stock :"+e.getMessage());

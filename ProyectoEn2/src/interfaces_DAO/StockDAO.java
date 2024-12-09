@@ -6,11 +6,11 @@ import Sistema.Stock;
 
 public interface StockDAO {
 	
-	void create (Stock stock);
-	Stock find (String nomenclatura);
+	void create (int idCripto, double cantidad);
+	Stock find (int idCripto);
 	void update (Stock stock);
 	void delete (String nomenclatura);
 	List<Stock> listarStock () ;
-	void incrementarCantidad(String nomenclatura, float cantidadASumar);
+	void incrementarCantidad(int idCripto, float cantidadASumar);
 
 }

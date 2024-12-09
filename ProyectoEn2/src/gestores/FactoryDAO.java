@@ -3,13 +3,17 @@ package gestores;
 import implementaciones_DAO.ActivoCriptoDAOjdbc;
 import implementaciones_DAO.ActivoFiatDAOjdbc;
 import implementaciones_DAO.MonedaDAOjdbc;
+import implementaciones_DAO.PersonaDAOjdbc;
 import implementaciones_DAO.StockDAOjdbc;
 import implementaciones_DAO.TransaccionDAOjdbc;
+import implementaciones_DAO.UsuarioDAOjdbc;
 import interfaces_DAO.ActivoCriptoDAO;
 import interfaces_DAO.ActivoFiatDAO;
 import interfaces_DAO.MonedaDAO;
+import interfaces_DAO.PersonaDAO;
 import interfaces_DAO.StockDAO;
 import interfaces_DAO.TransaccionDAO;
+import interfaces_DAO.UsuarioDAO;
 
 public class FactoryDAO {
 	
@@ -32,5 +36,11 @@ public class FactoryDAO {
 	
 	public static StockDAO getStockDAO () {
 		return new StockDAOjdbc();
+	}
+	public static PersonaDAO getPersonaDAO () {
+		return new PersonaDAOjdbc();
+	}
+	public static UsuarioDAO getUsuarioDAO () {
+		return new UsuarioDAOjdbc();
 	}
 }
