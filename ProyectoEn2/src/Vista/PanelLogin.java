@@ -38,7 +38,7 @@ public class PanelLogin extends JPanel {
 		topPanel = new JPanel();
         topPanel.setBackground(Color.WHITE); // Fondo transparente
         logoLabel = new JLabel();
-        logoLabel.setIcon(new ImageIcon("hodl.png")); // Ruta al logo
+        logoLabel.setIcon(new ImageIcon("images/hodl.png")); // Ruta al logo
         topPanel.add(logoLabel);
         topPanel.setLayout(new BorderLayout());
         JLabel titulo = new JLabel("HODL", JLabel.CENTER);

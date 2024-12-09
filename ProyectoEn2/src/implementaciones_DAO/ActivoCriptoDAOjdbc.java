@@ -17,11 +17,10 @@ import interfaces_DAO.MonedaDAO;
 
 public class ActivoCriptoDAOjdbc implements ActivoCriptoDAO {
 
-	public boolean create(int idUsuario, int idCriptomoneda, double cantidad) {
-        Connection connection = MyConnection.getConnection();
-        
+	@Override
+	public boolean create(int idUsuario, int idCriptomoneda, float cantidad) {
         try {
-           
+        	Connection connection = MyConnection.getConnection();
             String sql = "INSERT INTO ACTIVO_CRIPTO (ID_USUARIO, ID_CRIPTOMONEDA, CANTIDAD) VALUES (?, ?, ?)";
             try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
                 pstmt.setInt(1, idUsuario);
@@ -38,17 +37,17 @@ public class ActivoCriptoDAOjdbc implements ActivoCriptoDAO {
     }
 
 	@Override
-	public ActivoCripto find(int idUsuario, String nombreCripto) {
+	public ActivoCripto find(int idUsuario, String nomenclatura) {
 	    Connection connection = MyConnection.getConnection();
 	    String sql = "SELECT ac.CANTIDAD, c.NOMBRE, c.NOMENCLATURA, c.VALOR_DOLAR, " +
 	                 "c.VOLATILIDAD, c.NOMBRE_ICONO " +
 	                 "FROM ACTIVO_CRIPTO ac " +
 	                 "JOIN CRIPTOMONEDA c ON ac.ID_CRIPTOMONEDA = c.ID " +
-	                 "WHERE ac.ID_USUARIO = ? AND c.NOMBRE = ?";
+	                 "WHERE ac.ID_USUARIO = ? AND c.NOMENCLATURA = ?";
 
 	    try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
 	        pstmt.setInt(1, idUsuario);
-	        pstmt.setString(2, nombreCripto);
+	        pstmt.setString(2, nomenclatura.toUpperCase());
 
 	        ResultSet rs = pstmt.executeQuery();
 
@@ -75,60 +74,43 @@ public class ActivoCriptoDAOjdbc implements ActivoCriptoDAO {
 	}
 
 
-	@Override
-	public void update(ActivoCripto activo) {
-	    String sql = "UPDATE ACTIVO_CRIPTO SET cantidad = ?, direccion = ? WHERE nomenclatura = ?";
-	    try {
-	        Connection con = MyConnection.getConnection();
-	        PreparedStatement ps = con.prepareStatement(sql);
-
-	        // Configurar los parámetros del PreparedStatement
-	        ps.setFloat(1, activo.getAmount());
-	        ps.setString(2, activo.getDireccion());
-	        ps.setString(3, activo.getCripto().getNomenclatura());
-
-	        
-
-	        if (ps.executeUpdate() <= 0) {
-	            throw new SQLException("No se actualizó ninguna fila");
-	        }
-	    } catch (SQLException e) {
-	        System.out.println("Error al actualizar ActivoCripto: " + e.getMessage());
-	    }
+	private String generarDireccionAleatoria() {
+		return "abcde";
 	}
 
 
+
 	@Override
-	public void delete(String nomenclatura) {
+	public void delete(int idUsuario ,String nomenclatura) {
 		// Codigo del Delete
 		
 	}
 	
 	@Override
-	public int incrementarCantidad(String nomenclatura, float cantidadIncremento) {
-	    String sqlSelect = "SELECT cantidad FROM ACTIVO_CRIPTO WHERE nomenclatura = ?";
-	    String sqlUpdate = "UPDATE ACTIVO_CRIPTO SET cantidad = ? WHERE nomenclatura = ?";
+	public int incrementarCantidad(int idUsuario,String nomenclatura, float cantidadIncremento) {
+	    String sqlSelect = "SELECT cantidad FROM ACTIVO_CRIPTO WHERE NOMENCLATURA = ? AND ID_USUARIO = ?";
+	    String sqlUpdate = "UPDATE ACTIVO_CRIPTO SET CANTIDAD = ? WHERE NOMENCLATURA = ? AND ID_USUARIO = ?";
 	    
 	    try {
 	        Connection con = MyConnection.getConnection();
 	        PreparedStatement psSelect = con.prepareStatement(sqlSelect);
 	        psSelect.setString(1, nomenclatura);
+	        psSelect.setInt(2, idUsuario);
 
 	        ResultSet rs = psSelect.executeQuery();
 	        if (rs.next()) {
-	            float cantidadActual = rs.getFloat("cantidad");
+	            float cantidadActual = rs.getFloat("CANTIDAD");
 	            float nuevaCantidad = cantidadActual + cantidadIncremento;
 
 	            PreparedStatement psUpdate = con.prepareStatement(sqlUpdate);
 	            psUpdate.setFloat(1, nuevaCantidad);
 	            psUpdate.setString(2, nomenclatura);
-	            
-	            int filasAfectadas = psUpdate.executeUpdate();
-	            if (filasAfectadas > 0) {
+	            psUpdate.setInt(3,idUsuario);
+  
+	            if (psUpdate.executeUpdate() > 0) 
 	                return 0; 
-	            }
-	        } else {
-	            return -1; 
+	            else 
+	            	return -1; 
 	        }
 	    } catch (SQLException e) {
 	        System.out.println("Error al incrementar cantidad en ACTIVO_CRIPTO: " + e.getMessage());
@@ -139,25 +121,48 @@ public class ActivoCriptoDAOjdbc implements ActivoCriptoDAO {
 	
 	@Override
 	public List<ActivoCripto> listarActivosCriptos() {
-		String sql = "SELECT * FROM ACTIVO_CRIPTO";
-		List<ActivoCripto> list = new LinkedList<>();
-		Moneda mon=null;
-		try {
-			Connection con = MyConnection.getConnection();
-			PreparedStatement ps = con.prepareStatement(sql);
-			ResultSet rs = ps.executeQuery();
-			MonedaDAO mondao =FactoryDAO.getMonedaDAO();
-			while (rs.next()) {
-				mon = mondao.find(rs.getString("nomenclatura"));
-				if(mon != null && mon instanceof Criptomoneda)
-					list.add(new ActivoCripto(rs.getFloat("cantidad"),(Criptomoneda)mon, "DireccionRandom"));
-			}
+	    String sql = "SELECT ac.CANTIDAD, c.ID, c.NOMBRE, c.NOMENCLATURA, c.VALOR_DOLAR, " +
+	                 "c.VOLATILIDAD, c.NOMBRE_ICONO " +
+	                 "FROM ACTIVO_CRIPTO ac " +
+	                 "JOIN CRIPTOMONEDA c ON ac.ID_CRIPTOMONEDA = c.ID";
 
-		}catch (SQLException e) {
-			System.out.println("Error SQL :"+e.getMessage());
-		}
-		return list;
+	    List<ActivoCripto> lista = new LinkedList<>();
+	    try  {
+	    	Connection con = MyConnection.getConnection();
+	    	PreparedStatement ps = con.prepareStatement(sql);
+	        ResultSet rs = ps.executeQuery();
+	        
+	        while (rs.next()) {
+	            Criptomoneda cripto = new Criptomoneda(
+	                rs.getString("NOMBRE"),
+	                rs.getString("NOMENCLATURA"),
+	                rs.getFloat("VALOR_DOLAR"),
+	                rs.getFloat("VOLATILIDAD"),
+	                rs.getString("NOMBRE_ICONO")
+	            );
+
+	            String direccion = generarDireccionAleatoria(); 
+	            ActivoCripto activo = new ActivoCripto(rs.getFloat("CANTIDAD"), cripto, direccion);
+	            lista.add(activo);
+	        }
+
+	    } catch (SQLException e) {
+	        System.out.println("Error al listar activos cripto: " + e.getMessage());
+	    }
+	    return lista;
 	}
+
+	@Override
+	public void update(int idUsuario, int idCriptomoneda, float cantidad) {
+		//Codigo del update
+		
+	}
+
+
+	
+
+	
+
 
 
 }

@@ -42,7 +42,7 @@ public class PanelHistorial extends JPanel{
 	        add(labelTitulo, BorderLayout.NORTH);
 
 	        // Panel central : Tabla
-	        modeloTabla = new DefaultTableModel(new Object[]{"Fecha", "Tipo", "Monto", "Moneda"}, 0); //Tendriamos que hacer un modelo especifico
+	        modeloTabla = new DefaultTableModel(new Object[]{"Fecha", "Tipo", "Resumen"}, 0); //Tendriamos que hacer un modelo especifico
 	        tablaTransacciones = new JTable(modeloTabla);
 	        tablaTransacciones.setRowHeight(30);
 

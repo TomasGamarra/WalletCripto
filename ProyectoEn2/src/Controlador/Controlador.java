@@ -137,7 +137,7 @@ public class Boton_login implements ActionListener{
 			return;}
 			else {
 				Usuario user = modelo.getUsuarioDao(vista.getPanelMain().getPanelLogin().getUserField().getText());
-				if (user == null || !user.getPasswr().equals(new String(vista.getPanelMain().getPanelLogin().getPasswdField().getText())) ) {
+				if (user == null || !user.getPassword().equals(new String(vista.getPanelMain().getPanelLogin().getPasswdField().getText())) ) {
 					JOptionPane.showMessageDialog(vista.getPanelMain().getPanelLogin(), "Usuario o contraseña desconocidos");
 					return;
 				}else {
@@ -163,8 +163,8 @@ public class Boton_registrar implements ActionListener{
 			else {
 			// En este caso estoy tomando como si usuario devuelve null si no existe en la base de datos
 				Usuario user = modelo.getUsuarioDao(vista.getPanelMain().getPanelLogin().getUserField().getText());
-				if ( user == null || user.==null) {
-					JOptionPane.showMessageDialog(vista.getvistaLogin(), "Usuario o contraseña desconocidos");
+				if ( user == null || user==null) {
+					JOptionPane.showMessageDialog(vista.getVistaLogin(), "Usuario o contraseña desconocidos");
 					return;
 				}}
 				

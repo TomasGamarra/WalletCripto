@@ -97,10 +97,21 @@ public class PruebaVista {
     			+ "("
     			+ " ID     INTEGER   PRIMARY KEY AUTOINCREMENT NOT NULL , "
     			+ " RESUMEN VARCHAR(1000)   NOT NULL, "
-    			+ " FECHA_HORA		DATETIME  NOT NULL, "
+    			+ " TIPO VARCHAR(20) NOT NULL,"
+    			+ " FECHA_HORA		DATETIME  NOT NULL, " //Por ahi conviene string , fijarse
     			+ " ID_USUARIO INTEGER    NOT NULL, "
     			+ " FOREIGN KEY(ID_USUARIO) REFERENCES USUARIO(ID)"
     			+ ")";
+    	
+    	stmt.executeUpdate(sql);
+    	
+    	sql = "CREATE TABLE IF NOT EXISTS STOCK"
+    	+ "("
+    	+ " ID     INTEGER   PRIMARY KEY AUTOINCREMENT NOT NULL , "
+    	+ " ID_CRIPTOMONEDA INTEGER NOT NULL ,"
+    	+ " CANTIDAD REAL NOT NULL ,"
+    	+ " FOREIGN KEY(ID_CRIPTOMONEDA) REFERENCES CRIPTOMONEDA(ID)"
+    	+ ")";
     	
     	stmt.executeUpdate(sql);
     	
