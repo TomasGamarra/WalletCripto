@@ -1,4 +1,4 @@
-package Controlador;
+package Sistema;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -6,9 +6,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import Sistema.Criptomoneda;
-import Sistema.MonedaFiat;
-import Sistema.ServicioCotizaciones;
 import gestores.FactoryDAO;
 import interfaces_DAO.ActivoCriptoDAO;
 import interfaces_DAO.ActivoFiatDAO;
@@ -46,10 +43,10 @@ public class Modelo {
 		Map <String,Float> map = ServicioCotizaciones.obtenerPrecios(lista);
 		
 		criptoDAO.create(new Criptomoneda("Bitcoin","BTC",map.get("bitcoin"),1,"/images/Bitcoin.png"));
-		criptoDAO.create(new Criptomoneda("Ethereum","ETH",map.get("ethereum"),1,"/images/Ethereum.png"));
-		criptoDAO.create(new Criptomoneda("Dogecoin","DOGE",map.get("dogecoin"),1,"/images/Dogecoin.png"));
-		criptoDAO.create(new Criptomoneda("Usdc","USDC",map.get("usd-coin"),1,"/images/Usdc.png"));
-		criptoDAO.create(new Criptomoneda("Tether","USDT",map.get("tether"),1,"/images/Tether.png"));
+		criptoDAO.create(new Criptomoneda("Ethereum","ETH",map.get("ethereum"),1,"images/Ethereum.png"));
+		criptoDAO.create(new Criptomoneda("Dogecoin","DOGE",map.get("dogecoin"),1,"images/Dogecoin.png"));
+		criptoDAO.create(new Criptomoneda("Usdc","USDC",map.get("usd-coin"),1,"images/Usdc.png"));
+		criptoDAO.create(new Criptomoneda("Tether","USDT",map.get("tether"),1,"images/Tether.png"));
 		
 		fiatDAO.create(new MonedaFiat("Pesos Argentinos","ARS",1077,"/images/Ars.png"));
 		fiatDAO.create(new MonedaFiat("Dolares","USD",1,"/images/Usd.png"));

@@ -41,7 +41,7 @@ public class PanelActivos extends JPanel {
 	private JLabel labelBalance;
 	private JTable tablaActivos;
 	private ModeloTablaActivos tablaModelo;
-	private Object [][] datos ={ {new ImageIcon("images/Bitcoin.png"),"Bitcoin",0} , {new ImageIcon("images/Ethereum.png"),"Ethereum",0}, {new ImageIcon("images/Tether.png"),"Tether",0}};
+	private Object [][] datos ={ {new ImageIcon(getClass().getResource("/images/Bitcoin.png")),"Bitcoin",0} , {new ImageIcon(getClass().getResource("/images/Ethereum.png")),"Ethereum",0}, {new ImageIcon(getClass().getResource("/images/Tether.png")),"Tether",0}};
 	private JScrollPane scrollPane ;
 	private JLabel labelNombre;
 	
@@ -149,7 +149,7 @@ public class PanelActivos extends JPanel {
         botonHistorial.setFont(new Font("Arial", Font.BOLD, 16));
         botonHistorial.setFocusPainted(false);
         botonHistorial.setBorderPainted(false);
-        botonHistorial.setIcon(new ImageIcon("images/Historial.png"));
+        botonHistorial.setIcon(new ImageIcon(getClass().getResource("/images/Historial.png")));
         botonHistorial.setVerticalTextPosition(SwingConstants.TOP); // Texto arriba
         botonHistorial.setHorizontalTextPosition(SwingConstants.CENTER); // Texto centrado horizontalmente
         botonHistorial.setIconTextGap(5); // Espaciado entre el texto y el icono
@@ -162,7 +162,7 @@ public class PanelActivos extends JPanel {
         botonCotizaciones.setFont(new Font("Arial", Font.BOLD, 16));
         botonCotizaciones.setFocusPainted(false);
         botonCotizaciones.setBorderPainted(false);
-        botonCotizaciones.setIcon(new ImageIcon("images/Cotizaciones.png"));
+        botonCotizaciones.setIcon(new ImageIcon(getClass().getResource("/images/Cotizaciones.png")));
         botonCotizaciones.setVerticalTextPosition(SwingConstants.TOP); // Texto arriba
         botonCotizaciones.setHorizontalTextPosition(SwingConstants.CENTER); // Texto centrado horizontalmente
         botonCotizaciones.setIconTextGap(5); // Espaciado entre el texto y el icono
@@ -228,6 +228,10 @@ public class PanelActivos extends JPanel {
             this.iniciales = nuevasIniciales;
             repaint(); // Vuelve a dibujar el componente
         }
+	}
+	
+	public void actualizarIniciales (String nuevasIniciales) {
+		componenteIniciales.setIniciales(nuevasIniciales);
 	}
 
 	public JPanel getPanelCentral() {

@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import Controlador.Controlador;
-import Controlador.Modelo;
+import Sistema.Modelo;
 import gestores.MyConnection;
 
 public class PruebaVista {

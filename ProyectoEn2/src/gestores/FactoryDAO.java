@@ -4,7 +4,6 @@ import implementaciones_DAO.ActivoCriptoDAOjdbc;
 import implementaciones_DAO.ActivoFiatDAOjdbc;
 import implementaciones_DAO.CriptoDAOjdbc;
 import implementaciones_DAO.FiatDAOjdbc;
-import implementaciones_DAO.MonedaDAOjdbc;
 import implementaciones_DAO.PersonaDAOjdbc;
 import implementaciones_DAO.StockDAOjdbc;
 import implementaciones_DAO.TransaccionDAOjdbc;
@@ -13,7 +12,6 @@ import interfaces_DAO.ActivoCriptoDAO;
 import interfaces_DAO.ActivoFiatDAO;
 import interfaces_DAO.CriptoDAO;
 import interfaces_DAO.FiatDAO;
-import interfaces_DAO.MonedaDAO;
 import interfaces_DAO.PersonaDAO;
 import interfaces_DAO.StockDAO;
 import interfaces_DAO.TransaccionDAO;
@@ -21,11 +19,8 @@ import interfaces_DAO.UsuarioDAO;
 
 public class FactoryDAO {
 	
-	
-	public static MonedaDAO getMonedaDAO () {
-		return new MonedaDAOjdbc();
-	}
-	
+
+
 	public static ActivoFiatDAO getActivoFiatDAO () {
 		return new ActivoFiatDAOjdbc() ;
 	}

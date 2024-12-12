@@ -1,50 +1,106 @@
 package Vista;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.util.HashMap;
+import java.util.Map;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import Sistema.ServicioCotizaciones;
+
 public class PanelCotizaciones extends JPanel {
 	private JPanel panelCentral;
+	private JPanel panelSouth;
 	private JLabel labelValorUsd;
 	private JLabel labelNombreCripto;
-//	public PanelCotizaciones() {
-//	    setLayout(new BorderLayout());
-//	    panelCentral = new JPanel();
-//		panelCentral.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-//
-//	    
-//	    JPanel header = new JPanel(new GridLayout(1, 4));
-//	    
-//	    labelValorUsd = new JLabel("Valor (USD)", SwingConstants.CENTER);
-//	    labelNombreCripto = new JLabel("Criptomoneda", SwingConstants.CENTER);
-//	    
-//	    header.add(new JLabel("", SwingConstants.CENTER));
-//	    header.add(labelNombreCripto);
-//	    header.add(labelValorUsd);
-//	    header.setOpaque(false);
-//	    
-//	    header.setBackground(Color.LIGHT_GRAY);
-//	    add(header);
-//
-//	    // Consulta y carga inicial
-//	    String[][] criptos = Sistema.ServicioCotizaciones.consultarPreciosDesdeAPI();
-//	    if (criptos != null) {
-//	  
-//	    } else {
-//	        JLabel errorLabel = new JLabel("Error al cargar las cotizaciones.");
-//	        errorLabel.setHorizontalAlignment(SwingConstants.CENTER);
-//	        add(errorLabel);
-//	    }
-//	}
+	private JButton botonVolver;
+	private JPanel panelTop;
+	
+	
+	private Map<String, JButton> botonesCompra = new HashMap<>();
+	
+	public PanelCotizaciones() {
+	    setLayout(new BorderLayout());
+	    //PanelCentral
+	    panelCentral = new JPanel();
+		panelCentral.setLayout(new BoxLayout(panelCentral, BoxLayout.Y_AXIS));
+		botonVolver = new JButton("Volver");
+		//PanelSouth
+		panelSouth = new JPanel();
+		panelSouth.add(botonVolver);
+		panelSouth.add(botonVolver,SwingConstants.CENTER);	
+		//PanelTop
+		//panelTop = new JPanel();
+		
+		
+		add(panelCentral,BorderLayout.CENTER);
+		add(panelSouth,BorderLayout.SOUTH);
+		
+	    cargarDatos();
+	    
+	    
+	}
 
+	   private void cargarDatos() {
+	        String[][] datos = ServicioCotizaciones.consultarPreciosParaTabla(); 
+
+	        for (String[] fila : datos) {
+	            agregarFilaCotizacion(fila[0], fila[1], fila[2]);
+	        }
+	    }
+
+	    private void agregarFilaCotizacion(String rutaIcono, String nombre, String precio) {
+	        JPanel fila = new JPanel(new GridLayout(1, 4));
+	        fila.setBackground(new Color(230, 230, 250));
+	        
+	        // Crear y configurar componentes
+	        JLabel lblIcono = new JLabel(new ImageIcon(getClass().getResource(rutaIcono)));
+	        JLabel lblNombre = new JLabel(nombre);
+	        JLabel lblPrecio = new JLabel(precio);
+
+	        lblNombre.setFont(new Font("Arial", Font.BOLD, 16));
+	        lblPrecio.setFont(new Font("Arial", Font.BOLD, 16));
+
+	        // Aplicar márgenes
+	        lblIcono.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+	        lblNombre.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+	        lblPrecio.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+	        // Crear el botón y su panel
+	        JButton btnComprar = new JButton("Comprar");
+	        btnComprar.setActionCommand(nombre);
+	        btnComprar.setPreferredSize(new Dimension(90, 40));
+
+	        JPanel panelBoton = new JPanel(new GridBagLayout());
+	        panelBoton.setOpaque(false);  // Para mantener el color de fondo de la fila
+	        panelBoton.add(btnComprar);  // Centra el botón automáticamente
+
+	        // Agregar los componentes a la fila
+	        fila.add(lblIcono);
+	        fila.add(lblNombre);
+	        fila.add(lblPrecio);
+	        fila.add(panelBoton);
+
+	        // Guardar el botón y agregar la fila al panel central
+	        botonesCompra.put(nombre, btnComprar);
+	        panelCentral.add(fila);
+	    }
+	    
 	@Override
 	protected void paintComponent(Graphics g) {
         super.paintComponent(g);
