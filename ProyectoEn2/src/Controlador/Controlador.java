@@ -2,6 +2,9 @@ package Controlador;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.List;
 import java.util.Random;
 
@@ -45,15 +48,14 @@ public class Controlador {
 		
 		vista.getPanelMain().getPanelActivos().getBotonHistorial().addActionListener(new Boton_trans());
 		
-		// Falta boton csv y boton generar datos de prueba
+		
 		vista.getPanelMain().getPanelActivos().getBotonPrueba().addActionListener(new Boton_generar_datos());
-		vista.getPanelMain().getPanelActivos().getBotonExportar().addActionListener(new Boton_exportar()); //Falta implementar listener
+		vista.getPanelMain().getPanelActivos().getBotonExportar().addActionListener(new Boton_exportar()); 
 		
 		vista.getPanelMain().getPanelHistorial().getBotonVolver().addActionListener(new Boton_salir_trans());
 		
 		
-		//vista.getPanelMain().getPanelCotizaciones().getVolverButton().addActionListener(new Boton_salir_cotizacion());
-		//new Boton_salir_cotizacion()
+		vista.getPanelMain().getPanelCotizaciones().getBotonVolver().addActionListener(new Boton_salir_cotizacion());
 		//vista.getPanelMain().getPanelCotizaciones().getLogOutButton().addActionListener(new Boton_Logout_Cotizacion());
 		//new Boton_Logout_Cotizacion()
 		//Falta boton comprar 
@@ -163,18 +165,18 @@ public class Boton_login implements ActionListener{
 	
 	public void actionPerformed(ActionEvent e) {
 		
-		if (vista.getPanelMain().getPanelLogin().getUserField().getText().isBlank() || (new String(vista.getPanelMain().getPanelLogin().getPasswdField().getPassword()).isBlank())) {
+		if (vista.getPanelMain().getPanelLogin().extraerUser().isBlank() || (vista.getPanelMain().getPanelLogin().extraerPasswr().isBlank())) {
 			JOptionPane.showMessageDialog(vista.getPanelMain().getPanelLogin(), "Por favor complete todos los campos.");
 			
 			return;
 		}
 		else {
-			System.out.println(vista.getPanelMain().getPanelLogin().getUserField().getText());
-			Usuario user = modelo.getUsuarioDao().findByEmail(vista.getPanelMain().getPanelLogin().getUserField().getText()); // Obtengo el usuario de la DB
+			System.out.println(vista.getPanelMain().getPanelLogin().extraerUser());
+			Usuario user = modelo.getUsuarioDao().findByEmail(vista.getPanelMain().getPanelLogin().extraerUser()); // Obtengo el usuario de la DB
 			if ( user == null ) {
 				JOptionPane.showMessageDialog(vista.getPanelMain().getPanelLogin(), "Email no asociado a ninguna cuenta.");
 			}else 
-				if (!(user.getPassword().equals(new String(vista.getPanelMain().getPanelLogin().getPasswdField().getPassword()))))
+				if (!(user.getPassword().equals(vista.getPanelMain().getPanelLogin().extraerPasswr())))
 					JOptionPane.showMessageDialog(vista.getPanelMain().getPanelLogin(), "Contraseña incorrecta.");	
 				else {
 					GestorDeUsuarioActual.setUser(user);
@@ -191,7 +193,7 @@ public class Boton_login implements ActionListener{
 		//Nombre y apellido
 		String nombre = GestorDeUsuarioActual.getUser().getPersona().getNombre();
 		String apellido =GestorDeUsuarioActual.getUser().getPersona().getApellido();
-		vista.getPanelMain().getPanelActivos().getLabelNombre().setText(nombre+ " "+apellido );
+		vista.getPanelMain().getPanelActivos().actualizarNombre(nombre+ " "+apellido );
 		
 		//Actualizo iniciales
 		String iniciales = nombre.toUpperCase().charAt(0) +""+apellido.toUpperCase().charAt(0);
@@ -253,12 +255,12 @@ public class Boton_registrar implements ActionListener{
 	
 	
 	public void actionPerformed(ActionEvent e) {
-		String nombre = vista.getPanelMain().getPanelRegistro().getFieldNombre().getText();
-		String apellido= vista.getPanelMain().getPanelRegistro().getFieldApellido().getText();
-		String mail = vista.getPanelMain().getPanelRegistro().getFieldEmail().getText();
-		String contra = String.valueOf(vista.getPanelMain().getPanelRegistro().getFieldContra().getPassword());
-		String contra2 = String.valueOf(vista.getPanelMain().getPanelRegistro().getFieldContra2().getPassword());
-		boolean terminos= vista.getPanelMain().getPanelRegistro().getTermsCheckBox().isSelected();
+		String nombre = vista.getPanelMain().getPanelRegistro().extraerNombre();
+		String apellido= vista.getPanelMain().getPanelRegistro().extraerApellido();
+		String mail = vista.getPanelMain().getPanelRegistro().extraerEmail();
+		String contra = String.valueOf(vista.getPanelMain().getPanelRegistro().extraerContra());
+		String contra2 = String.valueOf(vista.getPanelMain().getPanelRegistro().extraerContra2());
+		boolean terminos= vista.getPanelMain().getPanelRegistro().extraerTerminos();
 		if (nombre.isEmpty() || apellido.isEmpty() || mail.isEmpty() || contra.isEmpty() || contra2.isEmpty()) {
 				JOptionPane.showMessageDialog(null, "No se han completado todos los campos.", "ERROR", JOptionPane.ERROR_MESSAGE);
 				return;
@@ -332,7 +334,38 @@ public class  Boton_generar_datos implements ActionListener{
 public class  Boton_exportar implements ActionListener{
 	
 	public void actionPerformed(ActionEvent e) {
+	
 		
+		String tituloscsv= "Icono,Moneda,Monto";
+		
+		List <ActivoCripto> listaCripto = modelo.getActivoCriptoDao().obtenerActivosCriptoPorUsuario( GestorDeUsuarioActual.getUser().getIdUsuario());
+		List <ActivoFiat> listaFiat= modelo.getActivoFiatDao().obtenerActivosFiatPorUsuario( GestorDeUsuarioActual.getUser().getIdUsuario());
+		
+		try {
+		BufferedWriter writer = new BufferedWriter(new FileWriter("archivo.csv "));
+		
+		writer.write(tituloscsv + "\n");
+		
+		for (ActivoCripto a : listaCripto) {
+			String linea = a.getCripto().getNombreIcono() + ", " + a.getCripto().getNombre() + ", " + + a.getAmount() + ", " +"\n";
+			writer.write(linea);
+		}
+		
+		for (ActivoFiat f : listaFiat) {
+			String linea = f.getMonedaFiat().getNombreIcono() + ", " + f.getMonedaFiat().getNombre() + ", "   + f.getAmount() + ", " + "\n";
+			writer.write(linea);
+		}
+		
+		writer.close();
+		
+		JOptionPane.showMessageDialog(null, "Archivo csv correctamente creado en la carpeta asociada a la aplicacion.");
+		
+		}catch (IOException e1) {
+			
+			JOptionPane.showMessageDialog(vista.getPanelMain().getPanelLogin(), "Ha ocurrido un error a la hora de generar el archivo csv.");
+			
+		}
+		}
 		
 		
 	}
@@ -340,4 +373,3 @@ public class  Boton_exportar implements ActionListener{
 	
 }
 
-}

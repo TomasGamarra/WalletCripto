@@ -230,6 +230,11 @@ public class PanelActivos extends JPanel {
         }
 	}
 	
+	
+	public void actualizarNombre(String nombre) {
+		 labelNombre.setText(nombre);
+	}
+	
 	public void actualizarIniciales (String nuevasIniciales) {
 		componenteIniciales.setIniciales(nuevasIniciales);
 	}

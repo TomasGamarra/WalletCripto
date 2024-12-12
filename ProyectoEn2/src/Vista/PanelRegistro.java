@@ -179,7 +179,54 @@ public class PanelRegistro extends JPanel {
 	public void setMainPanel(JPanel mainPanel) {
 		this.mainPanel = mainPanel;
 	}
+	public String extraerNombre() {
+		return fieldNombre.getText();
+	}
+	
+	public void ActualizarNombre() {
+		 fieldNombre.setText("");
+	}
 
+	public String extraerApellido() {
+		return fieldApellido.getText();
+	}
+	public void ActualizarApellido() {
+		 fieldApellido.setText("");
+	}
+
+	
+	public String extraerEmail() {
+		return fieldEmail.getText();
+	}
+	
+	public void ActualizarEmail() {
+		 fieldEmail.setText("");
+	}
+
+	
+	public String extraerContra() {
+		return new String(fieldContra.getText());
+	}
+	
+	public void ActualizarContra() {
+		 fieldContra.setText("");
+	}
+	public String extraerContra2() {
+		return new String(fieldContra2.getText());
+	}
+	public void ActualizarContra2() {
+		 fieldContra2.setText("");
+	}
+	
+	public boolean extraerTerminos() {
+		return termsCheckBox.isSelected();
+	}
+	
+	public void actualizarTerminos() {
+		termsCheckBox.setSelected(false);;
+	}
+	
+	
 	public JLabel getLabelNombre() {
 		return labelNombre;
 	}

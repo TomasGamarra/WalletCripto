@@ -101,6 +101,62 @@ public class PanelCotizaciones extends JPanel {
 	        panelCentral.add(fila);
 	    }
 	    
+	public JPanel getPanelCentral() {
+			return panelCentral;
+		}
+
+		public void setPanelCentral(JPanel panelCentral) {
+			this.panelCentral = panelCentral;
+		}
+
+		public JPanel getPanelSouth() {
+			return panelSouth;
+		}
+
+		public void setPanelSouth(JPanel panelSouth) {
+			this.panelSouth = panelSouth;
+		}
+
+		public JLabel getLabelValorUsd() {
+			return labelValorUsd;
+		}
+
+		public void setLabelValorUsd(JLabel labelValorUsd) {
+			this.labelValorUsd = labelValorUsd;
+		}
+
+		public JLabel getLabelNombreCripto() {
+			return labelNombreCripto;
+		}
+
+		public void setLabelNombreCripto(JLabel labelNombreCripto) {
+			this.labelNombreCripto = labelNombreCripto;
+		}
+
+		public JButton getBotonVolver() {
+			return botonVolver;
+		}
+
+		public void setBotonVolver(JButton botonVolver) {
+			this.botonVolver = botonVolver;
+		}
+
+		public JPanel getPanelTop() {
+			return panelTop;
+		}
+
+		public void setPanelTop(JPanel panelTop) {
+			this.panelTop = panelTop;
+		}
+
+		public Map<String, JButton> getBotonesCompra() {
+			return botonesCompra;
+		}
+
+		public void setBotonesCompra(Map<String, JButton> botonesCompra) {
+			this.botonesCompra = botonesCompra;
+		}
+
 	@Override
 	protected void paintComponent(Graphics g) {
         super.paintComponent(g);

@@ -134,6 +134,24 @@ public class PanelLogin extends JPanel {
         g2d.fillRect(0, 0, getWidth(), getHeight());
     }
 
+	
+	
+	
+	public String extraerUser() {
+		return userField.getText();
+	}
+	
+	public void ActualizarUser() {
+		 userField.setText("");
+	}
+
+	public String extraerPasswr() {
+		return new String(passwdField.getText());
+	}
+	public void ActualizarPasswr() {
+		 passwdField.setText("");
+	}
+	
 	public JPanel getPanelCenter() {
 		return panelCenter;
 	}
