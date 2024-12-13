@@ -50,13 +50,8 @@ public class Modelo {
         
         try {
   
-		 map= ServicioCotizaciones.obtenerPrecios(lista);
-		
-        
-		
-		Random ran = new Random();
-	
-		
+		map = ServicioCotizaciones.obtenerPrecios(lista);
+					
 		for (CriptomonedaEnum cripto : CriptomonedaEnum.values()) {
 		    criptoDAO.create(new Criptomoneda(
 		        cripto.getNombre(), 
@@ -65,18 +60,17 @@ public class Modelo {
 		        1, 
 		        cripto.getRutaIcono()));
 		    
-		    stockDAO.create(criptoDAO.obtenerIdCripto(cripto.getNomenclatura()), ran.nextFloat() * 3 + 8);
-		}
+		    stockDAO.create(criptoDAO.obtenerIdCripto(cripto.getNomenclatura()), Math.random() * 3 + 8);
+			}
 		
 		
-
 		for (MonedaFiatEnum fiat : MonedaFiatEnum.values()) {
 		    fiatDAO.create(new MonedaFiat(
 		        fiat.getNombre(), 
 		        fiat.getNomenclatura(), 
 		        fiat.getCotizacion(), 
 		        fiat.getRutaIcono()));
-		}
+			}
 		
         }catch (RequestException e) {
         	System.out.println(e.getMessage());

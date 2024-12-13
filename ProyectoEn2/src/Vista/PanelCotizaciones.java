@@ -32,17 +32,20 @@ public class PanelCotizaciones extends JPanel {
 	private JLabel labelNombreCripto;
 	private JButton botonVolver;
 	private JPanel panelTop;
+	private Map <String, JLabel> cotizaciones = new HashMap <>();
 	private Map<String, JButton> botonesCompra = new HashMap<>();
 		
 		
 	public PanelCotizaciones() {
 	    setLayout(new BorderLayout());
 	    setOpaque(false);
+	    
 	    //PanelCentral
 	    panelCentral = new JPanel();
 		panelCentral.setLayout(new BoxLayout(panelCentral, BoxLayout.Y_AXIS));
 		panelCentral.setOpaque(false);
 		botonVolver = new JButton("Volver");
+		
 		//PanelSouth
 		panelSouth = new JPanel();
 		panelSouth.add(botonVolver);
@@ -51,30 +54,25 @@ public class PanelCotizaciones extends JPanel {
 					
 		add(panelCentral,BorderLayout.CENTER);
 		add(panelSouth,BorderLayout.SOUTH);
-		
-	    cargarDatos();
-		    
-		    
+    
 	}
 
-	private void cargarDatos() {
-		try {
-		for ( CriptomonedaEnum cripto : CriptomonedaEnum.values()) 
-			agregarFilaCotizacion(cripto.getRutaIcono(),cripto.getNombre()+ " ("+ cripto.getNomenclatura() + ")","$"+String.format("%.2f",ServicioCotizaciones.obtenerPrecio(cripto.getClaveApi()) ));
-		} catch (RequestException e) {
-			System.out.println(e.getMessage());
+	public void cargarDatos(String [][] tabla) {
+		for (String [] fila : tabla) {
+			agregarFilaCotizacion(fila[0],fila[1],fila[2],fila[3]);
 		}
 		
 	}
 
-	private void agregarFilaCotizacion(String rutaIcono, String nombre, String precio) {
+	private void agregarFilaCotizacion(String rutaIcono, String nombre,String nomenclatura , String precio) {
 		JPanel fila = new JPanel(new GridLayout(1, 4));
 		fila.setOpaque(false);
 		        
 		        
         JLabel lblIcono = new JLabel(new ImageIcon(getClass().getResource(rutaIcono)));
-        JLabel lblNombre = new JLabel(nombre);
-        JLabel lblPrecio = new JLabel(precio);
+        JLabel lblNombre = new JLabel(nombre + "(" + nomenclatura + ")");
+        JLabel lblPrecio = new JLabel("$"+precio);
+        
         lblIcono.setOpaque(false);
         lblNombre.setOpaque(false);
         lblPrecio.setOpaque(false);
@@ -89,7 +87,8 @@ public class PanelCotizaciones extends JPanel {
 
         // Boton y PanelBoton
         JButton btnComprar = new JButton("Comprar");
-        btnComprar.setActionCommand(nombre);
+        btnComprar.setActionCommand(nombre); //Para luego diferenciar los datos en los listeners
+        
         btnComprar.setPreferredSize(new Dimension(90, 40));
         btnComprar.setBackground(new Color(20,140,20));
         btnComprar.setFont(new Font("Arial", Font.BOLD, 12));
@@ -97,9 +96,9 @@ public class PanelCotizaciones extends JPanel {
         JPanel panelBoton = new JPanel(new GridBagLayout());
         panelBoton.setOpaque(false);
 		        
-        panelBoton.add(btnComprar);  // Centra el botón automáticamente
+        panelBoton.add(btnComprar);  
 
-        // Agregar los componentes a la fila
+        
         fila.add(lblIcono);
         fila.add(lblNombre);
         fila.add(lblPrecio);
@@ -107,8 +106,10 @@ public class PanelCotizaciones extends JPanel {
 
         // Guardar el botón y agregar la fila al panel central
         botonesCompra.put(nombre, btnComprar);
+        cotizaciones.put(nombre,lblPrecio);
+        
         panelCentral.add(fila);
-		    }
+		}
 		    
 		@Override
 		protected void paintComponent(Graphics g) {
@@ -120,63 +121,71 @@ public class PanelCotizaciones extends JPanel {
 	    }
 		
 
-	    
+	
+	public void setCotizacion (String nombre ,float cotizacion) {	
+		JLabel label = cotizaciones.get(nombre);
+		if (label != null)
+			label.setText("$"+cotizacion);
+	}
+		
+		
 	public JPanel getPanelCentral() {
 			return panelCentral;
 		}
 
-		public void setPanelCentral(JPanel panelCentral) {
-			this.panelCentral = panelCentral;
-		}
+	public void setPanelCentral(JPanel panelCentral) {
+		this.panelCentral = panelCentral;
+	}
 
-		public JPanel getPanelSouth() {
-			return panelSouth;
-		}
+	public JPanel getPanelSouth() {
+		return panelSouth;
+	}
 
-		public void setPanelSouth(JPanel panelSouth) {
-			this.panelSouth = panelSouth;
-		}
+	public void setPanelSouth(JPanel panelSouth) {
+		this.panelSouth = panelSouth;
+	}
 
-		public JLabel getLabelValorUsd() {
-			return labelValorUsd;
-		}
+	public JLabel getLabelValorUsd() {
+		return labelValorUsd;
+	}
 
-		public void setLabelValorUsd(JLabel labelValorUsd) {
-			this.labelValorUsd = labelValorUsd;
-		}
+	public void setLabelValorUsd(JLabel labelValorUsd) {
+		this.labelValorUsd = labelValorUsd;
+	}
 
-		public JLabel getLabelNombreCripto() {
-			return labelNombreCripto;
-		}
+	public JLabel getLabelNombreCripto() {
+		return labelNombreCripto;
+	}
 
-		public void setLabelNombreCripto(JLabel labelNombreCripto) {
-			this.labelNombreCripto = labelNombreCripto;
-		}
+	public void setLabelNombreCripto(JLabel labelNombreCripto) {
+		this.labelNombreCripto = labelNombreCripto;
+	}
 
-		public JButton getBotonVolver() {
-			return botonVolver;
-		}
+	public JButton getBotonVolver() {
+		return botonVolver;
+	}
 
-		public void setBotonVolver(JButton botonVolver) {
-			this.botonVolver = botonVolver;
-		}
+	public void setBotonVolver(JButton botonVolver) {
+		this.botonVolver = botonVolver;
+	}
 
-		public JPanel getPanelTop() {
-			return panelTop;
-		}
+	public JPanel getPanelTop() {
+		return panelTop;
+	}
 
-		public void setPanelTop(JPanel panelTop) {
-			this.panelTop = panelTop;
-		}
+	public void setPanelTop(JPanel panelTop) {
+		this.panelTop = panelTop;
+	}
 
-		public Map<String, JButton> getBotonesCompra() {
+	public Map<String, JButton> getBotonesCompra() {
 			return botonesCompra;
-		}
+	}
 
-		public void setBotonesCompra(Map<String, JButton> botonesCompra) {
-			this.botonesCompra = botonesCompra;
-		}
-
+	public void setBotonesCompra(Map<String, JButton> botonesCompra) {
+		this.botonesCompra = botonesCompra;
+	}
+	
+	
 
 	
 	

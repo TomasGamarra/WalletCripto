@@ -15,29 +15,11 @@ import Excepciones.RequestException;
 public class ServicioCotizaciones {
     private static final String URL_API = 
         "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,usd-coin,tether,dogecoin&vs_currencies=usd";
-    private static Map <String,Float> map;
+    private static Map <String,Float> map = new HashMap<>();
    
 
-    public static float obtenerPrecio  ( String claveApi) throws RequestException {
-    	 HttpClient cliente = HttpClient.newHttpClient();
-         HttpRequest solicitud = HttpRequest.newBuilder()
-                 .uri(URI.create(URL_API))
-                 .GET()
-                 .build();
-
-         try {
-             HttpResponse<String> respuesta = cliente.send(solicitud, HttpResponse.BodyHandlers.ofString());
-             if (respuesta.statusCode() == 200) {
-            	 JSONObject json = new JSONObject(respuesta.body());
-                 return json.getJSONObject(claveApi).getFloat("usd");
-             } else {
-            	 if( respuesta.statusCode() == 429)
-                 	throw new RequestException("Demasiadas solicitudes a la API");
-             }
-         } catch (IOException | InterruptedException e) {
-             e.printStackTrace();
-         }
-         return -1;
+    public static float obtenerPrecio  (String claveApi) {
+    	return map.get(claveApi);
     }
 
     
@@ -51,10 +33,13 @@ public class ServicioCotizaciones {
         try {
             HttpResponse<String> respuesta = cliente.send(solicitud, HttpResponse.BodyHandlers.ofString());
             if (respuesta.statusCode() == 200) {
-                return obtenerPreciosHelper(respuesta.body(), clavesApi);
+                map.clear();
+                map.putAll(obtenerPreciosHelper(respuesta.body(), clavesApi));
+                return map;
             } else {
-                if( respuesta.statusCode() == 429)
+                if( respuesta.statusCode() == 429) {
                 	throw new RequestException("Demasiadas solicitudes a la API");
+                }
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
@@ -76,15 +61,12 @@ public class ServicioCotizaciones {
                 precios.put(claveApi, -1f); // Si no se encuentra, asignamos -1 como valor
             }
         }
-        map=precios;
+
         return precios;
     }
 
 
-	public static Map <String,Float> getMap() {
-		return map;
-	}
-
+	
     
 
 

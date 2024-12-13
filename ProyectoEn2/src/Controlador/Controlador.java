@@ -5,25 +5,31 @@ import java.awt.event.ActionListener;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 
+import Excepciones.RequestException;
 import Sistema.ActivoCripto;
 import Sistema.ActivoFiat;
 import Sistema.Criptomoneda;
+import Sistema.CriptomonedaEnum;
 import Sistema.Modelo;
-import Sistema.Moneda;
 import Sistema.MonedaFiat;
 import Sistema.Persona;
+import Sistema.ServicioCotizaciones;
 import Sistema.Usuario;
 import Vista.ModeloTablaActivos;
 import Vista.PanelesEnumerativos;
 import Vista.Vista;
-import gestores.GestorDeUsuarioActual;
+import gestores.GestorAplicacion;
+import gestores.GestorAplicacion;
 
 public class Controlador {
 	private Vista vista;
@@ -65,6 +71,53 @@ public class Controlador {
 		
 		//vista.getPanelMain().getPanelCompra().getCancelarButton().addActionListener(new Boton_cancelar_compra());
 		//Falta boton conversion, lista de monedas, boton de compra
+		
+		setearCotizaciones();
+		iniciarTimer();
+		
+		
+	
+	}
+	
+	
+	private void iniciarTimer() {
+	        Timer timer = new Timer();
+	        timer.schedule(new TimerTask() {
+	            public void run() {
+	                actualizarCotizacionesApi();
+	                actualizarVistaCotizaciones();
+	            }
+	        }, 5000, 10000);
+	}
+	
+	public void actualizarVistaCotizaciones(){
+		for (CriptomonedaEnum cripto : CriptomonedaEnum.values()) {
+			vista.getPanelMain().getPanelCotizaciones().setCotizacion(cripto.getNombre(), ServicioCotizaciones.obtenerPrecio(cripto.getClaveApi()));
+			System.out.println("Precio de " + cripto.getNombre() + ": " + ServicioCotizaciones.obtenerPrecio(cripto.getClaveApi()));
+		}		
+		vista.getPanelMain().getPanelCotizaciones().repaint();
+	}
+	
+	private void actualizarCotizacionesApi() {
+		try {
+			ServicioCotizaciones.obtenerPrecios(GestorAplicacion.getListaCriptoSoportadas());
+		} catch (RequestException e) {
+			System.out.println(e.getMessage());
+		}
+
+	}
+	
+	public void setearCotizaciones() {
+		String [][] tabla = new String[CriptomonedaEnum.values().length][4];
+		int i=0;
+		for ( CriptomonedaEnum cripto : CriptomonedaEnum.values())  {
+			tabla[i][0]=cripto.getRutaIcono();
+			tabla[i][1]=cripto.getNombre();
+			tabla[i][2]= cripto.getNomenclatura();
+			tabla[i++][3]=String.format("%.2f",ServicioCotizaciones.obtenerPrecio(cripto.getClaveApi())) ;
+		}
+			
+		vista.getPanelMain().getPanelCotizaciones().cargarDatos(tabla);
 	
 	}
 	
@@ -179,7 +232,7 @@ public class Boton_login implements ActionListener{
 				if (!(user.getPassword().equals(vista.getPanelMain().getPanelLogin().extraerPasswr())))
 					JOptionPane.showMessageDialog(vista.getPanelMain().getPanelLogin(), "Contraseña incorrecta.");	
 				else {
-					GestorDeUsuarioActual.setUser(user);
+					GestorAplicacion.setUser(user);
 					iniciarMenu();
 				}
              }
@@ -191,8 +244,8 @@ public class Boton_login implements ActionListener{
 	public void iniciarMenu() {
 		vista.cambiarCarta("activos");
 		//Nombre y apellido
-		String nombre = GestorDeUsuarioActual.getUser().getPersona().getNombre();
-		String apellido =GestorDeUsuarioActual.getUser().getPersona().getApellido();
+		String nombre = GestorAplicacion.getUser().getPersona().getNombre();
+		String apellido =GestorAplicacion.getUser().getPersona().getApellido();
 		vista.getPanelMain().getPanelActivos().actualizarNombre(nombre+ " "+apellido );
 		
 		//Actualizo iniciales
@@ -200,8 +253,8 @@ public class Boton_login implements ActionListener{
 		vista.getPanelMain().getPanelActivos().actualizarIniciales(iniciales); 
 		
 		//Actualizo tabla de activos
-		List <ActivoCripto> listaCripto = modelo.getActivoCriptoDao().obtenerActivosCriptoPorUsuario(GestorDeUsuarioActual.getUser().getIdUsuario());
-		List <ActivoFiat> listaFiat= modelo.getActivoFiatDao().obtenerActivosFiatPorUsuario(GestorDeUsuarioActual.getUser().getIdUsuario());
+		List <ActivoCripto> listaCripto = modelo.getActivoCriptoDao().obtenerActivosCriptoPorUsuario(GestorAplicacion.getUser().getIdUsuario());
+		List <ActivoFiat> listaFiat= modelo.getActivoFiatDao().obtenerActivosFiatPorUsuario(GestorAplicacion.getUser().getIdUsuario());
 		
 		
 		if (!listaCripto.isEmpty() && !listaFiat.isEmpty()) {
@@ -289,7 +342,7 @@ public class Boton_registrar implements ActionListener{
 		            "Usuario creado exitosamente, se le ha enviado un mail de confirmacion.", 
 		            "Creación de usuario", 
 		            JOptionPane.NO_OPTION );
-			GestorDeUsuarioActual.setUser(user);
+			GestorAplicacion.setUser(user);
 			iniciarMenu();
 				
 		
@@ -302,8 +355,8 @@ public class  Boton_generar_datos implements ActionListener{
 	    public void actionPerformed(ActionEvent e) {
 	        Random random = new Random();
 	        
-	        modelo.getActivoCriptoDao().eliminarActivosCriptoPorUsuario(GestorDeUsuarioActual.getUser().getIdUsuario());;
-	        modelo.getActivoFiatDao().eliminarActivosFiatPorUsuario(GestorDeUsuarioActual.getUser().getIdUsuario());;
+	        modelo.getActivoCriptoDao().eliminarActivosCriptoPorUsuario(GestorAplicacion.getUser().getIdUsuario());;
+	        modelo.getActivoFiatDao().eliminarActivosFiatPorUsuario(GestorAplicacion.getUser().getIdUsuario());;
 	        
 	        List<Criptomoneda> criptomonedas = modelo.getCriptoDAO().obtenerCriptomonedas();
 	        List<MonedaFiat> monedasFiduciarias = modelo.getFiatDAO().obtenerFiats();
@@ -312,17 +365,17 @@ public class  Boton_generar_datos implements ActionListener{
 	        
 	        for (Criptomoneda cripto : criptomonedas) {
 	            float cantidad = random.nextFloat() * 20;  
-	            modelo.getActivoCriptoDao().create(GestorDeUsuarioActual.getUser().getIdUsuario(),modelo.getCriptoDAO().obtenerIdCripto(cripto.getNomenclatura()),cantidad); //Tendria que ser update y crearlos la primera vez (iniciarMenu)
+	            modelo.getActivoCriptoDao().create(GestorAplicacion.getUser().getIdUsuario(),modelo.getCriptoDAO().obtenerIdCripto(cripto.getNomenclatura()),cantidad); //Tendria que ser update y crearlos la primera vez (iniciarMenu)
 	        }
 
 	        for (MonedaFiat moneda : monedasFiduciarias) {
 	            float cantidad = random.nextFloat() * 20;  
-	            modelo.getActivoFiatDao().create(GestorDeUsuarioActual.getUser().getIdUsuario(),modelo.getFiatDAO().obtenerIdFiat(moneda.getNomenclatura()), cantidad);//Tendria que ser update y crearlos la primera vez (iniciarMenu)
+	            modelo.getActivoFiatDao().create(GestorAplicacion.getUser().getIdUsuario(),modelo.getFiatDAO().obtenerIdFiat(moneda.getNomenclatura()), cantidad);//Tendria que ser update y crearlos la primera vez (iniciarMenu)
 	        }
 	        
 	    
 	        iniciarMenu();
-	        // Mensaje de confirmación
+	        
 	        JOptionPane.showMessageDialog(null, "Datos de prueba generados correctamente.");
 	    }
 	
@@ -338,8 +391,8 @@ public class  Boton_exportar implements ActionListener{
 		
 		String tituloscsv= "Nombre,Nomenclatura,Tipo,Cantidad,ValorEnUsd";
 		
-		List <ActivoCripto> listaCripto = modelo.getActivoCriptoDao().obtenerActivosCriptoPorUsuario( GestorDeUsuarioActual.getUser().getIdUsuario());
-		List <ActivoFiat> listaFiat= modelo.getActivoFiatDao().obtenerActivosFiatPorUsuario( GestorDeUsuarioActual.getUser().getIdUsuario());
+		List <ActivoCripto> listaCripto = modelo.getActivoCriptoDao().obtenerActivosCriptoPorUsuario( GestorAplicacion.getUser().getIdUsuario());
+		List <ActivoFiat> listaFiat= modelo.getActivoFiatDao().obtenerActivosFiatPorUsuario( GestorAplicacion.getUser().getIdUsuario());
 		
 		try {
 		BufferedWriter writer = new BufferedWriter(new FileWriter("archivo.csv",false));
@@ -347,12 +400,12 @@ public class  Boton_exportar implements ActionListener{
 		writer.write(tituloscsv + "\n");
 		
 		for (ActivoCripto a : listaCripto) {
-			String linea = a.getCripto().getNombre() + ", " + a.getCripto().getNomenclatura() + ", " + "Cripto" + ", " + a.getAmount() + ", " + a.getAmount() * a.getCripto().getValorUsd() + ", "+"\n";
+			String linea = a.getCripto().getNombre() + ", " + a.getCripto().getNomenclatura() + ", " + a.getClass() + ", " + a.getAmount() + ", " + a.getAmount() * a.getCripto().getValorUsd() + ", "+"\n";
 			writer.write(linea);
 		}
 		
 		for (ActivoFiat f : listaFiat) {
-			String linea = f.getMonedaFiat().getNombre() + ", " + f.getMonedaFiat().getNomenclatura() + ", " + "Fiat"   + ", " + f.getAmount() + ", " + f.getAmount() * f.getMonedaFiat().getValorUsd() + ", " + "\n";
+			String linea = f.getMonedaFiat().getNombre() + ", " + f.getMonedaFiat().getNomenclatura() + ", " + f.getClass()   + ", " + f.getAmount() + ", " + f.getAmount() * f.getMonedaFiat().getValorUsd() + ", " + "\n";
 			writer.write(linea);
 		}
 		

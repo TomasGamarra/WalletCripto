@@ -22,12 +22,13 @@ public class PanelPrincipal extends JPanel {
 		panelHistorial = new PanelHistorial();
 		panelCotizaciones = new PanelCotizaciones();
 		panelCompra = new PanelCompra();
+		//add(panelCompra,PanelesEnumerativos.COMPRA.getNombre());
 		add(panelHistorial,PanelesEnumerativos.HISTORIAL.getNombre());
         add(panelRegistro, PanelesEnumerativos.REGISTRO.getNombre());
         add(panelActivos, PanelesEnumerativos.ACTIVOS.getNombre());
 		add(panelLogin, PanelesEnumerativos.LOGIN.getNombre());
 		add(panelCotizaciones, PanelesEnumerativos.COTIZACIONES.getNombre());
-		add(panelCompra,PanelesEnumerativos.COMPRA.getNombre());
+		
         
         
        
