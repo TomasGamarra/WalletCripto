@@ -1,4 +1,6 @@
-package Sistema;
+package gestores;
+
+import Sistema.Usuario;
 
 public class GestorDeUsuarioActual {
 	private static Usuario user ;

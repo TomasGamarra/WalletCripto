@@ -13,7 +13,14 @@ public class ModeloTablaActivos extends DefaultTableModel {
 		 
 		
 
-		    @Override
+		    public ModeloTablaActivos() {
+			// TODO Auto-generated constructor stub
+		}
+
+
+
+
+			@Override
 		    public Class<?> getColumnClass(int columnIndex) {
 		        switch (columnIndex) {
 		            case 0: return ImageIcon.class; // Primera columna para imágenes

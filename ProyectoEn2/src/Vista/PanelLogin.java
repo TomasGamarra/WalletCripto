@@ -146,7 +146,7 @@ public class PanelLogin extends JPanel {
 	}
 
 	public String extraerPasswr() {
-		return new String(passwdField.getText());
+		return new String(passwdField.getPassword());
 	}
 	public void ActualizarPasswr() {
 		 passwdField.setText("");

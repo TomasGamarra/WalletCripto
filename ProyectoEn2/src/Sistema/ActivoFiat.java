@@ -18,4 +18,5 @@ public class ActivoFiat extends Activo{
 		this.fiat = fiat;
 	}
 
+	
 }

@@ -5,7 +5,9 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
+import Excepciones.RequestException;
 import gestores.FactoryDAO;
 import interfaces_DAO.ActivoCriptoDAO;
 import interfaces_DAO.ActivoFiatDAO;
@@ -36,20 +38,50 @@ public class Modelo {
 		criptoDAO =FactoryDAO.getCriptoDAO();
 		fiatDAO = FactoryDAO.getFiatDAO();
 		
-		String[] array = {"bitcoin", "ethereum", "dogecoin","usd-coin","tether"};
 		
-		//Todo lo de map es para solucionar error 409 por acceder muchas veces seguidas , perdon por ser tan hardcode
-        LinkedList<String> lista = new LinkedList<>(Arrays.asList(array));
-		Map <String,Float> map = ServicioCotizaciones.obtenerPrecios(lista);
 		
-		criptoDAO.create(new Criptomoneda("Bitcoin","BTC",map.get("bitcoin"),1,"/images/Bitcoin.png"));
-		criptoDAO.create(new Criptomoneda("Ethereum","ETH",map.get("ethereum"),1,"images/Ethereum.png"));
-		criptoDAO.create(new Criptomoneda("Dogecoin","DOGE",map.get("dogecoin"),1,"images/Dogecoin.png"));
-		criptoDAO.create(new Criptomoneda("Usdc","USDC",map.get("usd-coin"),1,"images/Usdc.png"));
-		criptoDAO.create(new Criptomoneda("Tether","USDT",map.get("tether"),1,"images/Tether.png"));
+		//Todo lo de map es para solucionar error 409 por acceder muchas veces seguidas 
+        LinkedList<String> lista = new LinkedList<>();
+        
+        for (CriptomonedaEnum cripto : CriptomonedaEnum.values()) 
+  		   lista.add(cripto.getClaveApi());
+        
+        Map <String,Float> map;
+        
+        try {
+  
+		 map= ServicioCotizaciones.obtenerPrecios(lista);
 		
-		fiatDAO.create(new MonedaFiat("Pesos Argentinos","ARS",1077,"/images/Ars.png"));
-		fiatDAO.create(new MonedaFiat("Dolares","USD",1,"/images/Usd.png"));
+        
+		
+		Random ran = new Random();
+	
+		
+		for (CriptomonedaEnum cripto : CriptomonedaEnum.values()) {
+		    criptoDAO.create(new Criptomoneda(
+		        cripto.getNombre(), 
+		        cripto.getNomenclatura(), 
+		        map.get(cripto.getClaveApi()), 
+		        1, 
+		        cripto.getRutaIcono()));
+		    
+		    stockDAO.create(criptoDAO.obtenerIdCripto(cripto.getNomenclatura()), ran.nextFloat() * 3 + 8);
+		}
+		
+		
+
+		for (MonedaFiatEnum fiat : MonedaFiatEnum.values()) {
+		    fiatDAO.create(new MonedaFiat(
+		        fiat.getNombre(), 
+		        fiat.getNomenclatura(), 
+		        fiat.getCotizacion(), 
+		        fiat.getRutaIcono()));
+		}
+		
+        }catch (RequestException e) {
+        	System.out.println(e.getMessage());
+        }
+		
 		
 	}
 	

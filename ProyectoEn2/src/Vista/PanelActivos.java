@@ -40,8 +40,7 @@ public class PanelActivos extends JPanel {
 	private JButton botonLogout;
 	private JLabel labelBalance;
 	private JTable tablaActivos;
-	private ModeloTablaActivos tablaModelo;
-	private Object [][] datos ={ {new ImageIcon(getClass().getResource("/images/Bitcoin.png")),"Bitcoin",0} , {new ImageIcon(getClass().getResource("/images/Ethereum.png")),"Ethereum",0}, {new ImageIcon(getClass().getResource("/images/Tether.png")),"Tether",0}};
+	private ModeloTablaActivos tablaModelo;	
 	private JScrollPane scrollPane ;
 	private JLabel labelNombre;
 	
@@ -52,7 +51,7 @@ public class PanelActivos extends JPanel {
 		panelCentral = new JPanel();
 		panelCentral.setOpaque(false);
 	 
-		tablaModelo = new ModeloTablaActivos(datos);
+		tablaModelo = new ModeloTablaActivos();
 		tablaActivos = new JTable(tablaModelo);
 		tablaActivos.setRowHeight(64);
 		scrollPane = new JScrollPane(tablaActivos);
@@ -194,7 +193,7 @@ public class PanelActivos extends JPanel {
         g2d.fillRect(0, 0, getWidth(), getHeight());
     }
 	
-	public static class ComponenteCircular extends JComponent {
+	public class ComponenteCircular extends JComponent {
         private String iniciales;
         private final int diameter = 75; 
 
@@ -379,14 +378,7 @@ public class PanelActivos extends JPanel {
 	}
 
 
-	public Object[][] getDatos() {
-		return datos;
-	}
 
-
-	public void setDatos(Object[][] datos) {
-		this.datos = datos;
-	}
 
 
 	public JScrollPane getScrollPane() {

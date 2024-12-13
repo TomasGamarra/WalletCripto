@@ -15,14 +15,15 @@ import javax.swing.JTable;
 import Sistema.ActivoCripto;
 import Sistema.ActivoFiat;
 import Sistema.Criptomoneda;
-import Sistema.GestorDeUsuarioActual;
 import Sistema.Modelo;
 import Sistema.Moneda;
 import Sistema.MonedaFiat;
 import Sistema.Persona;
 import Sistema.Usuario;
 import Vista.ModeloTablaActivos;
+import Vista.PanelesEnumerativos;
 import Vista.Vista;
+import gestores.GestorDeUsuarioActual;
 
 public class Controlador {
 	private Vista vista;
@@ -71,7 +72,7 @@ public class Controlador {
 		
 		
 		public void actionPerformed(ActionEvent e) {
-			vista.cambiarCarta("registro");
+			vista.cambiarCarta(PanelesEnumerativos.REGISTRO.getNombre());
 		}
 	}
 	
@@ -79,7 +80,7 @@ public class Controlador {
 	public class Boton_cancelar_registro implements ActionListener{
 		
 		public void actionPerformed(ActionEvent e) {
-			vista.cambiarCarta("login");
+			vista.cambiarCarta(PanelesEnumerativos.LOGIN.getNombre());
 		}
 	}
 
@@ -124,14 +125,14 @@ public class Boton_Logout_Cotizacion implements ActionListener{
 public class Boton_cotizacion implements ActionListener{
 	
 	public void actionPerformed(ActionEvent e) {
-		vista.cambiarCarta("cotizaciones");
+		vista.cambiarCarta(PanelesEnumerativos.COTIZACIONES.getNombre());
 	}
 }
 
 public class Boton_trans implements ActionListener{
 	
 	public void actionPerformed(ActionEvent e) {
-		vista.cambiarCarta("historial");
+		vista.cambiarCarta(PanelesEnumerativos.HISTORIAL.getNombre());
 		
 		
 	}
@@ -140,7 +141,7 @@ public class Boton_trans implements ActionListener{
 public class Boton_salir_trans implements ActionListener{
 	
 	public void actionPerformed(ActionEvent e) {
-		vista.cambiarCarta("activos");
+		vista.cambiarCarta(PanelesEnumerativos.ACTIVOS.getNombre());
 	}
 }
 
@@ -148,14 +149,14 @@ public class Boton_salir_trans implements ActionListener{
 public class Boton_salir_cotizacion implements ActionListener{
 	
 	public void actionPerformed(ActionEvent e) {
-		vista.cambiarCarta("activos");
+		vista.cambiarCarta(PanelesEnumerativos.ACTIVOS.getNombre());
 	}
 }
 
 public class Boton_cancelar_compra implements ActionListener{
 	
 	public void actionPerformed(ActionEvent e) {
-		vista.cambiarCarta("cotizacion");
+		vista.cambiarCarta(PanelesEnumerativos.COTIZACIONES.getNombre());
 	}
 }
 
@@ -171,7 +172,6 @@ public class Boton_login implements ActionListener{
 			return;
 		}
 		else {
-			System.out.println(vista.getPanelMain().getPanelLogin().extraerUser());
 			Usuario user = modelo.getUsuarioDao().findByEmail(vista.getPanelMain().getPanelLogin().extraerUser()); // Obtengo el usuario de la DB
 			if ( user == null ) {
 				JOptionPane.showMessageDialog(vista.getPanelMain().getPanelLogin(), "Email no asociado a ninguna cuenta.");
@@ -316,7 +316,7 @@ public class  Boton_generar_datos implements ActionListener{
 	        }
 
 	        for (MonedaFiat moneda : monedasFiduciarias) {
-	            float cantidad = random.nextFloat() * 20;  // Cantidad aleatoria
+	            float cantidad = random.nextFloat() * 20;  
 	            modelo.getActivoFiatDao().create(GestorDeUsuarioActual.getUser().getIdUsuario(),modelo.getFiatDAO().obtenerIdFiat(moneda.getNomenclatura()), cantidad);//Tendria que ser update y crearlos la primera vez (iniciarMenu)
 	        }
 	        
@@ -336,23 +336,23 @@ public class  Boton_exportar implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 	
 		
-		String tituloscsv= "Icono,Moneda,Monto";
+		String tituloscsv= "Nombre,Nomenclatura,Tipo,Cantidad,ValorEnUsd";
 		
 		List <ActivoCripto> listaCripto = modelo.getActivoCriptoDao().obtenerActivosCriptoPorUsuario( GestorDeUsuarioActual.getUser().getIdUsuario());
 		List <ActivoFiat> listaFiat= modelo.getActivoFiatDao().obtenerActivosFiatPorUsuario( GestorDeUsuarioActual.getUser().getIdUsuario());
 		
 		try {
-		BufferedWriter writer = new BufferedWriter(new FileWriter("archivo.csv "));
+		BufferedWriter writer = new BufferedWriter(new FileWriter("archivo.csv",false));
 		
 		writer.write(tituloscsv + "\n");
 		
 		for (ActivoCripto a : listaCripto) {
-			String linea = a.getCripto().getNombreIcono() + ", " + a.getCripto().getNombre() + ", " + + a.getAmount() + ", " +"\n";
+			String linea = a.getCripto().getNombre() + ", " + a.getCripto().getNomenclatura() + ", " + "Cripto" + ", " + a.getAmount() + ", " + a.getAmount() * a.getCripto().getValorUsd() + ", "+"\n";
 			writer.write(linea);
 		}
 		
 		for (ActivoFiat f : listaFiat) {
-			String linea = f.getMonedaFiat().getNombreIcono() + ", " + f.getMonedaFiat().getNombre() + ", "   + f.getAmount() + ", " + "\n";
+			String linea = f.getMonedaFiat().getNombre() + ", " + f.getMonedaFiat().getNomenclatura() + ", " + "Fiat"   + ", " + f.getAmount() + ", " + f.getAmount() * f.getMonedaFiat().getValorUsd() + ", " + "\n";
 			writer.write(linea);
 		}
 		
@@ -361,11 +361,11 @@ public class  Boton_exportar implements ActionListener{
 		JOptionPane.showMessageDialog(null, "Archivo csv correctamente creado en la carpeta asociada a la aplicacion.");
 		
 		}catch (IOException e1) {
-			
+			e1.printStackTrace();
 			JOptionPane.showMessageDialog(vista.getPanelMain().getPanelLogin(), "Ha ocurrido un error a la hora de generar el archivo csv.");
 			
 		}
-		}
+	}
 		
 		
 	}

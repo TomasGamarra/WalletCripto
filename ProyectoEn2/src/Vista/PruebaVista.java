@@ -118,6 +118,7 @@ public class PruebaVista {
     	+ " ID     INTEGER   PRIMARY KEY AUTOINCREMENT NOT NULL , "
     	+ " ID_CRIPTOMONEDA INTEGER NOT NULL ,"
     	+ " CANTIDAD REAL NOT NULL ,"
+    	+ " CONSTRAINT unique_constraint UNIQUE (ID_CRIPTOMONEDA),"
     	+ " FOREIGN KEY(ID_CRIPTOMONEDA) REFERENCES CRIPTOMONEDA(ID)"
     	+ ")";
     	
