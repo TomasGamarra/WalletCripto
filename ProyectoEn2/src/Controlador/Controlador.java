@@ -24,6 +24,7 @@ import Sistema.Modelo;
 import Sistema.MonedaFiat;
 import Sistema.Persona;
 import Sistema.ServicioCotizaciones;
+import Sistema.Transaccion;
 import Sistema.Usuario;
 import Vista.ModeloTablaActivos;
 import Vista.PanelesEnumerativos;
@@ -186,10 +187,14 @@ public class Boton_trans implements ActionListener{
 	
 	public void actionPerformed(ActionEvent e) {
 		vista.cambiarCarta(PanelesEnumerativos.HISTORIAL.getNombre());
+		List <Transaccion> t = modelo.getTransaccionDao().find(GestorAplicacion.getUser().getIdUsuario());
+		cargarTransEnTablaHistorial(t, vista.getPanelMain().getPanelHistorial().getTablaTransacciones());	
+		vista.getPanelMain().getPanelHistorial().repaint();
 		
 		
 	}
 }
+
 
 public class Boton_salir_trans implements ActionListener{
 	
@@ -299,6 +304,20 @@ public class Boton_login implements ActionListener{
 	}
 	
  
+
+	private void cargarTransEnTablaHistorial(List<Transaccion> transacciones, JTable tabla) {
+	    ModeloTablaActivos modelo = new ModeloTablaActivos(new Object[0][3]);
+	    tabla.setModel(modelo);    
+	    // Cargar transacciones
+	    for (Transaccion t : transacciones) {
+	        Object[] fila = new Object[3];
+	        fila[0] = t.getFecha();
+	        fila[1] = t.getTipo();
+	        fila[2] = t.getResumen();
+	        modelo.addRow(fila);
+	    }
+
+	}
 	
 
  
