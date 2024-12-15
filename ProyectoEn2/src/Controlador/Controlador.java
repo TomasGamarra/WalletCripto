@@ -94,7 +94,6 @@ public class Controlador {
 	public void actualizarVistaCotizaciones(){
 		for (CriptomonedaEnum cripto : CriptomonedaEnum.values()) {
 			vista.getPanelMain().getPanelCotizaciones().setCotizacion(cripto.getNombre(), ServicioCotizaciones.obtenerPrecio(cripto.getClaveApi()));
-			System.out.println("Precio de " + cripto.getNombre() + ": " + ServicioCotizaciones.obtenerPrecio(cripto.getClaveApi()));
 		}		
 		vista.getPanelMain().getPanelCotizaciones().repaint();
 	}

@@ -58,9 +58,8 @@ public class PanelCotizaciones extends JPanel {
 	}
 
 	public void cargarDatos(String [][] tabla) {
-		for (String [] fila : tabla) {
+		for (String [] fila : tabla) 
 			agregarFilaCotizacion(fila[0],fila[1],fila[2],fila[3]);
-		}
 		
 	}
 
