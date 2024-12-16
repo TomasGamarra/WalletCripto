@@ -75,4 +75,32 @@ public class CriptoDAOjdbc implements CriptoDAO {
 
             return id;
         }
+	
+
+	@Override
+	public Criptomoneda find(int idCripto) {
+	    Criptomoneda cripto = null;
+	    String sql = "SELECT * FROM CRIPTOMONEDA WHERE ID = ?";
+	    
+	    try {
+	        Connection con = MyConnection.getConnection();
+	        PreparedStatement pstmt = con.prepareStatement(sql);
+	        pstmt.setInt(1, idCripto);
+	        ResultSet rs = pstmt.executeQuery();
+	        
+	        if (rs.next()) {
+	            cripto = new Criptomoneda(
+	                rs.getString("NOMBRE"),
+	                rs.getString("NOMENCLATURA"),
+	                rs.getFloat("VALOR_DOLAR"),
+	                rs.getFloat("VOLATILIDAD"),
+	                rs.getString("NOMBRE_ICONO")
+	            );
+	        }
+	    } catch (SQLException e) {
+	        System.out.println("Error al buscar criptomoneda: " + e.getMessage());
+	    }
+	    
+	    return cripto;
+	}
 }

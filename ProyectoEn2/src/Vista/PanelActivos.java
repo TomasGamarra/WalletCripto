@@ -5,24 +5,19 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.RenderingHints;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
+import javax.swing.table.TableRowSorter;
 
 public class PanelActivos extends JPanel {
 	
@@ -43,6 +38,7 @@ public class PanelActivos extends JPanel {
 	private ModeloTablaActivos tablaModelo;	
 	private JScrollPane scrollPane ;
 	private JLabel labelNombre;
+	private TableRowSorter<ModeloTablaActivos> sorter ;
 	
 	public PanelActivos () {
 		setLayout(new BorderLayout());
@@ -54,8 +50,11 @@ public class PanelActivos extends JPanel {
 		tablaModelo = new ModeloTablaActivos();
 		tablaActivos = new JTable(tablaModelo);
 		tablaActivos.setRowHeight(64);
-		scrollPane = new JScrollPane(tablaActivos);
-				
+		
+		sorter = new TableRowSorter<>(tablaModelo);
+		tablaActivos.setRowSorter(sorter); 
+		
+		scrollPane = new JScrollPane(tablaActivos);	
 		panelCentral.add(scrollPane);
 		
 		
@@ -194,7 +193,16 @@ public class PanelActivos extends JPanel {
     }
 	
 	
+	public void limpiarTabla() {
+		this.getTablaModelo().setRowCount(0);
+		tablaActivos.setRowSorter(null);
+		TableRowSorter<ModeloTablaActivos> sorter = new TableRowSorter<>(tablaModelo);
+		tablaActivos.setRowSorter(sorter); 
+	}
 	
+	public void aniadirFila(Object [] fila) {
+		tablaModelo.addRow(fila);
+	}
 	
 	public void actualizarNombre(String nombre) {
 		 labelNombre.setText(nombre);

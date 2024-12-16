@@ -1,11 +1,7 @@
 package Sistema;
 
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import Excepciones.RequestException;
 import gestores.FactoryDAO;
@@ -80,20 +76,13 @@ public class Modelo {
 	}
 	
 	
-	public UsuarioDAO getUsuarioDao() {
-		return usuarioDAO;
-	}
+
 	public ActivoCriptoDAO getActivoCriptoDao() {
 		return activoCriptoDAO;
 	}
 	
-	public ActivoFiatDAO getActivoFiatDao() {
-		return activoFiatDAO;
-	}
+
 	
-	public PersonaDAO getPersonaDao() {
-		return personaDAO;
-	}
 	
 	public StockDAO getStockDao() {
 		return stockDAO;
@@ -104,14 +93,11 @@ public class Modelo {
 	}
 
 
-	public ActivoCriptoDAO getActivoCriptoDAO() {
-		return activoCriptoDAO;
-	}
 
 
 
 
-	public ActivoFiatDAO getActivoFiatDAO() {
+	public ActivoFiatDAO getActivoFiatDao() {
 		return activoFiatDAO;
 	}
 
@@ -125,42 +111,32 @@ public class Modelo {
 
 
 
-	public StockDAO getStockDAO() {
-		return stockDAO;
-	}
-
-
-
-
-	public TransaccionDAO getTransaccionDAO() {
-		return transaccionDAO;
-	}
-
-
-	public void setTransaccionDAO(TransaccionDAO transaccionDAO) {
+	public void setTransaccionDao(TransaccionDAO transaccionDAO) {
 		this.transaccionDAO = transaccionDAO;
 	}
 
 
-	public UsuarioDAO getUsuarioDAO() {
+	public UsuarioDAO getUsuarioDao() {
 		return usuarioDAO;
 	}
 
 
 
 
-	public CriptoDAO getCriptoDAO() {
+	public CriptoDAO getCriptoDao() {
 		return criptoDAO;
 	}
 
 
 
-	public FiatDAO getFiatDAO() {
+	public FiatDAO getFiatDao() {
 		return fiatDAO;
 	}
 
 
-	
+	public PersonaDAO getPersonaDao() {
+		return personaDAO;
+}
 	
 	
 	

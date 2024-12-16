@@ -21,12 +21,12 @@ public class PanelPrincipal extends JPanel {
 		panelRegistro = new PanelRegistro();
 		panelHistorial = new PanelHistorial();
 		panelCotizaciones = new PanelCotizaciones();
-		panelCompra = new PanelCompra();
-		//add(panelCompra,PanelesEnumerativos.COMPRA.getNombre());
+		panelCompra =new PanelCompra();
+		add(panelLogin, PanelesEnumerativos.LOGIN.getNombre());
+		add(panelCompra,PanelesEnumerativos.COMPRA.getNombre());
 		add(panelHistorial,PanelesEnumerativos.HISTORIAL.getNombre());
         add(panelRegistro, PanelesEnumerativos.REGISTRO.getNombre());
         add(panelActivos, PanelesEnumerativos.ACTIVOS.getNombre());
-		add(panelLogin, PanelesEnumerativos.LOGIN.getNombre());
 		add(panelCotizaciones, PanelesEnumerativos.COTIZACIONES.getNombre());
 		
         
@@ -62,6 +62,12 @@ public class PanelPrincipal extends JPanel {
 	}
 	public void setPanelCotizaciones(PanelCotizaciones panelCotizaciones) {
 		this.panelCotizaciones = panelCotizaciones;
+	}
+	public PanelCompra getPanelCompra() {
+		return panelCompra;
+	}
+	public void setPanelCompra(PanelCompra panelCompra) {
+		this.panelCompra = panelCompra;
 	}
 	
 	

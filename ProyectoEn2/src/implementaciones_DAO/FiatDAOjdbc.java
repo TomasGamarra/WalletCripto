@@ -37,6 +37,8 @@ public class FiatDAOjdbc implements FiatDAO {
         }
     }
 
+	
+	
 	@Override
 	public List<MonedaFiat> obtenerFiats() {
 		List<MonedaFiat> lista = new LinkedList<>();
@@ -74,5 +76,33 @@ public class FiatDAOjdbc implements FiatDAO {
 
         return id;
     }
+
+
+
+	@Override
+	public MonedaFiat find(int idMoneda) {
+	    MonedaFiat monedaFiat = null;
+	    String sql = "SELECT * FROM MONEDAFIAT WHERE ID = ?";
+	    
+	    try {
+	        Connection con = MyConnection.getConnection();
+	        PreparedStatement pstmt = con.prepareStatement(sql);
+	        pstmt.setInt(1, idMoneda);
+	        ResultSet rs = pstmt.executeQuery();
+	        
+	        if (rs.next()) {
+	            monedaFiat = new MonedaFiat(
+	                rs.getString("NOMBRE"),
+	                rs.getString("NOMENCLATURA"),
+	                rs.getFloat("VALOR_DOLAR"),
+	                rs.getString("NOMBRE_ICONO")
+	            );
+	        }
+	    } catch (SQLException e) {
+	        System.out.println("Error al buscar moneda fiat: " + e.getMessage());
+	    }
+	    
+	    return monedaFiat;
+	}
 	
 }

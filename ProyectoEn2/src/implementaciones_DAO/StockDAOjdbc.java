@@ -42,36 +42,30 @@ public class StockDAOjdbc implements StockDAO {
 	@Override
 	public Stock find(int idCripto) {
 	    Stock stock = null;
-	    String sql = "SELECT s.CANTIDAD, c.NOMBRE, c.NOMENCLATURA , C.VALOR_DOLAR," +
-	    		"c.VOLATILIDAD, c.NOMBRE_ICONO" +
-	    		"FROM STOCK s"+
-	    		"JOIN CRIPTOMONEDA c ON s.ID_CRIPTOMONEDA = c.ID"+
-	    		"WHERE S.ID_CRIPTOMONEDA =? ";
+	    String sql = "SELECT s.CANTIDAD, c.NOMBRE, c.NOMENCLATURA, c.VALOR_DOLAR, " +
+	                 "c.VOLATILIDAD, c.NOMBRE_ICONO " +
+	                 "FROM STOCK s " +
+	                 "JOIN CRIPTOMONEDA c ON s.ID_CRIPTOMONEDA = c.ID " +
+	                 "WHERE s.ID_CRIPTOMONEDA = ?";
 
-	    try  {
-	    	Connection con = MyConnection.getConnection();
+	    try {
+	        Connection con = MyConnection.getConnection();
 	        PreparedStatement ps = con.prepareStatement(sql);
 	        ps.setInt(1, idCripto);
 	        ResultSet rs = ps.executeQuery();
+
 	        if (rs.next()) {
-	              float cantidad = rs.getFloat("CANTIDAD");
-	              while (rs.next()) {
-	  	            Criptomoneda cripto = new Criptomoneda(
-	  	                rs.getString("NOMBRE"),
-	  	                rs.getString("NOMENCLATURA"),
-	  	                rs.getFloat("VALOR_DOLAR"),
-	  	                rs.getFloat("VOLATILIDAD"),
-	  	                rs.getString("NOMBRE_ICONO")
-	  	            );    
-	              
-	                
-	              if (cripto != null) {
-	                  stock = new Stock(cantidad, cripto);
-	               }
-	            }
-	        
-	    }
-	        } catch (SQLException e) {
+	            float cantidad = rs.getFloat("CANTIDAD");
+	            Criptomoneda cripto = new Criptomoneda(
+	                rs.getString("NOMBRE"),
+	                rs.getString("NOMENCLATURA"),
+	                rs.getFloat("VALOR_DOLAR"),
+	                rs.getFloat("VOLATILIDAD"),
+	                rs.getString("NOMBRE_ICONO")
+	            );
+	            stock = new Stock(cantidad, cripto);
+	        }
+	    } catch (SQLException e) {
 	        System.out.println("Error al buscar stock: " + e.getMessage());
 	    }
 

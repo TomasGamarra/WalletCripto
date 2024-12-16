@@ -9,24 +9,16 @@ public class ModeloTablaActivos extends DefaultTableModel {
 		 public ModeloTablaActivos(Object [][] datos) {
 		        super(datos, columnas);
 		    }
-		 
-		 
-		
+		 		
 
 		    public ModeloTablaActivos() {
-			// TODO Auto-generated constructor stub
-		}
-
-
+		    	super(null,columnas);
+		    }
 
 
 			@Override
 		    public Class<?> getColumnClass(int columnIndex) {
-		        switch (columnIndex) {
-		            case 0: return ImageIcon.class; // Primera columna para imágenes
-		            case 2: return String.class;    // Tercera columna para montos
-		            default: return String.class;  // Segunda columna para nombres
-		        }
+		       return this.getValueAt(0,columnIndex).getClass();
 		    }
 
 		    @Override

@@ -1,15 +1,15 @@
 package Sistema;
 
 public enum MonedaFiatEnum {
-    PESOS_ARGENTINOS("Pesos Argentinos", "ARS", 1077, "/images/Ars.png"),
+    PESOS_ARGENTINOS("Pesos Argentinos", "ARS", 0.09f, "/images/Ars.png"),
     DOLARES("Dolares", "USD", 1, "/images/Usd.png");
 
     private final String nombre;
     private final String nomenclatura;
-    private final int cotizacion;
+    private final float cotizacion;
     private final String rutaIcono;
 
-    MonedaFiatEnum(String nombre, String nomenclatura, int cotizacion, String rutaIcono) {
+    MonedaFiatEnum(String nombre, String nomenclatura, float cotizacion, String rutaIcono) {
         this.nombre = nombre;
         this.nomenclatura = nomenclatura;
         this.cotizacion = cotizacion;
@@ -24,7 +24,7 @@ public enum MonedaFiatEnum {
         return nomenclatura;
     }
 
-    public int getCotizacion() {
+    public float getCotizacion() {
         return cotizacion;
     }
 

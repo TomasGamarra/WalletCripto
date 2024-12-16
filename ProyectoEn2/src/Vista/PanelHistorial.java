@@ -24,10 +24,7 @@ public class PanelHistorial extends JPanel{
 	    private JLabel labelTitulo;
 	    private JScrollPane scrollPane;
 	    private JButton botonVolver;
-	    private JTextField campoFiltro;
-	    private JButton botonFiltrar;
 	    private JPanel panelInferior;
-	    private JPanel panelFiltros;
 	    
 
 	    public PanelHistorial() {
@@ -42,7 +39,7 @@ public class PanelHistorial extends JPanel{
 	        add(labelTitulo, BorderLayout.NORTH);
 
 	        // Panel central : Tabla
-	        modeloTabla = new DefaultTableModel(new Object[]{"Fecha", "Tipo", "Resumen"}, 0); //Tendriamos que hacer un modelo especifico
+	        modeloTabla = new ModeloTablaHistorial(); //Tendriamos que hacer un modelo especifico
 	        tablaTransacciones = new JTable(modeloTabla);
 	        tablaTransacciones.setRowHeight(30);
 
@@ -56,15 +53,7 @@ public class PanelHistorial extends JPanel{
 	        
 
 	        // Panel de filtros
-	        panelFiltros = new JPanel(new FlowLayout());
-	        campoFiltro = new JTextField(15);
-	        botonFiltrar = new JButton("Filtrar");
-	        
-	        panelFiltros.add(new JLabel("Filtrar por moneda:")); 
-	        panelFiltros.add(campoFiltro);
-	        panelFiltros.add(botonFiltrar);
-	        
-	        panelInferior.add(panelFiltros, BorderLayout.WEST);
+	
 	        
 
 	        // Boton Volver
@@ -85,12 +74,14 @@ public class PanelHistorial extends JPanel{
 	        return botonVolver;
 	    }
 
-	    public JButton getBotonFiltrar() {
-	        return botonFiltrar;
+	
+	    
+	    public void limpiarTabla() {
+	        modeloTabla.setRowCount(0);
 	    }
-
-	    public String getTextoFiltro() {
-	        return campoFiltro.getText();
+	    
+	    public void aniadirFila(Object[] fila) {
+	    	modeloTabla.addRow(fila);
 	    }
 	    
 	    @Override
@@ -143,15 +134,8 @@ public class PanelHistorial extends JPanel{
 		}
 
 
-		public JTextField getCampoFiltro() {
-			return campoFiltro;
-		}
 
-
-		public void setCampoFiltro(JTextField campoFiltro) {
-			this.campoFiltro = campoFiltro;
-		}
-
+		
 
 		public JPanel getPanelInferior() {
 			return panelInferior;
@@ -163,24 +147,13 @@ public class PanelHistorial extends JPanel{
 		}
 
 
-		public JPanel getPanelFiltros() {
-			return panelFiltros;
-		}
+	
 
 
-		public void setPanelFiltros(JPanel panelFiltros) {
-			this.panelFiltros = panelFiltros;
-		}
+	
 
 
-		public void setBotonVolver(JButton botonVolver) {
-			this.botonVolver = botonVolver;
-		}
-
-
-		public void setBotonFiltrar(JButton botonFiltrar) {
-			this.botonFiltrar = botonFiltrar;
-		}
+	
 	    
 	}
 

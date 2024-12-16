@@ -86,7 +86,7 @@ public class PanelCotizaciones extends JPanel {
 
         // Boton y PanelBoton
         JButton btnComprar = new JButton("Comprar");
-        btnComprar.setActionCommand(nombre); //Para luego diferenciar los datos en los listeners
+        btnComprar.setActionCommand(nomenclatura); //Para luego diferenciar los datos en los listeners
         
         btnComprar.setPreferredSize(new Dimension(90, 40));
         btnComprar.setBackground(new Color(20,140,20));
@@ -104,9 +104,9 @@ public class PanelCotizaciones extends JPanel {
         fila.add(panelBoton);
 
         // Guardar el botón y agregar la fila al panel central
-        botonesCompra.put(nombre, btnComprar);
-        cotizaciones.put(nombre,lblPrecio);
-        
+        botonesCompra.put(nomenclatura, btnComprar);
+        cotizaciones.put(nomenclatura,lblPrecio);
+       
         panelCentral.add(fila);
 		}
 		    
@@ -126,7 +126,10 @@ public class PanelCotizaciones extends JPanel {
 		if (label != null)
 			label.setText("$"+cotizacion);
 	}
-		
+	
+	public JButton getBoton (String nombre) {
+		return botonesCompra.get(nombre);
+	}
 		
 	public JPanel getPanelCentral() {
 			return panelCentral;

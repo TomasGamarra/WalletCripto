@@ -88,14 +88,14 @@ public class ActivoCriptoDAOjdbc implements ActivoCriptoDAO {
 	}
 	
 	@Override
-	public int incrementarCantidad(int idUsuario,String nomenclatura, float cantidadIncremento) {
-	    String sqlSelect = "SELECT cantidad FROM ACTIVO_CRIPTO WHERE NOMENCLATURA = ? AND ID_USUARIO = ?";
-	    String sqlUpdate = "UPDATE ACTIVO_CRIPTO SET CANTIDAD = ? WHERE NOMENCLATURA = ? AND ID_USUARIO = ?";
-	    
+	public int incrementarCantidad(int idUsuario, int idCriptomoneda, float cantidadIncremento) {
+	    String sqlSelect = "SELECT CANTIDAD FROM ACTIVO_CRIPTO WHERE ID_CRIPTOMONEDA = ? AND ID_USUARIO = ?";
+	    String sqlUpdate = "UPDATE ACTIVO_CRIPTO SET CANTIDAD = ? WHERE ID_CRIPTOMONEDA = ? AND ID_USUARIO = ?";
+
 	    try {
 	        Connection con = MyConnection.getConnection();
 	        PreparedStatement psSelect = con.prepareStatement(sqlSelect);
-	        psSelect.setString(1, nomenclatura);
+	        psSelect.setInt(1, idCriptomoneda); // Ahora usamos ID_CRIPTOMONEDA en lugar de nomenclatura
 	        psSelect.setInt(2, idUsuario);
 
 	        ResultSet rs = psSelect.executeQuery();
@@ -105,20 +105,20 @@ public class ActivoCriptoDAOjdbc implements ActivoCriptoDAO {
 
 	            PreparedStatement psUpdate = con.prepareStatement(sqlUpdate);
 	            psUpdate.setFloat(1, nuevaCantidad);
-	            psUpdate.setString(2, nomenclatura);
-	            psUpdate.setInt(3,idUsuario);
-  
+	            psUpdate.setInt(2, idCriptomoneda); // También actualizamos ID_CRIPTOMONEDA en lugar de nomenclatura
+	            psUpdate.setInt(3, idUsuario);
+
 	            if (psUpdate.executeUpdate() > 0) 
-	                return 0; 
+	                return 0; // Éxito al actualizar
 	            else 
-	            	return -1; 
+	                return -1; // Error al actualizar
 	        }
 	    } catch (SQLException e) {
 	        System.out.println("Error al incrementar cantidad en ACTIVO_CRIPTO: " + e.getMessage());
 	    }
-	    return -1;
+	    return -1; // Error si no se encontró el activo o hubo otro problema
 	}
-	
+
 	
 	@Override
 	public List<ActivoCripto> listarActivosCriptos() {

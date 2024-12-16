@@ -18,8 +18,12 @@ public class ServicioCotizaciones {
     private static Map <String,Float> map = new HashMap<>();
    
 
-    public static float obtenerPrecio  (String claveApi) {
-    	return map.get(claveApi);
+    public static float obtenerPrecio (String claveApi) throws RequestException {
+    	Float valor = map.get(claveApi);
+    	if (valor == null)
+    		throw new RequestException("No se cargaron las cotiziaciones por demasiadas solicitudes");
+    	else
+    	return valor;
     }
 
     

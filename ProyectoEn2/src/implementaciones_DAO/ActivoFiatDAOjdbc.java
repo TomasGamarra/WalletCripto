@@ -42,19 +42,19 @@ public class ActivoFiatDAOjdbc implements ActivoFiatDAO {
 	}
 
 	@Override
-	public ActivoFiat find(int idUsuario,int nombreFiat) {
+	public ActivoFiat find(int idUsuario,String nombreFiat) {
 	    ActivoFiat activoFiat = null;
 	    String sql = "SELECT af.CANTIDAD, f.NOMBRE, f.NOMENCLATURA, f.VALOR_DOLAR, " +
                 " f.NOMBRE_ICONO " +
                 "FROM ACTIVO_FIAT af " +
-                "JOIN MONEDAFIAT f ON af.ID_MONEDAFIA = f.ID " +
+                "JOIN MONEDAFIAT f ON af.ID_MONEDAFIAT = f.ID " +
                 "WHERE af.ID_USUARIO = ? AND f.NOMBRE = ?";
 
 	    try  {
 	    	Connection con = MyConnection.getConnection();
 	        PreparedStatement ps = con.prepareStatement(sql);
 	        ps.setInt(1, idUsuario); 
-	        ps.setInt(2, nombreFiat); 
+	        ps.setString(2, nombreFiat); 
 	        ResultSet rs = ps.executeQuery();
 
 	       
@@ -92,14 +92,14 @@ public class ActivoFiatDAOjdbc implements ActivoFiatDAO {
 	}
 	
 	@Override
-	public int incrementarCantidad(int idUsuario,String nomenclatura, float cantidadIncremento) {
-	    String sqlSelect = "SELECT cantidad FROM ACTIVO_FIAT WHERE NOMENCLATURA = ? AND ID_USUARIO = ?";
-	    String sqlUpdate = "UPDATE ACTIVO_FIAT SET CANTIDAD = ? WHERE NOMENCLATURA = ?"	;
-	    
-	    try {		
+	public int incrementarCantidad(int idUsuario, int idMonedaFiat, float cantidadIncremento) {
+	    String sqlSelect = "SELECT CANTIDAD FROM ACTIVO_FIAT WHERE ID_MONEDAFIAT = ? AND ID_USUARIO = ?";
+	    String sqlUpdate = "UPDATE ACTIVO_FIAT SET CANTIDAD = ? WHERE ID_MONEDAFIAT = ? AND ID_USUARIO = ?";
+
+	    try {
 	        Connection con = MyConnection.getConnection();
 	        PreparedStatement psSelect = con.prepareStatement(sqlSelect);
-	        psSelect.setString(1, nomenclatura);
+	        psSelect.setInt(1, idMonedaFiat);
 	        psSelect.setInt(2, idUsuario);
 
 	        ResultSet rs = psSelect.executeQuery();
@@ -109,14 +109,15 @@ public class ActivoFiatDAOjdbc implements ActivoFiatDAO {
 
 	            PreparedStatement psUpdate = con.prepareStatement(sqlUpdate);
 	            psUpdate.setFloat(1, nuevaCantidad);
-	            psUpdate.setString(2, nomenclatura);
+	            psUpdate.setInt(2, idMonedaFiat);
+	            psUpdate.setInt(3, idUsuario);
 	            
 	            int filasAfectadas = psUpdate.executeUpdate();
 	            if (filasAfectadas > 0) {
-	                return 0; // Actualizacion exitosa
+	                return 0; // Actualización exitosa
 	            }
 	        } else {
-	            return -1; // No se encontro la moneda
+	            return -1; // No se encontró la moneda
 	        }
 	    } catch (SQLException e) {
 	        System.out.println("Error al incrementar cantidad en ACTIVO_FIAT: " + e.getMessage());

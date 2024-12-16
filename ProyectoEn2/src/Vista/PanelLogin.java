@@ -65,7 +65,7 @@ public class PanelLogin extends JPanel {
         gbc.gridx = 0;  
         gbc.gridy = 0;  
         
-        labelUsuario = new JLabel("Usuario:");
+        labelUsuario = new JLabel("Email:");
         labelUsuario.setForeground(Color.BLACK);
         labelUsuario.setFont(new Font("Arial", Font.BOLD, 16));
         panelCenter.add(labelUsuario , gbc);
