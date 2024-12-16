@@ -1,7 +1,8 @@
 package comparadores;
 
 import java.util.Comparator;
-import Sistema.ActivoCripto;
+
+import sistema.ActivoCripto;
 
 public class ComparadorActivoCriptoPorNomenclatura implements Comparator<ActivoCripto> {
 

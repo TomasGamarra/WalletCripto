@@ -1,6 +1,6 @@
 package interfaces_DAO;
 
-import Sistema.Usuario;
+import sistema.Usuario;
 
 public interface UsuarioDAO {
 

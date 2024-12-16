@@ -2,7 +2,7 @@ package interfaces_DAO;
 
 import java.util.List;
 
-import Sistema.Moneda;
+import sistema.Moneda;
 
 public interface MonedaDAO {
 	

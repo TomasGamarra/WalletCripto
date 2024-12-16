@@ -8,11 +8,11 @@ import java.sql.Timestamp;
 import java.util.LinkedList;
 import java.util.List;
 
-import Sistema.Persona;
-import Sistema.Transaccion;
-import Sistema.Usuario;
 import gestores.MyConnection;
 import interfaces_DAO.TransaccionDAO;
+import sistema.Persona;
+import sistema.Transaccion;
+import sistema.Usuario;
 
 public class TransaccionDAOjdbc implements TransaccionDAO {
 

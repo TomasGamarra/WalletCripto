@@ -3,7 +3,7 @@ package interfaces_DAO;
 
 import java.util.List;
 
-import Sistema.Criptomoneda;
+import sistema.Criptomoneda;
 
 public interface CriptoDAO {
 	

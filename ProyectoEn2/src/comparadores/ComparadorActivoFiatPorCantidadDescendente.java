@@ -1,8 +1,7 @@
 package comparadores;
 import java.util.Comparator;
 
-
-import Sistema.ActivoFiat;
+import sistema.ActivoFiat;
 public class ComparadorActivoFiatPorCantidadDescendente implements Comparator <ActivoFiat>{
 
 	@Override

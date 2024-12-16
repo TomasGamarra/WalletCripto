@@ -2,7 +2,7 @@ package interfaces_DAO;
 
 import java.util.List;
 
-import Sistema.ActivoFiat;
+import sistema.ActivoFiat;
 
 public interface ActivoFiatDAO {
 	

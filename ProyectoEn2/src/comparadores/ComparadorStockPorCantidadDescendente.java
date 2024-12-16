@@ -2,7 +2,7 @@ package comparadores;
 
 import java.util.Comparator;
 
-import Sistema.Stock;
+import sistema.Stock;
 
 public class ComparadorStockPorCantidadDescendente implements Comparator <Stock> {
 

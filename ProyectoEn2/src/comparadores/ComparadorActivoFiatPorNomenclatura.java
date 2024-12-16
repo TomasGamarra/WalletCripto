@@ -2,7 +2,7 @@ package comparadores;
 
 import java.util.Comparator;
 
-import Sistema.ActivoFiat;
+import sistema.ActivoFiat;
 
 public class ComparadorActivoFiatPorNomenclatura implements Comparator<ActivoFiat> {
 

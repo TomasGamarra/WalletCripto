@@ -1,5 +1,5 @@
 package interfaces_DAO;
-import Sistema.Persona;
+import sistema.Persona;
 
 public interface PersonaDAO {
 	void create(String nombre,String apellido);

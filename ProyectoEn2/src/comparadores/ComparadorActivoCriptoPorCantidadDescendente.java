@@ -2,8 +2,8 @@ package comparadores;
 
 import java.util.Comparator;
 
-import Sistema.Activo;
-import Sistema.ActivoCripto;
+import sistema.Activo;
+import sistema.ActivoCripto;
 
 public class ComparadorActivoCriptoPorCantidadDescendente implements Comparator<ActivoCripto> {
 

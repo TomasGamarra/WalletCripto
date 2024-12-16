@@ -3,11 +3,11 @@ package gestores;
 import java.util.LinkedList;
 import java.util.List;
 
-import Sistema.Criptomoneda;
-import Sistema.CriptomonedaEnum;
-import Sistema.MonedaFiat;
-import Sistema.MonedaFiatEnum;
-import Sistema.Usuario;
+import enumerativos.CriptomonedaEnum;
+import sistema.Criptomoneda;
+import sistema.MonedaFiat;
+import sistema.MonedaFiatEnum;
+import sistema.Usuario;
 
 public class GestorAplicacion {
 	
@@ -15,7 +15,6 @@ public class GestorAplicacion {
 	private static List<String> listaCriptoSoportadas;
 	private static Criptomoneda criptoComprar;
 	private static MonedaFiat fiatCompra;
-	private static float conversion;
 	private static List<String> listaFiatSoportadas;
 	static {
 		listaCriptoSoportadas = new LinkedList<>();
@@ -59,12 +58,5 @@ public class GestorAplicacion {
 		GestorAplicacion.fiatCompra = fiatCompra;
 	}
 
-	public static float getConversion() {
-		return conversion;
-	}
-
-	public static void setConversion(float conversion) {
-		GestorAplicacion.conversion = conversion;
-	}
 	
 }

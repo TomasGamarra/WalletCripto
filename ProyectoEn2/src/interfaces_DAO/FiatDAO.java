@@ -2,7 +2,7 @@ package interfaces_DAO;
 
 import java.util.List;
 
-import Sistema.MonedaFiat;
+import sistema.MonedaFiat;
 
 public interface FiatDAO {
 	public void create (MonedaFiat moneda);

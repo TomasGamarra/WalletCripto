@@ -6,10 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import Sistema.Persona;
 import gestores.FactoryDAO;
 import gestores.MyConnection;
 import interfaces_DAO.PersonaDAO;
+import sistema.Persona;
 
 
 public class PersonaDAOjdbc implements PersonaDAO {

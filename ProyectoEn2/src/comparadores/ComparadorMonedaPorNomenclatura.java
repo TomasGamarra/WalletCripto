@@ -2,7 +2,7 @@ package comparadores;
 
 import java.util.Comparator;
 
-import Sistema.Moneda;
+import sistema.Moneda;
 
 public class ComparadorMonedaPorNomenclatura implements Comparator <Moneda>{
 

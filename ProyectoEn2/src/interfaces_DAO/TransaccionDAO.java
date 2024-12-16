@@ -2,7 +2,7 @@ package interfaces_DAO;
 
 import java.util.List;
 
-import Sistema.Transaccion;
+import sistema.Transaccion;
 
 public interface TransaccionDAO {
 	

@@ -2,7 +2,7 @@ package interfaces_DAO;
 
 import java.util.List;
 
-import Sistema.Stock;
+import sistema.Stock;
 
 public interface StockDAO {
 	

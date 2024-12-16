@@ -2,7 +2,7 @@ package interfaces_DAO;
 
 import java.util.List;
 
-import Sistema.ActivoCripto;
+import sistema.ActivoCripto;
 
 public interface ActivoCriptoDAO {
 
