@@ -194,7 +194,25 @@ public class PanelRegistro extends JPanel {
 		 fieldApellido.setText("");
 	}
 
+	public void setNombre() {
+		fieldNombre.setText("");
+	}
 	
+	public void setApellido() {
+		fieldApellido.setText("");
+	}
+	
+	public void setEmail() {
+		fieldEmail.setText("");
+	}
+	
+	public void setContrasenia() {
+		fieldContra.setText("");
+	}
+	
+	public void setContrasenia2() {
+		fieldContra2.setText("");
+	}
 	public String extraerEmail() {
 		return fieldEmail.getText();
 	}
@@ -205,14 +223,14 @@ public class PanelRegistro extends JPanel {
 
 	
 	public String extraerContra() {
-		return new String(fieldContra.getText());
+		return new String(fieldContra.getPassword());
 	}
 	
 	public void ActualizarContra() {
 		 fieldContra.setText("");
 	}
 	public String extraerContra2() {
-		return new String(fieldContra2.getText());
+		return new String(fieldContra2.getPassword());
 	}
 	public void ActualizarContra2() {
 		 fieldContra2.setText("");

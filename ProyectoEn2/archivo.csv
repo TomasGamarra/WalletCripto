@@ -1,0 +1,8 @@
+Nombre,Nomenclatura,Tipo,Cantidad,ValorEnUsd
+Bitcoin, BTC, ActivoCripto, 12.993013, 1374959.6, 
+Ethereum, ETH, ActivoCripto, 13.190441, 53172.91, 
+Dogecoin, DOGE, ActivoCripto, 11.357709, 4.589968, 
+Usdc, USDC, ActivoCripto, 12.959728, 12.948401, 
+Tether, USDT, ActivoCripto, 10.243959, 10.237454, 
+Pesos Argentinos, ARS, ActivoFiat, 2.7003229, 0.24302907, 
+Dolares, USD, ActivoFiat, 15.703381, 15.703381, 

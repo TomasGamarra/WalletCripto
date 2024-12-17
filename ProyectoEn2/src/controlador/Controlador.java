@@ -266,7 +266,11 @@ public class Controlador {
 					JOptionPane.showMessageDialog(null, e1.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
 				}
 					
-			
+				vista.getPanelMain().getPanelRegistro().setNombre();
+				vista.getPanelMain().getPanelRegistro().setApellido();
+				vista.getPanelMain().getPanelRegistro().setEmail();
+				vista.getPanelMain().getPanelRegistro().setContrasenia();
+				vista.getPanelMain().getPanelRegistro().setContrasenia2();
 			}
 		}
 	
@@ -282,6 +286,11 @@ public class Controlador {
 		
 		public void actionPerformed(ActionEvent e) {
 			vista.cambiarCarta(PanelesEnumerativos.LOGIN.getNombre());
+			vista.getPanelMain().getPanelRegistro().setNombre();
+			vista.getPanelMain().getPanelRegistro().setApellido();
+			vista.getPanelMain().getPanelRegistro().setEmail();
+			vista.getPanelMain().getPanelRegistro().setContrasenia();
+			vista.getPanelMain().getPanelRegistro().setContrasenia2();
 		}
 	}
 
@@ -304,7 +313,7 @@ public class Controlador {
 }
 	
 	public class Boton_cotizacion implements ActionListener{
-	public void actionPerformed(ActionEvent e) {
+		public void actionPerformed(ActionEvent e) {
 		vista.cambiarCarta(PanelesEnumerativos.COTIZACIONES.getNombre());
 	}
 }
@@ -357,7 +366,8 @@ public class Controlador {
 					iniciarMenu();
 				}
              }
-		
+		vista.getPanelMain().getPanelLogin().setUser(); //Limpio
+		vista.getPanelMain().getPanelLogin().setPassword(); //Limpio
 		
 	}
 }	

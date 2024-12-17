@@ -156,6 +156,13 @@ public class PanelLogin extends JPanel {
 		return new String(passwdField.getPassword());
 	}
 	
+	public void setUser() {
+		userField.setText("");
+	}
+	
+	public void setPassword() {
+		passwdField.setText("");
+	}
 	
 	public JPanel getPanelCenter() {
 		return panelCenter;
